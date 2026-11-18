@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>어머니의 성경책 · 파트 연습</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{--me:#2f5d8a;--bg:#f6f3ee;--card:#fffdf9;--ink:#1f1b16;--mute:#7a7066;--line:#e6dfd5;--bass:#2f5d8a;--ten:#7c9a5b;--hi:#e8a33d;--warn:#b5532f}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans KR",system-ui,sans-serif;-webkit-tap-highlight-color:transparent}
+.wrap{max-width:760px;margin:0 auto;padding:0 12px 60px}
+header{padding:16px 2px 4px}
+h1{font-size:20px;margin:0;font-weight:900;letter-spacing:-.02em}
+.sub{color:var(--mute);font-size:13px;margin-top:2px}
+.parts{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:10px}
+.parts button{padding:9px 4px;line-height:1.25;font-size:13px;border-width:2px}
+.parts button b{display:block;font-size:16px}
+.parts button.on{background:var(--me);border-color:var(--me);color:#fff}
+.srcrow{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.seg{display:flex;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--card)}
+.seg button{border:0;border-radius:0;padding:7px 11px;font-size:13px}
+.seg button.on{background:var(--ink);color:#fff}
+.lyr{padding:6px 2px 2px}
+.lyr .ln{font-size:30px;font-weight:900;line-height:1.45;letter-spacing:.02em;word-break:keep-all}
+.lyr .ln span[data-i]{color:#cfc5b8;transition:color .12s}
+.lyr .ln .w{white-space:nowrap}
+.lyr .ln span[data-i].done{color:#6f655b}
+.lyr .ln span[data-i].cur{color:var(--me)}
+.sync{display:flex;align-items:center;gap:8px;margin-top:10px;font-size:13px;color:var(--mute)}.sync button{padding:5px 9px;font-size:13px}.sync b{min-width:44px;text-align:center;color:var(--ink)}
+.lyr .ln2{font-size:19px;font-weight:700;color:#b3a798;margin-top:6px;min-height:28px;word-break:keep-all}
+.lyr .meta .dyn{font-style:normal;font-family:inherit;font-size:15px;background:#fbf1e3;padding:2px 8px;border-radius:8px}
+.lyr .meta{display:flex;flex-wrap:wrap;gap:10px;align-items:center;font-size:14px;color:var(--mute);margin-bottom:6px;min-height:22px}
+.lyr .meta b{color:var(--ink);font-size:16px}
+.lyr .rest{font-size:22px;color:#c9beb1;font-weight:700}
+body.recmode .synonly{display:none}
+body:not(.recmode) .reconly{display:none}
+body.lyrview .fullonly{display:none}
+body:not(.lyrview) .lyronly{display:none}
+.bar{position:sticky;top:0;z-index:10;background:rgba(246,243,238,.95);backdrop-filter:blur(8px);padding:8px 0;border-bottom:1px solid var(--line)}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+button{font:inherit;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:8px 12px;font-size:14px;cursor:pointer}
+button.on{background:var(--me);color:#fff;border-color:var(--me)}
+button.big{font-size:17px;font-weight:700;min-width:88px;background:var(--ink);color:#fff;border-color:var(--ink)}
+.pos{font-variant-numeric:tabular-nums;font-size:13px;color:var(--mute);margin-left:auto;text-align:right}
+.pos b{color:var(--ink);font-size:15px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;margin-top:12px}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.steps button{padding:9px 4px;text-align:center;line-height:1.25;font-size:13px}
+.steps button b{display:block;font-size:15px}
+.stepdesc{font-size:13px;color:var(--mute);margin-top:8px;min-height:18px}
+.now{display:flex;align-items:center;gap:14px}
+.syl{font-size:54px;font-weight:900;line-height:1;min-width:78px;text-align:center;color:var(--me)}
+.syl.rest{color:#c9beb1;font-size:30px}
+.syl.echo{color:var(--warn)}
+.nowinfo{flex:1;min-width:0}
+.nn{font-size:20px;font-weight:700}
+.nn small{font-size:13px;color:var(--mute);font-weight:500;margin-left:6px}
+.dyn{display:inline-block;font-style:italic;font-family:Georgia,serif;font-weight:700;color:var(--warn);margin-left:8px;font-size:17px}
+.next{margin-top:6px;font-size:16px;color:var(--mute);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.next span{margin-right:7px}
+.next span.cur{color:var(--me);font-weight:700}
+.next span.br{color:var(--warn);font-weight:700}
+.countdown{font-size:13px;color:var(--warn);margin-top:4px;min-height:18px;font-weight:700}
+.tip{margin-top:10px;padding:8px 10px;background:#fbf1e3;border-radius:10px;font-size:13px;line-height:1.5;display:none}
+.echoBanner{font-size:19px !important;margin-top:10px;padding:8px 10px;border-radius:10px;font-size:14px;font-weight:700;text-align:center;display:none}
+canvas{width:100%;display:block;border-radius:10px;background:#fbf9f5}
+.legend{display:flex;gap:12px;font-size:12px;color:var(--mute);margin-top:6px;flex-wrap:wrap}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:4px;vertical-align:-1px}
+.score{position:relative;overflow:hidden;border-radius:10px;border:1px solid var(--line);background:#fff}
+.score img{width:100%;display:block}
+.score .box{position:absolute;border:2.5px solid var(--hi);background:rgba(232,163,61,.13);border-radius:6px;pointer-events:none;transition:all .15s}
+.pager{display:flex;align-items:center;gap:8px;margin-bottom:8px;font-size:13px;color:var(--mute)}
+.pager label{display:flex;gap:4px;align-items:center}
+.pager label:first-of-type{margin-left:auto}
+.secs{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.secs button{text-align:left;padding:10px 12px;line-height:1.3}
+.secs button b{display:block;font-size:14px}
+.secs button span{font-size:12px;color:var(--mute)}
+.secs button.on span{color:#dbe7f3}
+h2{font-size:15px;margin:0 0 10px;font-weight:700}
+.mix{display:grid;grid-template-columns:52px 1fr 40px;gap:8px 10px;align-items:center;font-size:14px}
+.mix input{width:100%;accent-color:var(--bass)}
+.mix .lab{font-weight:700}
+.mix .val{font-size:12px;color:var(--mute);text-align:right}
+.toggles{display:flex;gap:6px;flex-wrap:wrap}
+.toggles button{font-size:13px;padding:7px 10px}
+.speed{display:flex;align-items:center;gap:10px;margin-top:12px;font-size:14px}
+.speed input{flex:1;accent-color:var(--bass)}
+.range{display:flex;gap:6px;align-items:center;margin-top:12px;font-size:14px;flex-wrap:wrap}
+select{font:inherit;font-size:14px;padding:6px 8px;border-radius:8px;border:1px solid var(--line);background:#fff}
+details{margin-top:12px}
+summary{font-weight:700;font-size:15px;cursor:pointer;padding:4px 0}
+.note{font-size:12px;color:var(--mute);line-height:1.6;margin-top:10px}
+.hint{font-size:12px;color:var(--mute);margin-top:6px;line-height:1.5}
+.hard{font-size:13px;line-height:1.5}
+.hard div{padding:7px 0;border-bottom:1px dashed var(--line);display:flex;gap:10px;cursor:pointer}
+.hard div b{min-width:44px;color:var(--warn)}
+audio{width:100%;margin-top:6px}
+.trk{margin-top:10px;font-size:14px}.trk span{font-size:12px;color:var(--mute);margin-left:6px}
+a{color:var(--bass)}
+/* ===== 큰 글씨·큰 버튼 (50–60대 사용자) ===== */
+body{font-size:17px}
+h1{font-size:24px}
+.sub{font-size:15px;color:#5f564d}
+h2{font-size:19px}
+button{font-size:16px;min-height:48px;padding:10px 14px}
+.parts{gap:8px}
+.parts button{min-height:64px;font-size:16px}
+.parts button b{font-size:21px}
+.bar .row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.bar .row .big{grid-column:1/-1;min-height:60px;font-size:22px}
+.bar .row button{font-size:15px}
+.pos{grid-column:1/-1;text-align:center;margin:0;font-size:15px}
+.pos b{font-size:18px}
+.hint{font-size:15px;color:#5f564d}
+.steps{grid-template-columns:1fr 1fr;gap:8px}
+.steps button{font-size:15px;min-height:64px}
+.steps button b{font-size:17px}
+.stepdesc{font-size:16px;color:#3f3730;line-height:1.5}
+.lyr .meta{font-size:17px}
+.lyr .meta b{font-size:19px}
+.lyr .ln{font-size:30px;line-height:1.4}
+.lyr .ln span[data-i]{color:#7d7368}
+.lyr .ln span[data-i].done{color:#c4b9ac}
+.lyr .ln span[data-i].cur{color:var(--me);text-decoration:underline;text-decoration-thickness:4px;text-underline-offset:8px}
+.lyr .ln2{font-size:24px;color:#8a8076}
+.tip{font-size:17px;line-height:1.55}
+.countdown{font-size:17px}
+.secs{grid-template-columns:1fr 1fr}
+.secs button b{font-size:17px}
+.secs button span{font-size:14px}
+.spd{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:12px}
+.spd button{white-space:nowrap;padding:10px 4px;font-size:15px}
+.hard{font-size:16px;line-height:1.55}
+.hard div b{min-width:62px}
+.trk{font-size:17px}.trk span{font-size:14px}
+summary{font-size:17px}
+.note{font-size:14px;color:#5f564d}
+.toggles button{font-size:15px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <h1>어머니의 성경책 — 파트 연습</h1>
+  <div class="sub">C.D. Tillman 작곡 · 김치곤 편곡 · 혼성 4부(SATB) · 내 파트를 고르세요</div>
+  <div class="parts" id="parts">
+    <button data-p="S"><b>S</b>소프라노</button>
+    <button data-p="A"><b>A</b>알토</button>
+    <button data-p="T"><b>T</b>테너</button>
+    <button data-p="B"><b>B</b>베이스</button>
+  </div>
+  <div class="srcrow" style="display:none">
+    <div class="seg" id="srcSeg" style="display:none"><button data-v="rec">🎙 실제 녹음</button><button data-v="syn" class="on">🎹 파트 연습 음원</button></div>
+    <div class="seg" id="viewSeg"><button data-v="lyr" class="on">가사 크게</button><button data-v="full">자세히</button></div>
+  </div>
+  <audio id="recA" preload="none"></audio>
+</header>
+
+<div class="bar">
+  <div class="row">
+    <button class="big" id="play">▶ 재생</button>
+    <button id="back" title="구간 처음으로">⏮ 처음부터</button>
+    <button id="loopBtn" class="on">🔁 반복</button>
+    <button id="test">🔊 소리 확인</button>
+    <div class="pos"><b id="mNo">–</b> 마디 <span id="passLbl"></span><br><span id="tLbl">0:00</span></div>
+  </div>
+  <div class="hint" id="aState">위에서 내 파트를 누르고 ▶ 재생을 누르세요. 소리가 안 나면 ‘소리 확인’을 눌러 보고, 아이폰은 옆면 무음 스위치를 꺼 주세요.</div>
+</div>
+
+<div class="card lyronly" id="lyrCard">
+  <div class="lyr">
+    <div class="meta"><span id="lyMeta"></span><span class="dyn" id="lyDyn"></span><span class="countdown" id="lyCd" style="margin:0"></span></div>
+    <div class="echoBanner" id="lyEcho" style="margin:0 0 8px"></div>
+    <div class="ln" id="ly1"></div>
+    <canvas id="lyPitch" height="230" style="margin-top:8px;background:#fbf8f3"></canvas>
+    <div class="hint" style="margin-top:2px">▲ 위로 갈수록 높은 음, ▼ 아래로 갈수록 낮은 음이에요. 블록 위 글자는 계이름이에요.</div>
+    <div class="ln2" id="ly2"></div>
+  </div>
+  <div class="tip" id="lyTip"></div>
+  <div class="reconly sync"><span>가사 타이밍</span><button id="offM">◀ 빠르게</button><b id="offV">0.0초</b><button id="offP">늦게 ▶</button></div>
+  <div class="reconly hint" style="margin-top:4px">블루투스 이어폰은 소리가 0.2초쯤 늦게 들려서 가사가 먼저 나와요. 그럴 땐 ‘늦게’를 2번 눌러 보세요.</div>
+</div>
+
+<div class="card reconly hint" id="recNote" style="margin-top:12px;line-height:1.6">🎙 실제 합창 녹음에 가사·악보를 맞춰 놓았어요. 녹음이라 파트별 소리 크기는 못 바꿔요. 내 파트만 크게 듣거나 빼고 부르려면 위에서 <b>🎹 파트 연습 음원</b>을 고르세요.</div>
+
+<div class="card synonly">
+  <div class="steps" id="steps">
+    <button data-s="1"><b>① 전체 듣기</b>곡 흐름 익히기</button>
+    <button data-s="2"><b>② 내 파트 크게</b>같이 따라 부르기</button>
+    <button data-s="3"><b>③ 한 소절씩</b>듣고 → 내가 부르기</button>
+    <button data-s="4"><b>④ 내 파트 빼고</b>혼자 불러 보기</button>
+    <button data-s="5" style="grid-column:1/-1"><b>⑤ 다 같이 합창</b>네 파트 모두 부르기 — 반주만 나와요</button>
+  </div>
+  <div class="stepdesc" id="stepdesc"></div>
+</div>
+
+<div class="card fullonly">
+  <div class="now">
+    <div class="syl rest" id="syl">쉼</div>
+    <div class="nowinfo">
+      <div class="nn" id="nn">–</div>
+      <div class="next" id="next"></div>
+      <div class="countdown" id="cd"></div>
+    </div>
+  </div>
+  <div class="echoBanner" id="echoBanner"></div>
+  <div class="tip" id="tip"></div>
+</div>
+
+<div class="card fullonly">
+  <canvas id="roll" height="240"></canvas>
+  <div class="legend"><span><i style="background:var(--me)"></i><span id="lgMe">내 파트</span></span><span><i style="background:var(--ten);opacity:.6"></i><span id="lgOt">테너</span></span><span><b style="color:var(--warn)">∨</b> 숨 쉬는 곳</span><span>위쪽 글자 = 반주 화음 · 회색 = 반주 멜로디</span></div>
+</div>
+
+<div class="card">
+  <div class="pager">
+    <button id="pPrev">◀</button><span id="pLbl">1 / 8 쪽</span><button id="pNext">▶</button>
+    <label><input type="checkbox" id="zoom" checked> 확대</label>
+    <label><input type="checkbox" id="follow" checked> 자동 넘김</label>
+  </div>
+  <div class="score" id="score"><div id="inner" style="position:relative"><img id="pimg" alt="악보"><div class="box" id="box"></div></div></div>
+  <div class="hint">악보 마디를 누르면 그 마디 한 마디 앞부터 재생돼요.</div>
+</div>
+
+<div class="card">
+  <h2>연습 구간</h2>
+  <div class="secs" id="secs"></div>
+  <div class="spd" id="spd"><button data-v="70">느리게</button><button data-v="85">조금 느리게</button><button data-v="100" class="on">보통</button></div>
+  <div class="speed" style="display:none">속도 <input type="range" id="speed" min="50" max="120" step="5" value="100"><b id="spdLbl">100%</b></div>
+</div>
+
+<div class="card">
+  <h2>⚠️ 주의할 곳</h2>
+  <div class="hard" id="hard"></div>
+</div>
+
+<div class="card">
+  <h2>🎧 화면 끄고 듣기</h2>
+  <div class="hint" style="margin-top:0">미리 만들어 둔 <b id="trkPart">베이스</b> 음원이에요. 바로 재생되고 화면을 꺼도 계속 들려요(곡 전체, 전주 포함 약 7분 30초).</div>
+  <div class="trk"><b>내 파트 크게 듣기</b> <span>반주와 함께</span><audio id="trkG" controls playsinline preload="none"></audio></div>
+  <div class="trk"><b>내 파트 빼고 듣기</b> <span>혼자 불러 볼 때</span><audio id="trkM" controls playsinline preload="none"></audio></div>
+  <details style="margin-top:6px"><summary style="font-size:13px;font-weight:500">구간·속도 맞춤 음원 만들기</summary>
+  <div class="hint">지금 고른 구간·속도·소리 설정 그대로 음원 파일을 만들어요.</div>
+  <div class="row" style="margin-top:8px"><button id="render">맞춤 음원 만들기</button><span class="hint" id="rState" style="margin:0"></span></div>
+  <audio id="player" controls playsinline style="display:none"></audio>
+  </details>
+</div>
+
+<div class="card">
+  <details>
+    <summary>세부 설정 (필요할 때만)</summary>
+    <div class="toggles" style="margin-top:10px"><button id="tGraph">음표 그래프 화면 보기</button></div>
+    <div style="margin-top:10px"><h2>소리 크기</h2><div class="mix" id="mix"></div></div>
+    <div class="toggles" style="margin-top:12px">
+      <button id="tClick">메트로놈</button>
+      <button id="tCount" class="on">시작 전 카운트</button>
+      <button id="tOct">베이스 한 옥타브 위로 듣기</button>
+      <button id="tSkip" class="on">긴 쉼 건너뛰기</button>
+      <button id="tEcho">따라 부르기 모드</button>
+      <button id="tSamp" class="on">녹음 소리(피아노·합창)</button>
+    </div>
+    <div class="range">따라 부르기 단위 <select id="echoLen"><option value="1">1마디</option><option value="2" selected>2마디</option><option value="4">4마디</option></select></div>
+    <div class="range">직접 구간 <select id="from"></select> ~ <select id="to"></select></div>
+    <div class="hint">폰 스피커는 낮은 음이 잘 안 들려요. 이어폰을 쓰거나 ‘한 옥타브 위로’를 켜 보세요.</div>
+  </details>
+</div>
+
+<div class="card">
+  <h2>실제 합창 들어보기</h2>
+  <div class="hint" style="margin-top:0">이 페이지는 음정·박자 연습용이에요. 노래 느낌(발음, 호흡, 음색)은 실제 녹음으로 한 번 들어보는 게 좋아요.<br>
+  <a href="https://www.youtube.com/results?search_query=%EC%96%B4%EB%A8%B8%EB%8B%88%EC%9D%98+%EC%84%B1%EA%B2%BD%EC%B1%85+%EA%B9%80%EC%B9%98%EA%B3%A4+%ED%8E%B8%EA%B3%A1" target="_blank" rel="noopener">유튜브에서 ‘어머니의 성경책 김치곤 편곡’ 찾기 ↗</a></div>
+</div>
+
+<div class="note">
+  · 악보 PDF를 눈으로 보고 옮긴 연습용 음원이에요. 이상한 음이 있으면 악보를 우선하세요.<br>
+  · 반주는 악보 인식 프로그램(Audiveris)으로 피아노 파트를 읽어 만들었어요. 인식이 깨진 마디(2·4·41·80마디)만 화음 반주로 대신했어요.<br>
+  · 10–17마디 반복은 1·2·3절로 펼쳐 놓았어요(여성 1·2절 허밍·3절 가사, 남성 2·3절 허밍). 남성이 두 음으로 갈라지면 위가 테너·아래가 베이스, 여성이 갈라지면 위가 소프라노·아래가 알토예요.<br>
+  · 템포 ♩=56(1–33마디), ♩=60(34마디~). 셈여림·rit.·늘임표는 대략 반영했어요. 실제로는 지휘자 템포를 따르세요.<br>  · 피아노·합창 소리는 FluidR3 GM 사운드폰트(MIT 라이선스) 녹음 샘플이에요.
+</div>
+</div>
+
+<script>
+const SCORE = {"m": {"18": {"S": [["E4", 1.5, "아", 0], ["D4", 0.25, "침", 0], ["C4", 0.25, "ㅡ", 0], ["C4", 0.5, "저", 0], ["G4", 0.5, "녁", 0], ["A4", 0.5, "읽", 0], ["F4", 0.5, "으", 0]], "A": [["E4", 1.5, "아", 0], ["D4", 0.25, "침", 0], ["C4", 0.25, "ㅡ", 0], ["C4", 0.5, "저", 0], ["G4", 0.5, "녁", 0], ["A4", 0.5, "읽", 0], ["F4", 0.5, "으", 0]]}, "19": {"S": [["E4", 1.0, "시", 0], ["D4", 1.0, "ㅡ", 0], ["E4", 2.0, "던", 0]], "A": [["E4", 1.0, "시", 0], ["D4", 1.0, "ㅡ", 0], ["E4", 2.0, "던", 0]]}, "20": {"S": [["C4", 1.5, "어", 0], ["C4", 0.5, "머", 0], ["C5", 0.5, "니", 0], ["C5", 0.5, "의", 0], ["B4", 0.5, "성", 0], ["B4", 0.5, "경", 0]], "A": [["C4", 1.5, "어", 0], ["C4", 0.5, "머", 0], ["C5", 0.5, "니", 0], ["C5", 0.5, "의", 0], ["B4", 0.5, "성", 0], ["B4", 0.5, "경", 0]]}, "21": {"S": [["A4", 3.0, "책", 0], ["r", 1.0, "", 0]], "A": [["A4", 3.0, "책", 0], ["r", 1.0, "", 0]]}, "22": {"S": [["E4", 1.5, "손", 0], ["D4", 0.5, "때", 0], ["C4", 0.5, "남", 0], ["G4", 0.5, "은", 0], ["A4", 0.5, "구", 0], ["F4", 0.5, "절", 0]], "A": [["E4", 1.5, "손", 0], ["D4", 0.5, "때", 0], ["C4", 0.5, "남", 0], ["G4", 0.5, "은", 0], ["A4", 0.5, "구", 0], ["F4", 0.5, "절", 0]]}, "23": {"S": [["E4", 1.0, "마", 0], ["D4", 1.0, "ㅡ", 0], ["E4", 2.0, "다", 0]], "A": [["E4", 1.0, "마", 0], ["D4", 1.0, "ㅡ", 0], ["E4", 2.0, "다", 0]]}, "24": {"S": [["A4", 1.5, "모", 0], ["G4", 0.5, "습", 0], ["F4", 0.5, "본", 0], ["E4", 0.5, "듯", 0], ["D4", 0.5, "합", 0], ["D4", 0.5, "니", 0]], "A": [["A4", 1.5, "모", 0], ["G4", 0.5, "습", 0], ["F4", 0.5, "본", 0], ["E4", 0.5, "듯", 0], ["D4", 0.5, "합", 0], ["D4", 0.5, "니", 0]]}, "25": {"S": [["C4", 3.0, "다", 0], ["r", 1.0, "", 0]], "A": [["C4", 3.0, "다", 0], ["r", 1.0, "", 0]]}, "26": {"B": [["C4", 1.5, "믿", 0], ["C4", 0.5, "는", 0], ["B3", 1.0, "자", 0], ["A3", 1.0, "는", 0]], "T": [["C4", 1.5, "믿", 0], ["C4", 0.5, "는", 0], ["B3", 1.0, "자", 0], ["A3", 1.0, "는", 0]]}, "27": {"B": [["G3", 0.5, "누", 0], ["G3", 0.5, "구", 0], ["E3", 0.5, "든", 0], ["F3", 0.5, "ㅡ", 0], ["G3", 2.0, "지", 0]], "T": [["G3", 0.5, "누", 0], ["G3", 0.5, "구", 0], ["E3", 0.5, "든", 0], ["F3", 0.5, "ㅡ", 0], ["G3", 2.0, "지", 0]]}, "28": {"B": [["C4", 1.5, "영", 0], ["C4", 0.5, "생", 0], ["C4", 0.5, "함", 0], ["B3", 0.5, "을", 0], ["D4", 0.5, "얻", 0], ["C4", 0.5, "으", 0]], "T": [["C4", 1.5, "영", 0], ["C4", 0.5, "생", 0], ["C4", 0.5, "함", 0], ["B3", 0.5, "을", 0], ["D4", 0.5, "얻", 0], ["C4", 0.5, "으", 0]]}, "29": {"B": [["B3", 3.0, "리", 0], ["r", 1.0, "", 0]], "T": [["B3", 3.0, "리", 0], ["r", 1.0, "", 0]]}, "30": {"B": [["C4", 1.5, "외", 0], ["C4", 0.5, "워", 0], ["B3", 1.0, "주", 0], ["A3", 1.0, "신", 0]], "T": [["C4", 1.5, "외", 0], ["C4", 0.5, "워", 0], ["B3", 1.0, "주", 0], ["A3", 1.0, "신", 0]], "S": [["E4", 1.5, "외", 0], ["E4", 0.5, "워", 0], ["D#4", 1.0, "주", 0], ["D#4", 1.0, "신", 0]], "A": [["E4", 1.5, "외", 0], ["E4", 0.5, "워", 0], ["D#4", 1.0, "주", 0], ["D#4", 1.0, "신", 0]]}, "31": {"B": [["G3", 0.5, "귀", 0], ["G3", 0.5, "한", 0], ["E3", 0.5, "말", 0], ["F3", 0.5, "ㅡ", 0], ["G3", 2.0, "씀", 0]], "T": [["G3", 0.5, "귀", 0], ["G3", 0.5, "한", 0], ["E3", 0.5, "말", 0], ["F3", 0.5, "ㅡ", 0], ["G3", 2.0, "씀", 0]], "S": [["E4", 0.5, "귀", 0], ["E4", 0.5, "한", 0], ["D4", 0.5, "말", 0], ["D4", 0.5, "ㅡ", 1], ["C#4", 2.0, "씀", 0]], "A": [["E4", 0.5, "귀", 0], ["E4", 0.5, "한", 0], ["D4", 0.5, "말", 0], ["D4", 0.5, "ㅡ", 1], ["C#4", 2.0, "씀", 0]]}, "32": {"B": [["A3", 1.5, "이", 0], ["G3", 0.5, "제", 0], ["F3", 0.5, "힘", 0], ["E3", 0.5, "이", 0], ["D3", 0.5, "됩", 0], ["D3", 0.5, "니", 0]], "T": [["A3", 1.5, "이", 0], ["G3", 0.5, "제", 0], ["F3", 0.5, "힘", 0], ["E3", 0.5, "이", 0], ["D3", 0.5, "됩", 0], ["D3", 0.5, "니", 0]], "S": [["F4", 1.5, "이", 0], ["E4", 0.5, "제", 0], ["D4", 0.5, "힘", 0], ["C4", 0.5, "이", 0], ["B3", 0.5, "됩", 0], ["B3", 0.5, "니", 0]], "A": [["F4", 1.5, "이", 0], ["E4", 0.5, "제", 0], ["D4", 0.5, "힘", 0], ["C4", 0.5, "이", 0], ["B3", 0.5, "됩", 0], ["B3", 0.5, "니", 0]]}, "33": {"B": [["C3", 2.0, "다", 0], ["r", 2.0, "", 0]], "T": [["C3", 2.0, "다", 0], ["r", 2.0, "", 0]], "S": [["C4", 2.0, "다", 0], ["r", 2.0, "", 0]], "A": [["C4", 2.0, "다", 0], ["r", 2.0, "", 0]]}, "35": {"S": [["r", 3.0, "", 0], ["G4", 0.5, "귀", 0], ["C5", 0.5, "하", 0]], "A": [["r", 3.0, "", 0], ["G4", 0.5, "귀", 0], ["G4", 0.5, "하", 0]], "T": [["r", 3.0, "", 0], ["G3", 0.5, "귀", 0], ["C4", 0.5, "하", 0]], "B": [["r", 3.0, "", 0], ["G3", 0.5, "귀", 0], ["E3", 0.5, "하", 0]]}, "36": {"S": [["D5", 3.0, "고", 0], ["B4", 0.5, "귀", 0], ["D5", 0.5, "하", 0]], "A": [["F4", 2.0, "고", 0], ["E4", 1.0, "ㅡ", 0], ["E4", 0.5, "귀", 0], ["E4", 0.5, "하", 0]], "T": [["A3", 2.0, "고", 0], ["B3", 1.0, "ㅡ", 0], ["B3", 0.5, "귀", 0], ["B3", 0.5, "하", 0]], "B": [["B2", 2.0, "고", 0], ["E3", 1.0, "ㅡ", 0], ["E3", 0.5, "귀", 0], ["E3", 0.5, "하", 0]]}, "37": {"S": [["C5", 3.0, "다", 0], ["C5", 0.5, "우", 0], ["B4", 0.5, "리", 0]], "A": [["E4", 3.0, "다", 0], ["E4", 0.5, "우", 0], ["E4", 0.5, "리", 0]], "T": [["C4", 3.0, "다", 0], ["C4", 0.5, "우", 0], ["C4", 0.5, "리", 0]], "B": [["A3", 2.0, "다", 0], ["G3", 1.0, "ㅡ", 0], ["G3", 0.5, "우", 0], ["G3", 0.5, "리", 0]]}, "38": {"S": [["A4", 0.5, "어", 0], ["B4", 0.5, "머", 0], ["C5", 0.5, "님", 0], ["E5", 0.5, "이", 0], ["D5", 0.5, "들", 0], ["A4", 0.5, "려", 0], ["B4", 0.5, "주", 0], ["C5", 0.5, "시", 0]], "A": [["F4", 0.5, "어", 0], ["G4", 0.5, "머", 0], ["A4", 0.5, "님", 0], ["A4", 0.5, "이", 0], ["A4", 0.5, "들", 0], ["A4", 0.5, "려", 0], ["A4", 0.5, "주", 0], ["A4", 0.5, "시", 0]], "T": [["C4", 0.5, "어", 0], ["C4", 0.5, "머", 0], ["C4", 0.5, "님", 0], ["C4", 0.5, "이", 0], ["D4", 0.5, "들", 0], ["D4", 0.5, "려", 0], ["D4", 0.5, "주", 0], ["D4", 0.5, "시", 0]], "B": [["F3", 0.5, "어", 0], ["F3", 0.5, "머", 0], ["F3", 0.5, "님", 0], ["F3", 0.5, "이", 0], ["F#3", 0.5, "들", 0], ["F#3", 0.5, "려", 0], ["F#3", 0.5, "주", 0], ["F#3", 0.5, "시", 0]]}, "39": {"S": [["D5", 3.0, "던", 0], ["C5", 0.25, "재", 0], ["D5", 0.25, "ㅡ", 0], ["C5", 0.25, "미", 0], ["D5", 0.25, "ㅡ", 0]], "A": [["G4", 3.0, "던", 0], ["A4", 0.25, "재", 0], ["B4", 0.25, "ㅡ", 0], ["A4", 0.25, "미", 0], ["B4", 0.25, "ㅡ", 0]], "T": [["C4", 2.0, "던", 0], ["B3", 1.0, "ㅡ", 0], ["D4", 0.5, "재", 0], ["D4", 0.5, "미", 0]], "B": [["G3", 3.0, "던", 0], ["G3", 0.5, "재", 0], ["G3", 0.5, "미", 0]]}, "40": {"S": [["E5", 0.5, "있", 0], ["E5", 0.5, "게", 0], ["E5", 0.5, "듣", 0], ["E5", 0.25, "던", 0], ["D5", 0.25, "ㅡ", 0], ["C5", 1.0, "말", 0], ["C5", 0.5, "이", 0], ["C5", 0.5, "책", 0]], "A": [["G#4", 0.5, "있", 0], ["G#4", 0.5, "게", 0], ["G#4", 0.5, "듣", 0], ["G#4", 0.5, "던", 0], ["E4", 1.0, "말", 0], ["E4", 0.5, "이", 0], ["E4", 0.5, "책", 0]], "T": [["B3", 0.5, "있", 0], ["B3", 0.5, "게", 0], ["B3", 0.5, "듣", 0], ["D4", 0.5, "던", 0], ["C4", 1.0, "말", 0], ["C4", 0.5, "이", 0], ["C4", 0.5, "책", 0]], "B": [["E3", 0.5, "있", 0], ["E3", 0.5, "게", 0], ["E3", 0.5, "듣", 0], ["E3", 0.5, "던", 0], ["A3", 1.0, "말", 0], ["A3", 0.5, "이", 0], ["G3", 0.5, "책", 0]]}, "41": {"S": [["C5", 0.5, "중", 0], ["D5", 0.5, "에", 0], ["C5", 0.5, "있", 0], ["A4", 0.5, "으", 0], ["G4", 1.0, "니", 0], ["G4", 0.5, "이", 0], ["F4", 0.5, "ㅡ", 0]], "A": [["E4", 0.5, "중", 0], ["E4", 0.5, "에", 0], ["E4", 0.5, "있", 0], ["E4", 0.5, "으", 0], ["E4", 1.0, "니", 0], ["E4", 0.5, "이", 0], ["D4", 0.5, "ㅡ", 0]], "T": [["C4", 0.5, "중", 0], ["C4", 0.5, "에", 0], ["C4", 0.5, "있", 0], ["C4", 0.5, "으", 0], ["C4", 1.0, "니", 0], ["C4", 0.5, "이", 0], ["B3", 0.5, "ㅡ", 0]], "B": [["F#3", 0.5, "중", 0], ["F#3", 0.5, "에", 0], ["F#3", 0.5, "있", 0], ["F#3", 0.5, "으", 0], ["G3", 1.0, "니", 0], ["G3", 0.5, "이", 0], ["G#3", 0.5, "ㅡ", 0]]}, "42": {"S": [["E4", 0.5, "성", 0], ["G4", 0.5, "경", 0], ["C5", 0.5, "심", 0], ["E5", 0.5, "히", 0], ["D5", 0.5, "사", 0], ["A4", 0.5, "랑", 0], ["B4", 0.5, "합", 0], ["D5", 0.5, "니", 0]], "A": [["C4", 0.5, "성", 0], ["E4", 0.5, "경", 0], ["A4", 0.5, "심", 0], ["A4", 0.5, "히", 0], ["F4", 0.5, "사", 0], ["F4", 0.5, "랑", 0], ["F4", 0.5, "합", 0], ["F4", 0.5, "니", 0]], "T": [["A3", 0.5, "성", 0], ["C4", 0.5, "경", 0], ["C4", 0.5, "심", 0], ["C4", 0.5, "히", 0], ["C4", 0.5, "사", 0], ["C4", 0.5, "랑", 0], ["D4", 0.5, "합", 0], ["B3", 0.5, "니", 0]], "B": [["A3", 0.5, "성", 0], ["G3", 0.5, "경", 0], ["F3", 0.5, "심", 0], ["F3", 0.5, "히", 0], ["D3", 0.5, "사", 0], ["D3", 0.5, "랑", 0], ["G3", 0.5, "합", 0], ["G3", 0.5, "니", 0]]}, "43": {"S": [["C5", 3.0, "다", 0], ["r", 1.0, "", 0]], "A": [["E4", 3.0, "다", 0], ["r", 1.0, "", 0]], "T": [["C4", 3.0, "다", 0], ["r", 1.0, "", 0]], "B": [["C3", 3.0, "다", 0], ["r", 1.0, "", 0]]}, "44": {"S": [["r", 3.0, "", 0], ["B3", 0.5, "우", 0], ["C4", 0.5, "리", 0]], "A": [["r", 3.0, "", 0], ["B3", 0.5, "우", 0], ["C4", 0.5, "리", 0]]}, "45": {"S": [["A3", 0.5, "어", 0], ["B3", 0.5, "머", 0], ["C4", 0.5, "님", 0], ["E4", 0.5, "의", 0], ["D4", 1.5, "성", 0], ["C4", 0.5, "경", 0]], "A": [["A3", 0.5, "어", 0], ["B3", 0.5, "머", 0], ["C4", 0.5, "님", 0], ["E4", 0.5, "의", 0], ["D4", 1.5, "성", 0], ["C4", 0.5, "경", 0]]}, "46": {"S": [["D4", 3.0, "책", 0], ["r", 1.0, "", 0]], "A": [["D4", 3.0, "책", 0], ["r", 1.0, "", 0]]}, "48": {"T": [["r", 3.0, "", 0], ["B2", 1.0, "나", 0]], "B": [["r", 3.0, "", 0], ["B2", 1.0, "나", 0]]}, "49": {"T": [["A2", 0.5, "잊", 0], ["B2", 0.5, "지", 0], ["C3", 0.5, "않", 0], ["E3", 0.5, "고", 0], ["D3", 0.5, "기", 0], ["A2", 0.5, "억", 0], ["B2", 0.5, "합", 0], ["D3", 0.5, "니", 0]], "B": [["A2", 0.5, "잊", 0], ["B2", 0.5, "지", 0], ["C3", 0.5, "않", 0], ["E3", 0.5, "고", 0], ["D3", 0.5, "기", 0], ["A2", 0.5, "억", 0], ["B2", 0.5, "합", 0], ["D3", 0.5, "니", 0]]}, "50": {"T": [["C3", 3.0, "다", 0], ["r", 1.0, "", 0]], "B": [["C3", 3.0, "다", 0], ["r", 1.0, "", 0]]}, "58": {"S": [["Eb5", 1.5, "풍", 0], ["Eb5", 0.5, "파", 0], ["D5", 1.0, "많", 0], ["C5", 1.0, "은", 0]], "A": [["Eb5", 1.5, "풍", 0], ["Eb5", 0.5, "파", 0], ["D5", 1.0, "많", 0], ["C5", 1.0, "은", 0]], "T": [["Eb4", 1.5, "풍", 0], ["Eb4", 0.5, "파", 0], ["D4", 1.0, "많", 0], ["C4", 1.0, "은", 0]], "B": [["Eb4", 1.5, "풍", 0], ["Eb4", 0.5, "파", 0], ["D4", 1.0, "많", 0], ["C4", 1.0, "은", 0]]}, "59": {"S": [["Bb4", 0.5, "세", 0], ["Bb4", 0.5, "상", 0], ["G4", 0.5, "에", 0], ["Ab4", 0.5, "ㅡ", 0], ["Bb4", 2.0, "서", 0]], "A": [["Bb4", 0.5, "세", 0], ["Bb4", 0.5, "상", 0], ["G4", 0.5, "에", 0], ["Ab4", 0.5, "ㅡ", 0], ["Bb4", 2.0, "서", 0]], "T": [["Bb3", 0.5, "세", 0], ["Bb3", 0.5, "상", 0], ["G3", 0.5, "에", 0], ["Ab3", 0.5, "ㅡ", 0], ["Bb3", 2.0, "서", 0]], "B": [["Bb3", 0.5, "세", 0], ["Bb3", 0.5, "상", 0], ["G3", 0.5, "에", 0], ["Ab3", 0.5, "ㅡ", 0], ["Bb3", 2.0, "서", 0]]}, "60": {"S": [["Eb5", 1.5, "선", 0], ["Eb5", 0.5, "한", 0], ["Eb5", 0.5, "싸", 0], ["C5", 0.5, "움", 0], ["F5", 0.5, "싸", 0], ["Eb5", 0.5, "우", 0]], "A": [["Eb5", 1.5, "선", 0], ["Eb5", 0.5, "한", 0], ["Eb5", 0.5, "싸", 0], ["C5", 0.5, "움", 0], ["F5", 0.5, "싸", 0], ["Eb5", 0.5, "우", 0]], "T": [["C4", 1.5, "선", 0], ["C4", 0.5, "한", 0], ["C4", 0.5, "싸", 0], ["A3", 0.5, "움", 0], ["D4", 0.5, "싸", 0], ["C4", 0.5, "우", 0]], "B": [["C4", 1.5, "선", 0], ["C4", 0.5, "한", 0], ["C4", 0.5, "싸", 0], ["A3", 0.5, "움", 0], ["D4", 0.5, "싸", 0], ["C4", 0.5, "우", 0]]}, "61": {"S": [["D5", 3.0, "다", 0], ["r", 1.0, "", 0]], "A": [["D5", 3.0, "다", 0], ["r", 1.0, "", 0]], "T": [["C4", 2.0, "다", 0], ["B3", 1.0, "ㅡ", 0], ["r", 1.0, "", 0]], "B": [["C4", 2.0, "다", 0], ["B3", 1.0, "ㅡ", 0], ["r", 1.0, "", 0]]}, "62": {"S": [["Eb5", 1.5, "생", 0], ["Eb5", 0.5, "명", 0], ["D5", 1.0, "시", 0], ["C5", 1.0, "내", 0]], "A": [["C5", 1.5, "생", 0], ["C5", 0.5, "명", 0], ["Bb4", 1.0, "시", 0], ["F4", 1.0, "내", 0]], "T": [["Eb4", 1.5, "생", 0], ["Eb4", 0.5, "명", 0], ["F4", 1.0, "시", 0], ["D4", 1.0, "내", 0]], "B": [["Ab3", 1.5, "생", 0], ["Ab3", 0.5, "명", 0], ["Ab3", 1.0, "시", 0], ["Ab3", 1.0, "내", 0]]}, "63": {"S": [["Bb4", 0.5, "흐", 0], ["Bb4", 0.5, "르", 0], ["G4", 0.5, "는", 0], ["Ab4", 0.5, "곳", 0], ["Bb4", 2.0, "에", 0]], "A": [["F4", 0.5, "흐", 0], ["F4", 0.5, "르", 0], ["F4", 0.5, "는", 0], ["F4", 0.5, "곳", 0], ["G4", 2.0, "에", 0]], "T": [["D4", 0.5, "흐", 0], ["D4", 0.5, "르", 0], ["D4", 0.5, "는", 0], ["D4", 0.5, "곳", 0], ["E4", 2.0, "에", 0]], "B": [["G3", 0.5, "흐", 0], ["G3", 0.5, "르", 0], ["Bb3", 0.5, "는", 0], ["Bb3", 0.5, "곳", 0], ["C4", 2.0, "에", 0]]}, "64": {"S": [["C5", 1.5, "길", 0], ["Bb4", 0.5, "이", 0], ["Ab4", 0.5, "함", 0], ["G4", 0.5, "께", 0], ["F4", 0.5, "살", 0], ["F4", 0.5, "리", 0]], "A": [["Ab4", 1.5, "길", 0], ["F4", 0.5, "이", 0], ["D4", 0.5, "함", 0], ["D4", 0.5, "께", 0], ["D4", 0.5, "살", 0], ["D4", 0.5, "리", 0]], "T": [["C4", 1.5, "길", 0], ["C4", 0.5, "이", 0], ["Bb3", 0.5, "함", 0], ["Bb3", 0.5, "께", 0], ["Ab3", 0.5, "살", 0], ["Ab3", 0.5, "리", 0]], "B": [["F3", 1.5, "길", 0], ["Ab3", 0.5, "이", 0], ["Bb3", 0.5, "함", 0], ["Bb3", 0.5, "께", 0], ["Bb2", 0.5, "살", 0], ["Bb2", 0.5, "리", 0]]}, "65": {"S": [["Eb4", 3.0, "라", 0], ["Bb4", 0.5, "귀", 0], ["Eb5", 0.5, "하", 0]], "A": [["Bb3", 3.0, "라", 0], ["G4", 0.5, "귀", 0], ["G4", 0.5, "하", 0]], "T": [["G3", 3.0, "라", 0], ["Bb3", 0.5, "귀", 0], ["Eb4", 0.5, "하", 0]], "B": [["Eb3", 3.0, "라", 0], ["G3", 0.5, "귀", 0], ["G3", 0.5, "하", 0]]}, "66": {"S": [["F5", 3.0, "고", 0], ["D5", 0.5, "귀", 0], ["F5", 0.5, "하", 0]], "A": [["C5", 2.0, "고", 0], ["B4", 1.0, "ㅡ", 0], ["B4", 0.5, "귀", 0], ["B4", 0.5, "하", 0]], "T": [["D4", 3.0, "고", 0], ["D4", 0.5, "귀", 0], ["D4", 0.5, "하", 0]], "B": [["Ab3", 2.0, "고", 0], ["G3", 1.0, "ㅡ", 0], ["G3", 0.5, "귀", 0], ["G3", 0.5, "하", 0]]}, "67": {"S": [["Eb5", 3.0, "다", 0], ["Eb5", 0.5, "우", 0], ["D5", 0.5, "리", 0]], "A": [["G4", 3.0, "다", 0], ["G4", 0.5, "우", 0], ["G4", 0.5, "리", 0]], "T": [["Eb4", 3.0, "다", 0], ["Eb4", 0.5, "우", 0], ["Eb4", 0.5, "리", 0]], "B": [["C4", 3.0, "다", 0], ["C4", 0.5, "우", 0], ["Bb3", 0.5, "리", 0]]}, "68": {"S": [["C5", 0.5, "어", 0], ["D5", 0.5, "머", 0], ["Eb5", 0.5, "님", 0], ["G5", 0.5, "이", 0], ["F5", 0.5, "들", 0], ["C5", 0.5, "려", 0], ["D5", 0.5, "주", 0], ["Eb5", 0.5, "시", 0]], "A": [["Ab4", 0.5, "어", 0], ["Ab4", 0.5, "머", 0], ["C5", 0.5, "님", 0], ["C5", 0.5, "이", 0], ["A4", 0.5, "들", 0], ["A4", 0.5, "려", 0], ["A4", 0.5, "주", 0], ["A4", 0.5, "시", 0]], "T": [["Eb4", 0.5, "어", 0], ["Eb4", 0.5, "머", 0], ["Eb4", 0.5, "님", 0], ["Eb4", 0.5, "이", 0], ["Eb4", 0.5, "들", 0], ["Eb4", 0.5, "려", 0], ["Eb4", 0.5, "주", 0], ["Eb4", 0.5, "시", 0]], "B": [["Ab3", 0.5, "어", 0], ["Ab3", 0.5, "머", 0], ["Ab3", 0.5, "님", 0], ["Ab3", 0.5, "이", 0], ["F3", 0.5, "들", 0], ["F3", 0.5, "려", 0], ["F3", 0.5, "주", 0], ["F3", 0.5, "시", 0]]}, "69": {"S": [["F5", 3.0, "던", 0], ["Eb5", 0.5, "재", 0], ["F5", 0.5, "미", 0]], "A": [["Ab4", 2.0, "던", 0], ["Bb4", 1.0, "ㅡ", 0], ["Ab4", 0.5, "재", 0], ["Ab4", 0.5, "미", 0]], "T": [["Eb4", 2.0, "던", 0], ["D4", 1.0, "ㅡ", 0], ["Eb4", 0.5, "재", 0], ["Eb4", 0.5, "미", 0]], "B": [["Bb3", 3.0, "던", 0], ["Bb3", 0.5, "재", 0], ["Bb3", 0.5, "미", 0]]}, "70": {"S": [["G5", 0.5, "있", 0], ["G5", 0.5, "게", 0], ["G5", 0.5, "듣", 0], ["G5", 0.5, "던", 0], ["Eb5", 1.0, "말", 0], ["Eb5", 0.5, "이", 0], ["Eb5", 0.5, "책", 0]], "A": [["B4", 0.5, "있", 0], ["B4", 0.5, "게", 0], ["B4", 0.5, "듣", 0], ["B4", 0.5, "던", 0], ["G4", 1.0, "말", 0], ["G4", 0.5, "이", 0], ["G4", 0.5, "책", 0]], "T": [["D4", 0.5, "있", 0], ["D4", 0.5, "게", 0], ["D4", 0.5, "듣", 0], ["D4", 0.5, "던", 0], ["Eb4", 1.0, "말", 0], ["Eb4", 0.5, "이", 0], ["Eb4", 0.5, "책", 0]], "B": [["G3", 0.5, "있", 0], ["G3", 0.5, "게", 0], ["G3", 0.5, "듣", 0], ["G3", 0.5, "던", 0], ["C4", 1.0, "말", 0], ["C4", 0.5, "이", 0], ["Bb3", 0.5, "책", 0]]}, "71": {"S": [["Eb5", 0.5, "중", 0], ["F5", 0.5, "에", 0], ["Eb5", 0.5, "있", 0], ["C5", 0.5, "으", 0], ["Eb5", 1.5, "니", 0], ["Cb5", 0.25, "귀", 0], ["Cb5", 0.25, "한", 0]], "A": [["G4", 0.5, "중", 0], ["C5", 0.5, "에", 0], ["Ab4", 0.5, "있", 0], ["C5", 0.5, "으", 0], ["Cb5", 1.5, "니", 0], ["r", 0.5, "", 0]], "T": [["Eb4", 0.5, "중", 0], ["Eb4", 0.5, "에", 0], ["Eb4", 0.5, "있", 0], ["Eb4", 0.5, "으", 0], ["Eb4", 1.5, "니", 0], ["r", 0.5, "", 0]], "B": [["A3", 0.5, "중", 0], ["A3", 0.5, "에", 0], ["A3", 0.5, "있", 0], ["A3", 0.5, "으", 0], ["Ab3", 1.5, "니", 0], ["r", 0.5, "", 0]]}, "72": {"S": [["Bb4", 0.5, "어", 0], ["Eb5", 0.5, "머", 0], ["Eb5", 0.5, "니", 0], ["Bb4", 0.5, "의", 0], ["C5", 0.5, "사", 0], ["Eb5", 1.0, "랑", 0], ["C5", 0.25, "귀", 0], ["C5", 0.25, "한", 0]], "A": [["G4", 0.5, "어", 0], ["Bb4", 0.5, "머", 0], ["Bb4", 0.5, "니", 0], ["G4", 0.5, "의", 0], ["Ab4", 0.5, "사", 0], ["Ab4", 1.0, "랑", 0], ["r", 0.5, "", 0]], "T": [["Eb4", 0.5, "어", 0], ["Eb4", 0.5, "머", 0], ["Eb4", 0.5, "니", 0], ["Eb4", 0.5, "의", 0], ["C4", 0.5, "사", 0], ["C4", 1.0, "랑", 0], ["r", 0.5, "", 0]], "B": [["G3", 0.5, "어", 0], ["G3", 0.5, "머", 0], ["G3", 0.5, "니", 0], ["G3", 0.5, "의", 0], ["F3", 0.5, "사", 0], ["F3", 1.0, "랑", 0], ["r", 0.5, "", 0]]}, "73": {"S": [["Bb4", 0.5, "아", 0], ["Eb5", 0.5, "버", 0], ["Eb5", 0.5, "지", 0], ["Bb4", 0.5, "의", 0], ["C5", 0.5, "사", 0], ["Eb5", 1.0, "랑", 0], ["C5", 0.25, "귀", 0], ["C5", 0.25, "한", 0]], "A": [["G4", 0.5, "아", 0], ["Bb4", 0.5, "버", 0], ["Bb4", 0.5, "지", 0], ["G4", 0.5, "의", 0], ["Ab4", 0.5, "사", 0], ["C5", 1.0, "랑", 0], ["r", 0.5, "", 0]], "T": [["Eb4", 0.5, "아", 0], ["Eb4", 0.5, "버", 0], ["Eb4", 0.5, "지", 0], ["Eb4", 0.5, "의", 0], ["Eb4", 0.5, "사", 0], ["Eb4", 1.0, "랑", 0], ["r", 0.5, "", 0]], "B": [["G3", 0.5, "아", 0], ["G3", 0.5, "버", 0], ["G3", 0.5, "지", 0], ["G3", 0.5, "의", 0], ["Ab3", 0.5, "사", 0], ["Ab3", 1.0, "랑", 0], ["r", 0.5, "", 0]]}, "74": {"S": [["Bb4", 0.5, "하", 0], ["Eb5", 0.5, "나", 0], ["Eb5", 0.5, "님", 0], ["Bb4", 0.5, "의", 0], ["C5", 0.5, "사", 0], ["F5", 1.5, "랑", 0]], "A": [["Bb4", 0.5, "하", 0], ["Eb5", 0.5, "나", 0], ["Eb5", 0.5, "님", 0], ["Bb4", 0.5, "의", 0], ["Ab4", 0.5, "사", 0], ["Ab4", 1.5, "랑", 0]], "T": [["Bb3", 0.5, "하", 0], ["Eb4", 0.5, "나", 0], ["Eb4", 0.5, "님", 0], ["Bb3", 0.5, "의", 0], ["C4", 0.5, "사", 0], ["C4", 1.5, "랑", 0]], "B": [["Bb3", 0.5, "하", 0], ["Eb4", 0.5, "나", 0], ["Eb4", 0.5, "님", 0], ["Bb3", 0.5, "의", 0], ["F3", 0.5, "사", 0], ["F3", 1.5, "랑", 0]]}, "75": {"S": [["F5", 2.0, "ㅡ", 1], ["r", 1.0, "", 0], ["Eb5", 1.0, "아", 0]], "A": [["Ab4", 2.0, "ㅡ", 1], ["r", 1.0, "", 0], ["Ab4", 1.0, "아", 0]], "T": [["Eb4", 2.0, "ㅡ", 0], ["r", 1.0, "", 0], ["F4", 1.0, "아", 0]], "B": [["Bb3", 2.0, "ㅡ", 0], ["r", 1.0, "", 0], ["Bb3", 1.0, "아", 0]]}, "76": {"S": [["Eb5", 4.0, "멘", 0]], "A": [["C5", 4.0, "멘", 0]], "T": [["Eb4", 4.0, "멘", 0]], "B": [["Ab3", 4.0, "멘", 0]]}, "77": {"S": [["D5", 1.5, "아", 0], ["Eb5", 0.25, "ㅡ", 0], ["F5", 0.25, "ㅡ", 0], ["E5", 2.0, "멘", 0]], "A": [["Bb4", 2.0, "아", 0], ["G4", 2.0, "멘", 0]], "T": [["D4", 2.0, "아", 0], ["E4", 2.0, "멘", 0]], "B": [["G3", 2.0, "아", 0], ["C4", 2.0, "멘", 0]]}, "79": {"S": [["r", 2.0, "", 0], ["G5", 2.0, "아", 0]], "A": [["r", 2.0, "", 0], ["C5", 2.0, "아", 0]], "T": [["r", 2.0, "", 0], ["Eb4", 2.0, "아", 0]], "B": [["r", 2.0, "", 0], ["F3", 2.0, "아", 0]]}, "81": {"S": [["G4", 1.5, "어", 0], ["F4", 0.5, "머", 0], ["Eb4", 0.5, "니", 0], ["Bb4", 0.5, "의", 0], ["C5", 0.5, "넓", 0], ["Ab4", 0.5, "은", 0]], "A": [["G4", 1.5, "어", 0], ["F4", 0.5, "머", 0], ["Eb4", 0.5, "니", 0], ["Bb4", 0.5, "의", 0], ["C5", 0.5, "넓", 0], ["Ab4", 0.5, "은", 0]]}, "82": {"S": [["G4", 1.0, "사", 0], ["F4", 1.0, "ㅡ", 0], ["G4", 2.0, "랑", 0]], "A": [["G4", 1.0, "사", 0], ["F4", 1.0, "ㅡ", 0], ["G4", 2.0, "랑", 0]]}, "83": {"S": [["G4", 3.0, "ㅡ", 1], ["r", 1.0, "", 0]], "A": [["G4", 3.0, "ㅡ", 1], ["r", 1.0, "", 0]], "T": [["r", 3.0, "", 0], ["Eb3", 0.5, "내", 0], ["C3", 0.5, "가", 0]], "B": [["r", 3.0, "", 0], ["Eb3", 0.5, "내", 0], ["C3", 0.5, "가", 0]]}, "84": {"T": [["Bb2", 0.5, "잊", 0], ["Eb3", 0.5, "지", 0], ["Eb3", 0.5, "않", 0], ["G3", 0.5, "고", 0], ["F3", 0.5, "기", 0], ["C3", 0.5, "억", 0], ["D3", 0.5, "합", 0], ["F3", 0.5, "니", 0]], "B": [["Bb2", 0.5, "잊", 0], ["Eb3", 0.5, "지", 0], ["Eb3", 0.5, "않", 0], ["G3", 0.5, "고", 0], ["F3", 0.5, "기", 0], ["C3", 0.5, "억", 0], ["D3", 0.5, "합", 0], ["F3", 0.5, "니", 0]]}, "85": {"T": [["Eb3", 3.0, "다", 0], ["r", 1.0, "", 0]], "B": [["Eb3", 3.0, "다", 0], ["r", 1.0, "", 0]]}, "86": {"S": [["r", 3.0, "", 0], ["D4", 0.5, "내", 0], ["Eb4", 0.5, "가", 0]], "A": [["r", 3.0, "", 0], ["D4", 0.5, "내", 0], ["Eb4", 0.5, "가", 0]], "T": [["r", 3.0, "", 0], ["D3", 0.5, "내", 0], ["Eb3", 0.5, "가", 0]], "B": [["r", 3.0, "", 0], ["D3", 0.5, "내", 0], ["Eb3", 0.5, "가", 0]]}, "87": {"S": [["C4", 0.5, "잊", 0], ["D4", 0.5, "지", 0], ["Eb4", 0.5, "않", 0], ["G4", 0.5, "고", 0], ["F4", 0.5, "기", 0], ["C4", 0.5, "억", 0], ["D4", 0.5, "합", 0], ["F4", 0.5, "니", 0]], "A": [["C4", 0.5, "잊", 0], ["D4", 0.5, "지", 0], ["Eb4", 0.5, "않", 0], ["G4", 0.5, "고", 0], ["F4", 0.5, "기", 0], ["C4", 0.5, "억", 0], ["D4", 0.5, "합", 0], ["F4", 0.5, "니", 0]], "T": [["C3", 0.5, "잊", 0], ["D3", 0.5, "지", 0], ["Eb3", 0.5, "않", 0], ["G3", 0.5, "고", 0], ["F3", 0.5, "기", 0], ["C3", 0.5, "억", 0], ["D3", 0.5, "합", 0], ["F3", 0.5, "니", 0]], "B": [["C3", 0.5, "잊", 0], ["D3", 0.5, "지", 0], ["Eb3", 0.5, "않", 0], ["G3", 0.5, "고", 0], ["F3", 0.5, "기", 0], ["C3", 0.5, "억", 0], ["D3", 0.5, "합", 0], ["F3", 0.5, "니", 0]]}, "88": {"S": [["Eb4", 4.0, "다", 0]], "A": [["Eb4", 4.0, "다", 0]], "T": [["Eb3", 4.0, "다", 0]], "B": [["Eb3", 4.0, "다", 0]]}, "89": {"S": [["Eb4", 4.0, "", 1]], "A": [["Eb4", 4.0, "", 1]], "T": [["Eb3", 4.0, "", 1]], "B": [["Eb3", 4.0, "", 1]]}, "90": {"S": [["Eb4", 4.0, "", 1]], "A": [["Eb4", 4.0, "", 1]], "T": [["Eb3", 4.0, "", 1]], "B": [["Eb3", 4.0, "", 1]]}}, "rep": {"10": {"hum": [["C3", 2.0, "음", 0], ["D3", 2.0, "", 0]], "w": [["E4", 1.5, "", 0], ["D4", 0.5, "", 0], ["C4", 0.5, "", 0], ["G4", 0.5, "", 0], ["A4", 0.5, "", 0], ["F4", 0.5, "", 0]], "wl": [["E4", 1.5, "어", 0], ["D4", 0.5, "머", 0], ["C4", 0.5, "니", 0], ["G4", 0.5, "의", 0], ["A4", 0.5, "넓", 0], ["F4", 0.5, "은", 0]]}, "11": {"hum": [["E3", 1.0, "", 0], ["G3", 1.0, "", 0], ["E3", 2.0, "", 0]], "w": [["E4", 1.0, "", 0], ["D4", 1.0, "", 0], ["E4", 2.0, "", 0]], "wl": [["E4", 1.0, "사", 0], ["D4", 1.0, "ㅡ", 0], ["E4", 2.0, "랑", 0]]}, "12": {"hum": [["C3", 2.0, "", 0], ["E3", 2.0, "", 0]], "w": [["C4", 1.5, "", 0], ["C4", 0.5, "", 0], ["C5", 0.5, "", 0], ["C5", 0.5, "", 0], ["B4", 0.5, "", 0], ["B4", 0.5, "", 0]], "wl": [["C4", 1.5, "귀", 0], ["C4", 0.5, "하", 0], ["C5", 0.5, "고", 0], ["C5", 0.5, "도", 0], ["B4", 0.5, "귀", 0], ["B4", 0.5, "하", 0]]}, "13": {"hum": [["D3", 3.0, "", 0], ["r", 1.0, "", 0]], "w": [["A4", 3.0, "", 0], ["r", 1.0, "", 0]], "wl": [["A4", 3.0, "다", 0], ["r", 1.0, "", 0]]}, "14": {"hum": [["E3", 2.0, "", 0], ["D3", 2.0, "", 0]], "w": [["E4", 1.5, "", 0], ["D4", 0.5, "", 0], ["C4", 0.5, "", 0], ["G4", 0.5, "", 0], ["A4", 0.5, "", 0], ["F4", 0.5, "", 0]], "wl": [["E4", 1.5, "그", 0], ["D4", 0.5, "사", 0], ["C4", 0.5, "랑", 0], ["G4", 0.5, "이", 0], ["A4", 0.5, "언", 0], ["F4", 0.5, "제", 0]]}, "15": {"hum": [["C3", 2.0, "", 0], ["G2", 2.0, "", 0]], "w": [["E4", 1.0, "", 0], ["D4", 1.0, "", 0], ["E4", 2.0, "", 0]], "wl": [["E4", 1.0, "든", 0], ["D4", 1.0, "ㅡ", 0], ["E4", 2.0, "지", 0]]}, "16": {"hum": [["A2", 2.0, "", 0], ["C3", 2.0, "", 0]], "w": [["A4", 1.5, "", 0], ["G4", 0.5, "", 0], ["F4", 0.5, "", 0], ["E4", 0.5, "", 0], ["D4", 0.5, "", 0], ["D4", 0.5, "", 0]], "wl": [["A4", 1.5, "나", 0], ["G4", 0.5, "를", 0], ["F4", 0.5, "감", 0], ["E4", 0.5, "싸", 0], ["D4", 0.5, "줍", 0], ["D4", 0.5, "니", 0]]}, "17": {"hum": [["E3", 3.0, "", 0], ["r", 1.0, "", 0]], "w": [["C4", 3.0, "", 0], ["r", 1.0, "", 0]], "wl": [["C4", 3.0, "다", 0], ["r", 1.0, "", 0]]}}};
+const BOXES = {"9": [1, 0.0957, 0.5807, 0.2771, 0.7517], "10": [1, 0.2771, 0.5807, 0.4717, 0.7517], "11": [1, 0.4717, 0.5807, 0.6114, 0.7517], "12": [1, 0.6114, 0.5807, 0.7994, 0.7517], "13": [1, 0.7994, 0.5807, 0.9391, 0.7517], "14": [2, 0.0957, 0.0334, 0.3574, 0.2044], "15": [2, 0.3574, 0.0334, 0.5256, 0.2044], "16": [2, 0.5256, 0.0334, 0.7532, 0.2044], "17": [2, 0.7532, 0.0334, 0.9369, 0.2044], "18": [2, 0.0957, 0.356, 0.3904, 0.5271], "19": [2, 0.3904, 0.356, 0.5498, 0.5271], "20": [2, 0.5498, 0.356, 0.7774, 0.5271], "21": [2, 0.7774, 0.356, 0.9391, 0.5271], "22": [2, 0.0957, 0.6608, 0.3497, 0.8318], "23": [2, 0.3497, 0.6608, 0.5124, 0.8318], "24": [2, 0.5124, 0.6608, 0.7532, 0.8318], "25": [2, 0.7532, 0.6608, 0.9391, 0.8318], "26": [3, 0.0957, 0.0334, 0.3332, 0.2044], "27": [3, 0.3332, 0.0334, 0.5487, 0.2044], "28": [3, 0.5487, 0.0334, 0.7818, 0.2044], "29": [3, 0.7818, 0.0334, 0.9391, 0.2044], "30": [3, 0.0957, 0.3374, 0.2991, 0.5084], "31": [3, 0.2991, 0.3374, 0.5344, 0.5084], "32": [3, 0.5344, 0.3374, 0.7389, 0.5084], "33": [3, 0.7389, 0.3374, 0.9391, 0.5084], "34": [3, 0.0957, 0.6429, 0.3046, 0.8139], "35": [3, 0.3046, 0.6429, 0.5091, 0.8139], "36": [3, 0.5091, 0.6429, 0.7829, 0.8139], "37": [3, 0.7829, 0.6429, 0.9391, 0.8139], "38": [4, 0.0957, 0.0334, 0.3959, 0.2044], "39": [4, 0.3959, 0.0334, 0.6653, 0.2044], "40": [4, 0.6653, 0.0334, 0.9391, 0.2044], "41": [4, 0.0957, 0.3382, 0.431, 0.5092], "42": [4, 0.431, 0.3382, 0.7246, 0.5092], "43": [4, 0.7246, 0.3382, 0.9391, 0.5092], "44": [4, 0.0957, 0.6429, 0.2936, 0.8139], "45": [4, 0.2936, 0.6429, 0.4827, 0.8139], "46": [4, 0.4827, 0.6429, 0.6301, 0.8139], "47": [4, 0.6301, 0.6429, 0.784, 0.8139], "48": [4, 0.784, 0.6429, 0.9391, 0.8139], "49": [5, 0.0957, 0.0334, 0.364, 0.2044], "50": [5, 0.364, 0.0334, 0.5498, 0.2044], "51": [5, 0.5498, 0.0334, 0.7444, 0.2044], "52": [5, 0.7444, 0.0334, 0.9391, 0.2044], "53": [5, 0.0957, 0.3972, 0.2991, 0.5333], "54": [5, 0.2991, 0.3972, 0.4959, 0.5333], "55": [5, 0.4959, 0.3972, 0.6499, 0.5333], "56": [5, 0.6499, 0.3972, 0.7829, 0.5333], "57": [5, 0.7829, 0.3972, 0.9391, 0.5333], "58": [5, 0.0957, 0.6087, 0.3442, 0.7797], "59": [5, 0.3442, 0.6087, 0.5454, 0.7797], "60": [5, 0.5454, 0.6087, 0.7466, 0.7797], "61": [5, 0.7466, 0.6087, 0.9391, 0.7797], "62": [6, 0.0957, 0.0334, 0.3464, 0.2044], "63": [6, 0.3464, 0.0334, 0.552, 0.2044], "64": [6, 0.552, 0.0334, 0.7565, 0.2044], "65": [6, 0.7565, 0.0334, 0.9391, 0.2044], "66": [6, 0.0957, 0.3382, 0.4025, 0.5092], "67": [6, 0.4025, 0.3382, 0.6191, 0.5092], "68": [6, 0.6191, 0.3382, 0.9391, 0.5092], "69": [6, 0.0957, 0.6429, 0.3893, 0.8139], "70": [6, 0.3893, 0.6429, 0.6334, 0.8139], "71": [6, 0.6334, 0.6429, 0.9391, 0.8139], "72": [7, 0.0957, 0.0334, 0.5553, 0.2044], "73": [7, 0.5553, 0.0334, 0.9391, 0.2044], "74": [7, 0.0957, 0.4213, 0.5256, 0.5924], "75": [7, 0.5256, 0.4213, 0.7158, 0.5924], "76": [7, 0.7158, 0.4213, 0.9391, 0.5924], "77": [8, 0.0957, 0.0334, 0.4102, 0.2044], "78": [8, 0.4102, 0.0334, 0.6015, 0.2044], "79": [8, 0.6015, 0.0334, 0.7642, 0.2044], "80": [8, 0.7642, 0.0334, 0.9391, 0.2044], "81": [8, 0.0957, 0.3374, 0.3354, 0.5084], "82": [8, 0.3354, 0.3374, 0.4684, 0.5084], "83": [8, 0.4684, 0.3374, 0.5927, 0.5084], "84": [8, 0.5927, 0.3374, 0.7895, 0.5084], "85": [8, 0.7895, 0.3374, 0.9391, 0.5084], "86": [8, 0.0957, 0.6429, 0.3475, 0.8139], "87": [8, 0.3475, 0.6429, 0.5641, 0.8139], "88": [8, 0.5641, 0.6429, 0.6785, 0.8139], "89": [8, 0.6785, 0.6429, 0.8236, 0.8139], "90": [8, 0.8236, 0.6429, 0.9369, 0.8139], "0": [1, 0.0957, 0.1943, 0.2738, 0.342], "1": [1, 0.2738, 0.1943, 0.4321, 0.342], "2": [1, 0.4321, 0.1943, 0.5938, 0.342], "3": [1, 0.5938, 0.1943, 0.7279, 0.342], "4": [1, 0.7279, 0.1943, 0.9391, 0.342], "5": [1, 0.0957, 0.3848, 0.3684, 0.5364], "6": [1, 0.3684, 0.3848, 0.5641, 0.5364], "7": [1, 0.5641, 0.3848, 0.7422, 0.5364], "8": [1, 0.7422, 0.3848, 0.9391, 0.5364]};
+const PIANO = {"0": [[0.0, 0.5, 60, 0], [0.5, 0.5, 60, 0]], "1": [[0.0, 0.5, 69, 0], [0.5, 2.5, 67, 0], [3.0, 0.5, 60, 0], [3.5, 0.5, 60, 0], [0.0, 3.0, 60, 0], [0.0, 3.0, 64, 0], [0.0, 2.0, 59, 1], [2.0, 2.0, 58, 1], [0.0, 4.0, 55, 1], [0.0, 4.0, 48, 1]], "3": [[0.0, 3.5, 64, 0], [3.5, 0.25, 62, 0], [3.75, 0.25, 64, 0], [0.0, 4.0, 48, 1], [0.0, 4.0, 56, 1]], "5": [[0.0, 4.0, 65, 0], [0.0, 4.0, 64, 0]], "6": [[0.0, 4.0, 57, 1]], "7": [[0.0, 4.0, 62, 0], [0.0, 0.5, 67, 0], [0.5, 0.5, 70, 0], [1.0, 2.0, 70, 0], [3.0, 0.333, 67, 0], [3.333, 0.333, 63, 0], [3.667, 0.333, 65, 0], [0.0, 4.0, 58, 1], [0.0, 4.0, 51, 1]], "8": [[1.5, 2.0, 56, 0], [1.5, 2.0, 60, 0], [2.0, 2.0, 56, 0], [2.0, 2.0, 60, 0], [0.0, 0.5, 58, 0], [0.0, 0.5, 61, 0], [0.0, 0.5, 66, 0], [0.5, 1.0, 58, 0], [0.5, 1.0, 61, 0], [0.5, 1.0, 66, 0], [3.0, 1.0, 63, 0], [0.0, 0.5, 39, 1], [0.5, 1.0, 39, 1], [1.5, 2.5, 46, 1]], "9": [[0.0, 1.0, 60, 0], [0.0, 1.0, 62, 0], [0.0, 1.0, 64, 0], [0.0, 1.0, 67, 0], [1.0, 2.0, 60, 0], [1.0, 2.0, 62, 0], [1.0, 2.0, 64, 0], [1.0, 2.0, 67, 0], [3.0, 1.0, 60, 0], [3.0, 1.0, 62, 0], [3.0, 1.0, 64, 0], [3.0, 1.0, 67, 0]], "10": [[0.0, 1.0, 60, 0], [0.0, 1.0, 62, 0], [0.0, 1.0, 64, 0], [0.0, 1.0, 67, 0], [1.0, 1.0, 60, 0], [1.0, 1.0, 62, 0], [1.0, 1.0, 64, 0], [1.0, 1.0, 67, 0], [2.0, 1.0, 60, 0], [2.0, 1.0, 62, 0], [2.0, 1.0, 65, 0], [2.0, 1.0, 67, 0], [3.0, 1.0, 60, 0], [3.0, 1.0, 62, 0], [3.0, 1.0, 65, 0], [3.0, 1.0, 67, 0]], "11": [[0.0, 1.0, 60, 0], [0.0, 1.0, 62, 0], [0.0, 1.0, 64, 0], [0.0, 1.0, 67, 0], [1.0, 1.0, 60, 0], [1.0, 1.0, 62, 0], [1.0, 1.0, 64, 0], [1.0, 1.0, 67, 0], [2.0, 1.0, 60, 0], [2.0, 1.0, 62, 0], [2.0, 1.0, 64, 0], [2.0, 1.0, 67, 0], [3.0, 1.0, 60, 0], [3.0, 1.0, 62, 0], [3.0, 1.0, 64, 0], [3.0, 1.0, 67, 0]], "12": [[0.0, 1.0, 60, 0], [0.0, 1.0, 62, 0], [0.0, 1.0, 64, 0], [0.0, 1.0, 67, 0], [1.0, 1.0, 60, 0], [1.0, 1.0, 62, 0], [1.0, 1.0, 64, 0], [1.0, 1.0, 67, 0], [2.0, 1.0, 60, 0], [2.0, 1.0, 62, 0], [2.0, 1.0, 64, 0], [2.0, 1.0, 67, 0], [3.0, 1.0, 60, 0], [3.0, 1.0, 62, 0], [3.0, 1.0, 64, 0], [3.0, 1.0, 67, 0]], "13": [[0.0, 1.0, 60, 0], [0.0, 1.0, 62, 0], [0.0, 1.0, 65, 0], [0.0, 1.0, 67, 0], [1.0, 1.0, 60, 0], [1.0, 1.0, 62, 0], [1.0, 1.0, 65, 0], [1.0, 1.0, 67, 0], [2.0, 1.0, 60, 0], [2.0, 1.0, 62, 0], [2.0, 1.0, 65, 0], [2.0, 1.0, 67, 0], [3.0, 1.0, 60, 0], [3.0, 1.0, 62, 0], [3.0, 1.0, 65, 0], [3.0, 1.0, 67, 0]], "14": [[0.0, 1.0, 60, 0], [0.0, 1.0, 62, 0], [0.0, 1.0, 64, 0], [0.0, 1.0, 67, 0], [1.0, 1.0, 60, 0], [1.0, 1.0, 62, 0], [1.0, 1.0, 64, 0], [1.0, 1.0, 67, 0], [2.0, 1.0, 60, 0], [2.0, 1.0, 62, 0], [2.0, 1.0, 65, 0], [2.0, 1.0, 67, 0], [3.0, 1.0, 60, 0], [3.0, 1.0, 62, 0], [3.0, 1.0, 65, 0], [3.0, 1.0, 67, 0]], "15": [[0.0, 1.0, 60, 0], [0.0, 1.0, 62, 0], [0.0, 1.0, 64, 0], [0.0, 1.0, 67, 0], [1.0, 1.0, 60, 0], [1.0, 1.0, 62, 0], [1.0, 1.0, 64, 0], [1.0, 1.0, 67, 0], [2.0, 1.0, 60, 0], [2.0, 1.0, 62, 0], [2.0, 1.0, 64, 0], [2.0, 1.0, 67, 0], [3.0, 1.0, 60, 0], [3.0, 1.0, 62, 0], [3.0, 1.0, 64, 0], [3.0, 1.0, 67, 0]], "16": [[0.0, 1.0, 60, 0], [0.0, 1.0, 62, 0], [0.0, 1.0, 65, 0], [0.0, 1.0, 67, 0], [1.0, 1.0, 60, 0], [1.0, 1.0, 62, 0], [1.0, 1.0, 65, 0], [1.0, 1.0, 67, 0], [2.0, 1.0, 60, 0], [2.0, 1.0, 62, 0], [2.0, 1.0, 65, 0], [2.0, 1.0, 67, 0], [3.0, 1.0, 60, 0], [3.0, 1.0, 62, 0], [3.0, 1.0, 65, 0], [3.0, 1.0, 67, 0]], "17": [[0.0, 1.0, 60, 0], [0.0, 1.0, 62, 0], [0.0, 1.0, 64, 0], [0.0, 1.0, 67, 0], [1.0, 1.0, 60, 0], [1.0, 1.0, 62, 0], [1.0, 1.0, 64, 0], [1.0, 1.0, 67, 0], [2.0, 1.0, 60, 0], [2.0, 1.0, 62, 0], [2.0, 1.0, 64, 0], [2.0, 1.0, 67, 0], [3.0, 1.0, 60, 0], [3.0, 1.0, 62, 0], [3.0, 1.0, 64, 0], [3.0, 1.0, 67, 0]], "18": [[0.0, 2.0, 55, 0], [0.0, 2.0, 60, 0], [0.0, 2.0, 62, 0], [0.0, 2.0, 64, 0], [2.0, 1.0, 55, 0], [2.0, 1.0, 60, 0], [2.0, 1.0, 64, 0], [3.0, 1.0, 57, 0], [3.0, 1.0, 60, 0], [3.0, 1.0, 65, 0], [0.0, 2.0, 48, 1], [2.0, 1.0, 45, 1], [3.0, 1.0, 38, 1], [3.0, 1.0, 45, 1]], "19": [[0.0, 1.0, 64, 0], [1.0, 1.0, 62, 0], [2.0, 2.0, 55, 0], [2.0, 2.0, 60, 0], [2.0, 2.0, 62, 0], [2.0, 2.0, 64, 0], [0.0, 2.0, 53, 0], [0.0, 2.0, 57, 0], [0.0, 2.0, 43, 1], [2.0, 2.0, 48, 1]], "20": [[0.0, 2.0, 55, 0], [0.0, 2.0, 60, 0], [0.0, 2.0, 67, 0], [2.0, 2.0, 56, 0], [2.0, 2.0, 60, 0], [2.0, 2.0, 68, 0], [0.0, 2.0, 52, 1], [2.0, 2.0, 40, 1]], "21": [[0.0, 2.0, 57, 0], [0.0, 2.0, 60, 0], [0.0, 2.0, 65, 0], [0.0, 2.0, 69, 0], [2.0, 1.0, 69, 0], [3.0, 1.0, 67, 0], [2.0, 2.0, 57, 0], [2.0, 2.0, 60, 0], [2.0, 2.0, 65, 0], [0.0, 2.0, 41, 1], [0.0, 2.0, 48, 1], [2.0, 2.0, 43, 1], [2.0, 2.0, 50, 1]], "22": [[0.0, 1.0, 59, 0], [0.0, 1.0, 60, 0], [0.0, 1.0, 64, 0], [0.0, 1.0, 67, 0], [1.0, 1.0, 57, 0], [1.0, 1.0, 60, 0], [1.0, 1.0, 64, 0], [2.0, 0.5, 53, 0], [2.0, 0.5, 57, 0], [2.0, 0.5, 60, 0], [2.5, 0.5, 55, 0], [2.5, 0.5, 59, 0], [2.5, 0.5, 62, 0], [3.0, 1.0, 57, 0], [3.0, 1.0, 60, 0], [3.0, 1.0, 64, 0], [0.0, 1.0, 48, 1], [1.0, 1.0, 41, 1], [1.0, 1.0, 48, 1], [2.0, 0.5, 38, 1], [2.0, 0.5, 45, 1], [2.5, 0.5, 40, 1], [2.5, 0.5, 47, 1], [3.0, 0.5, 41, 1], [3.0, 0.5, 48, 1], [3.5, 0.5, 53, 1]], "23": [[0.0, 1.0, 55, 0], [0.0, 1.0, 60, 0], [0.0, 1.0, 67, 0], [1.0, 1.0, 52, 0], [1.0, 1.0, 59, 0], [1.0, 1.0, 64, 0], [2.0, 2.0, 60, 0], [2.0, 2.0, 64, 0], [2.0, 1.0, 57, 0], [3.0, 1.0, 55, 0], [0.0, 1.0, 40, 1], [1.0, 1.0, 44, 1], [2.0, 2.0, 45, 1]], "24": [[0.0, 1.0, 57, 0], [0.0, 1.0, 61, 0], [0.0, 1.0, 65, 0], [1.0, 1.0, 60, 0], [2.0, 0.5, 57, 0], [2.0, 0.5, 59, 0], [2.5, 0.5, 60, 0], [3.0, 0.5, 61, 0], [3.5, 0.5, 59, 0], [0.0, 1.0, 38, 1], [1.0, 1.0, 50, 1], [2.0, 1.5, 43, 1], [2.0, 1.5, 53, 1], [3.5, 0.5, 43, 1], [3.5, 0.5, 53, 1]], "25": [[0.0, 1.5, 60, 0], [1.5, 1.0, 55, 0], [2.5, 0.5, 60, 0], [3.0, 0.5, 64, 0], [3.5, 0.5, 69, 0], [0.0, 3.0, 48, 1], [0.0, 3.0, 52, 1]], "26": [[0.0, 1.5, 72, 0], [1.5, 0.5, 72, 0], [2.0, 0.5, 71, 0], [2.5, 0.5, 64, 0], [3.0, 0.5, 69, 0], [3.5, 0.5, 62, 0], [0.0, 1.5, 57, 1], [1.5, 0.5, 57, 1], [2.0, 1.0, 55, 1], [3.0, 1.0, 53, 1]], "27": [[0.0, 1.0, 60, 0], [0.0, 1.0, 67, 0], [1.0, 0.5, 64, 0], [1.5, 0.5, 65, 0], [2.0, 2.0, 59, 0], [2.0, 2.0, 67, 0], [0.0, 1.0, 52, 1], [1.0, 0.5, 48, 1], [1.5, 0.5, 50, 1], [2.0, 2.0, 52, 1]], "28": [[0.0, 2.0, 64, 0], [0.0, 2.0, 72, 0], [2.0, 2.0, 62, 0], [2.0, 2.0, 66, 0], [2.0, 2.0, 72, 0], [0.0, 2.0, 45, 1], [0.0, 2.0, 52, 1], [0.0, 2.0, 60, 1], [2.0, 2.0, 50, 1], [2.0, 2.0, 57, 1]], "29": [[0.0, 4.0, 64, 0], [0.0, 4.0, 59, 0], [0.0, 2.0, 57, 0], [2.0, 2.0, 56, 0], [0.0, 4.0, 47, 1], [0.0, 4.0, 40, 1]], "30": [[0.0, 1.5, 57, 0], [0.0, 1.5, 64, 0], [1.5, 0.5, 57, 0], [1.5, 0.5, 64, 0], [2.0, 1.0, 59, 0], [2.0, 1.0, 66, 0], [3.0, 1.0, 59, 0], [3.0, 1.0, 63, 0], [3.0, 1.0, 69, 0], [0.0, 1.5, 41, 1], [0.0, 1.5, 48, 1], [1.5, 0.5, 41, 1], [1.5, 0.5, 48, 1], [2.0, 1.0, 51, 1], [3.0, 1.0, 47, 1]], "31": [[0.0, 1.0, 64, 0], [1.0, 1.0, 62, 0], [2.0, 0.5, 61, 0], [2.5, 0.5, 58, 0], [3.0, 0.5, 57, 0], [3.5, 0.5, 55, 0], [0.0, 2.0, 55, 0], [2.0, 2.0, 55, 0], [0.0, 2.0, 52, 1], [2.0, 2.0, 45, 1], [2.0, 2.0, 52, 1]], "32": [[0.0, 1.5, 65, 0], [1.5, 1.0, 64, 0], [0.0, 2.0, 57, 0], [2.0, 0.5, 62, 0], [2.5, 0.5, 60, 0], [3.0, 0.5, 57, 0], [3.0, 0.5, 59, 0], [3.5, 0.5, 62, 0], [0.0, 2.0, 50, 1], [2.0, 2.0, 43, 1], [2.0, 2.0, 53, 1]], "33": [[0.0, 0.5, 59, 0], [0.0, 0.5, 60, 0], [0.5, 0.5, 64, 0], [1.0, 0.5, 69, 0], [1.5, 0.5, 72, 0], [2.0, 0.75, 76, 0], [2.75, 0.25, 74, 0], [3.0, 0.5, 72, 0], [3.5, 0.5, 69, 0], [2.0, 2.0, 66, 0], [0.0, 1.0, 45, 1], [1.0, 1.0, 43, 1], [2.0, 2.0, 38, 1], [2.0, 2.0, 45, 1], [2.0, 2.0, 54, 1]], "34": [[0.0, 1.0, 67, 0], [1.0, 1.0, 64, 0], [2.0, 1.0, 62, 0], [3.0, 0.5, 59, 0], [3.5, 0.5, 60, 0], [0.0, 2.0, 60, 0], [0.0, 2.0, 64, 0], [2.0, 2.0, 53, 0], [2.0, 2.0, 57, 0], [0.0, 2.0, 43, 1], [2.0, 2.0, 43, 1]], "35": [[1.0, 0.5, 55, 0], [1.5, 0.5, 60, 0], [2.0, 0.5, 62, 0], [2.5, 0.5, 64, 0], [3.0, 0.5, 67, 0], [3.5, 0.5, 72, 0], [0.0, 4.0, 60, 0], [0.0, 4.0, 52, 0], [0.0, 4.0, 48, 1]], "36": [[0.0, 3.0, 74, 0], [3.0, 0.5, 71, 0], [3.5, 0.5, 74, 0], [0.0, 2.0, 62, 0], [0.0, 2.0, 69, 0], [2.0, 2.0, 62, 0], [2.0, 2.0, 68, 0], [0.0, 0.5, 47, 1], [0.5, 0.5, 53, 1], [1.0, 0.5, 57, 1], [1.5, 0.5, 53, 1], [2.0, 0.5, 40, 1], [2.5, 0.5, 47, 1], [3.0, 0.5, 56, 1], [3.5, 0.5, 47, 1]], "37": [[0.0, 1.0, 72, 0], [1.0, 0.5, 71, 0], [1.5, 0.5, 72, 0], [2.0, 1.0, 71, 0], [3.0, 1.0, 67, 0], [0.0, 2.0, 64, 0], [2.0, 2.0, 64, 0], [0.0, 0.5, 45, 1], [0.5, 0.5, 52, 1], [1.0, 0.5, 60, 1], [1.5, 0.5, 52, 1], [2.0, 0.5, 43, 1], [2.5, 0.5, 52, 1], [3.0, 0.5, 60, 1], [3.5, 0.5, 52, 1]], "38": [[0.0, 2.0, 69, 0], [2.0, 1.0, 69, 0], [2.0, 1.0, 72, 0], [3.0, 1.0, 66, 0], [3.0, 1.0, 76, 0], [0.0, 0.5, 41, 1], [0.5, 0.5, 48, 1], [1.0, 0.5, 57, 1], [1.5, 0.5, 48, 1], [2.0, 0.5, 42, 1], [2.5, 0.5, 50, 1], [3.0, 0.5, 57, 1], [3.5, 0.5, 50, 1]], "39": [[0.0, 0.5, 76, 0], [0.5, 0.5, 77, 0], [1.0, 2.0, 74, 0], [3.0, 0.25, 69, 0], [3.0, 0.25, 72, 0], [3.25, 0.25, 71, 0], [3.25, 0.25, 74, 0], [3.5, 0.25, 69, 0], [3.5, 0.25, 72, 0], [3.75, 0.25, 71, 0], [3.75, 0.25, 74, 0], [0.0, 3.0, 65, 0], [0.0, 3.0, 69, 0], [0.0, 0.5, 43, 1], [0.5, 0.5, 50, 1], [1.0, 0.5, 59, 1], [1.5, 0.5, 57, 1], [2.0, 1.0, 55, 1], [3.0, 1.0, 43, 1]], "40": [[0.0, 0.5, 64, 0], [0.0, 0.5, 68, 0], [0.0, 0.5, 76, 0], [0.5, 0.5, 64, 0], [0.5, 0.5, 68, 0], [0.5, 0.5, 76, 0], [1.0, 0.5, 64, 0], [1.0, 0.5, 71, 0], [1.0, 0.5, 76, 0], [1.5, 0.25, 76, 0], [1.75, 0.25, 74, 0], [2.0, 1.0, 64, 0], [2.0, 1.0, 72, 0], [3.0, 1.0, 64, 0], [3.0, 1.0, 72, 0], [0.0, 0.5, 40, 1], [0.5, 0.5, 47, 1], [1.0, 0.5, 56, 1], [1.5, 0.5, 47, 1], [2.0, 0.5, 45, 1], [2.5, 0.5, 52, 1], [3.0, 0.5, 60, 1], [3.5, 0.5, 43, 1]], "42": [[0.0, 1.0, 55, 0], [0.0, 1.0, 60, 0], [0.0, 1.0, 64, 0], [1.0, 1.0, 57, 0], [1.0, 1.0, 60, 0], [1.0, 1.0, 64, 0], [2.0, 1.0, 57, 0], [2.0, 1.0, 60, 0], [2.0, 1.0, 65, 0], [3.0, 0.5, 53, 0], [3.0, 0.5, 59, 0], [3.5, 0.5, 62, 0], [0.0, 1.0, 45, 1], [0.0, 1.0, 52, 1], [1.0, 1.0, 41, 1], [1.0, 1.0, 48, 1], [2.0, 1.0, 38, 1], [2.0, 1.0, 45, 1], [3.0, 1.0, 43, 1], [3.0, 1.0, 50, 1]], "43": [[0.0, 0.5, 64, 0], [0.5, 0.5, 67, 0], [1.0, 2.0, 64, 0], [3.0, 1.0, 62, 0], [0.0, 0.5, 48, 1], [0.5, 0.5, 55, 1], [1.0, 0.5, 60, 1], [1.5, 0.5, 55, 1], [2.0, 0.5, 47, 1], [2.5, 0.5, 55, 1], [3.0, 0.5, 59, 1], [3.5, 0.5, 55, 1]], "44": [[0.0, 0.5, 62, 0], [0.5, 0.5, 64, 0], [1.0, 2.0, 60, 0], [3.0, 0.5, 59, 0], [3.5, 0.5, 60, 0], [0.0, 0.5, 45, 1], [0.5, 0.5, 52, 1], [1.0, 0.5, 57, 1], [1.5, 0.5, 52, 1], [2.0, 0.5, 43, 1], [2.5, 0.5, 52, 1], [3.0, 0.5, 55, 1], [3.5, 0.5, 52, 1]], "45": [[0.0, 0.5, 57, 0], [0.5, 0.5, 59, 0], [1.0, 0.5, 60, 0], [1.5, 0.5, 64, 0], [2.0, 0.5, 62, 0], [2.5, 0.5, 57, 0], [3.0, 0.5, 59, 0], [3.5, 0.5, 60, 0], [0.0, 0.5, 41, 1], [0.5, 0.5, 48, 1], [1.0, 0.5, 57, 1], [1.5, 0.5, 48, 1], [2.0, 0.5, 42, 1], [2.5, 0.5, 50, 1], [3.0, 1.0, 57, 1]], "46": [[0.0, 3.0, 62, 0], [3.0, 0.5, 60, 0], [3.5, 0.5, 62, 0], [0.0, 0.5, 43, 1], [0.5, 0.5, 50, 1], [1.0, 0.5, 53, 1], [1.5, 0.5, 57, 1], [2.0, 1.0, 55, 1], [3.0, 1.0, 43, 1]], "47": [[0.0, 0.5, 64, 0], [0.5, 0.5, 67, 0], [1.0, 2.0, 64, 0], [3.0, 1.0, 62, 0], [0.0, 0.5, 48, 1], [0.5, 0.5, 55, 1], [1.0, 0.5, 60, 1], [1.5, 0.5, 55, 1], [2.0, 0.5, 47, 1], [2.5, 0.5, 55, 1], [3.0, 0.5, 59, 1], [3.5, 0.5, 55, 1]], "48": [[0.0, 0.5, 62, 0], [0.5, 0.5, 67, 0], [1.0, 2.0, 60, 0], [3.0, 1.0, 59, 0], [0.0, 0.5, 45, 1], [0.5, 0.5, 52, 1], [1.0, 0.5, 57, 1], [1.5, 0.5, 52, 1], [2.0, 0.5, 43, 1], [2.5, 0.5, 52, 1], [3.0, 0.5, 55, 1], [3.5, 0.5, 52, 1]], "49": [[0.0, 0.5, 57, 0], [0.5, 0.5, 59, 0], [1.0, 0.5, 60, 0], [1.5, 0.5, 64, 0], [2.0, 0.5, 62, 0], [2.5, 0.5, 57, 0], [3.0, 0.5, 59, 0], [3.5, 0.5, 62, 0], [0.0, 0.5, 41, 1], [0.5, 0.5, 48, 1], [1.0, 0.5, 57, 1], [1.5, 0.5, 48, 1], [2.0, 0.5, 43, 1], [2.5, 0.5, 53, 1], [3.0, 0.5, 57, 1], [3.5, 0.5, 55, 1]], "50": [[0.5, 0.5, 64, 0], [1.0, 0.5, 67, 0], [1.5, 0.5, 72, 0], [2.0, 0.5, 76, 0], [2.5, 0.5, 79, 0], [3.0, 0.5, 84, 0], [3.5, 0.5, 86, 0], [2.0, 0.5, 67, 0], [2.5, 0.5, 72, 0], [3.0, 0.5, 76, 0], [3.5, 0.5, 74, 0], [0.0, 0.5, 48, 1], [0.5, 0.5, 55, 1], [1.0, 0.5, 60, 1], [1.5, 0.5, 64, 1]], "51": [[0.0, 1.5, 76, 0], [0.0, 2.0, 72, 0], [3.0, 1.0, 79, 0], [3.5, 0.5, 76, 0], [3.5, 0.5, 67, 0], [0.0, 2.0, 57, 1], [2.0, 0.5, 64, 1], [2.5, 0.5, 67, 1], [3.0, 0.5, 64, 1], [3.5, 0.5, 55, 1]], "52": [[0.0, 1.5, 76, 0], [1.5, 0.5, 79, 0], [2.0, 1.0, 76, 0], [3.0, 1.0, 72, 0], [0.0, 2.0, 69, 0], [2.0, 1.0, 67, 0], [3.0, 1.0, 72, 0], [0.5, 0.5, 60, 1], [1.0, 0.5, 64, 1], [1.5, 0.5, 60, 1], [2.5, 0.5, 60, 1], [3.0, 0.5, 64, 1], [3.5, 0.5, 60, 1], [0.0, 2.0, 53, 1], [2.0, 2.0, 52, 1]], "53": [[0.0, 1.0, 57, 0], [0.0, 1.0, 60, 0], [1.0, 1.0, 60, 0], [1.0, 1.0, 64, 0], [2.0, 1.5, 62, 0], [3.5, 0.5, 60, 0], [2.0, 1.0, 57, 0], [3.0, 0.5, 59, 0], [3.5, 0.5, 60, 0], [0.0, 0.5, 38, 1], [0.5, 0.5, 45, 1], [1.0, 0.5, 53, 1], [1.5, 0.5, 45, 1], [2.0, 0.5, 43, 1], [2.5, 1.0, 53, 1], [3.5, 0.5, 53, 1]], "54": [[0.0, 0.5, 60, 0], [0.5, 0.5, 62, 0], [1.0, 0.5, 63, 0], [1.5, 0.5, 65, 0], [2.0, 0.5, 67, 0], [2.5, 0.5, 68, 0], [3.0, 0.5, 70, 0], [3.5, 0.5, 72, 0], [0.0, 0.5, 44, 1], [0.5, 0.5, 51, 1], [1.0, 0.5, 58, 1], [1.5, 0.5, 51, 1], [2.0, 0.5, 44, 1], [2.5, 0.5, 51, 1], [3.0, 0.5, 60, 1], [3.5, 0.5, 58, 1]], "55": [[0.0, 0.5, 74, 0], [0.5, 0.5, 75, 0], [1.0, 1.0, 72, 0], [2.0, 1.0, 60, 0], [2.0, 1.0, 65, 0], [2.0, 1.0, 68, 0], [3.0, 0.5, 63, 0], [3.0, 0.5, 67, 0], [3.0, 0.5, 70, 0], [3.5, 0.5, 61, 0], [3.5, 0.5, 65, 0], [3.5, 0.5, 68, 0], [0.0, 0.5, 41, 1], [0.5, 0.5, 48, 1], [1.0, 0.5, 56, 1], [1.5, 0.5, 48, 1], [2.0, 1.0, 50, 1], [2.0, 1.0, 56, 1], [3.0, 0.5, 48, 1], [3.0, 0.5, 55, 1], [3.5, 0.5, 46, 1], [3.5, 0.5, 54, 1]], "56": [[0.0, 0.5, 70, 0], [0.5, 0.5, 72, 0], [1.0, 2.0, 63, 0], [0.0, 1.0, 60, 0], [0.0, 1.0, 63, 0], [1.0, 1.0, 56, 0], [1.0, 1.0, 60, 0], [1.0, 0.5, 63, 0], [1.5, 0.5, 62, 0], [0.0, 3.0, 44, 1], [0.0, 3.0, 51, 1], [1.0, 1.0, 41, 1], [1.0, 1.0, 48, 1]], "57": [[0.0, 0.5, 60, 0], [0.5, 0.5, 62, 0], [1.0, 0.5, 63, 0], [1.5, 0.5, 67, 0], [2.0, 0.5, 65, 0], [2.5, 0.5, 60, 0], [3.0, 0.5, 62, 0], [3.5, 0.5, 65, 0], [0.0, 2.0, 46, 1], [0.0, 2.0, 53, 1], [0.0, 2.0, 56, 1], [2.0, 1.0, 46, 1], [2.0, 1.0, 53, 1], [2.0, 1.0, 56, 1], [3.0, 1.0, 46, 1], [3.0, 1.0, 53, 1], [3.0, 1.0, 56, 1]], "58": [[0.0, 2.0, 63, 0], [0.0, 2.0, 67, 0], [0.0, 2.0, 75, 0], [2.0, 1.0, 62, 0], [2.0, 1.0, 67, 0], [2.0, 1.0, 74, 0], [3.0, 1.0, 60, 0], [3.0, 1.0, 63, 0], [3.0, 1.0, 72, 0], [0.0, 0.5, 24, 1], [0.0, 0.5, 36, 1], [0.5, 0.5, 43, 1], [1.0, 0.5, 51, 1], [1.5, 0.5, 55, 1], [2.0, 0.5, 46, 1], [2.5, 0.5, 55, 1], [3.0, 0.5, 44, 1], [3.5, 0.5, 53, 1]], "59": [[0.0, 1.0, 58, 0], [0.0, 1.0, 63, 0], [0.0, 1.0, 70, 0], [1.0, 0.5, 67, 0], [1.5, 0.5, 65, 0], [2.0, 2.0, 55, 0], [2.0, 2.0, 60, 0], [2.0, 2.0, 64, 0], [0.0, 0.5, 43, 1], [0.5, 0.5, 51, 1], [1.0, 0.5, 39, 1], [1.5, 0.5, 38, 1], [2.0, 0.5, 36, 1], [2.5, 0.5, 43, 1], [3.0, 0.5, 52, 1], [3.5, 0.5, 48, 1]], "60": [[0.0, 2.0, 60, 0], [0.0, 2.0, 63, 0], [0.0, 2.0, 68, 0], [2.0, 1.0, 63, 0], [2.0, 1.0, 69, 0], [2.0, 1.0, 72, 0], [3.0, 1.0, 65, 0], [3.0, 1.0, 69, 0], [3.0, 1.0, 75, 0], [0.0, 0.5, 41, 1], [0.5, 0.5, 48, 1], [1.0, 0.5, 56, 1], [1.5, 0.5, 48, 1], [2.0, 0.5, 41, 1], [2.5, 0.5, 48, 1], [3.0, 0.5, 57, 1], [3.5, 0.5, 48, 1]], "61": [[0.0, 2.0, 67, 0], [0.0, 2.0, 72, 0], [0.0, 2.0, 74, 0], [0.0, 2.0, 79, 0], [2.0, 2.0, 67, 0], [2.0, 2.0, 71, 0], [2.0, 2.0, 74, 0], [2.0, 2.0, 77, 0], [0.0, 0.5, 43, 1], [0.5, 0.5, 50, 1], [1.0, 0.5, 60, 1], [1.5, 0.5, 57, 1], [2.0, 0.5, 59, 1], [2.5, 0.5, 55, 1], [3.0, 0.5, 43, 1], [3.5, 0.5, 31, 1]], "62": [[0.0, 2.0, 63, 0], [0.0, 2.0, 68, 0], [0.0, 2.0, 72, 0], [0.0, 2.0, 75, 0], [2.0, 1.0, 62, 0], [2.0, 1.0, 67, 0], [2.0, 1.0, 70, 0], [2.0, 1.0, 74, 0], [3.0, 1.0, 62, 0], [3.0, 1.0, 65, 0], [3.0, 1.0, 72, 0], [0.0, 0.5, 44, 1], [0.5, 0.5, 51, 1], [1.0, 0.5, 60, 1], [1.5, 0.5, 56, 1], [2.0, 0.5, 44, 1], [2.5, 1.0, 53, 1], [3.5, 0.5, 53, 1]], "63": [[0.0, 1.0, 62, 0], [0.0, 1.0, 65, 0], [0.0, 1.0, 70, 0], [0.0, 1.0, 74, 0], [1.0, 0.5, 63, 0], [1.0, 0.5, 75, 0], [1.5, 0.5, 65, 0], [1.5, 0.5, 77, 0], [2.0, 2.0, 64, 0], [2.0, 2.0, 70, 0], [2.0, 2.0, 76, 0], [0.0, 0.5, 43, 1], [0.5, 0.5, 50, 1], [1.0, 0.5, 58, 1], [1.5, 0.5, 50, 1], [2.0, 0.5, 48, 1], [2.5, 0.5, 55, 1], [3.0, 0.5, 58, 1], [3.5, 0.5, 55, 1]], "64": [[0.0, 1.0, 65, 0], [0.0, 1.0, 68, 0], [0.0, 1.0, 77, 0], [1.0, 1.0, 63, 0], [1.0, 1.0, 68, 0], [1.0, 1.0, 72, 0], [2.0, 1.5, 65, 0], [2.0, 1.5, 68, 0], [2.0, 1.5, 74, 0], [3.5, 0.5, 75, 0], [0.0, 0.5, 41, 1], [0.5, 0.5, 48, 1], [1.0, 0.5, 56, 1], [1.5, 0.5, 48, 1], [2.0, 0.5, 46, 1], [2.5, 0.5, 53, 1], [3.0, 0.5, 56, 1], [3.5, 0.5, 53, 1]], "65": [[0.0, 3.0, 63, 0], [0.0, 3.0, 67, 0], [0.0, 3.0, 70, 0], [0.0, 3.0, 75, 0], [3.0, 0.5, 67, 0], [3.0, 0.5, 70, 0], [3.5, 0.5, 63, 0], [3.5, 0.5, 70, 0], [3.5, 0.5, 75, 0], [0.0, 0.5, 39, 1], [0.5, 0.5, 46, 1], [1.0, 0.5, 55, 1], [1.5, 0.5, 53, 1], [2.0, 0.5, 51, 1], [2.5, 0.5, 46, 1], [3.0, 0.5, 51, 1], [3.5, 0.5, 55, 1]], "66": [[1.0, 0.75, 53, 0], [1.0, 0.75, 59, 0], [1.0, 0.75, 62, 0], [1.75, 0.125, 53, 0], [1.75, 0.125, 59, 0], [1.75, 0.125, 62, 0], [1.875, 0.125, 53, 0], [1.875, 0.125, 59, 0], [1.875, 0.125, 62, 0], [2.0, 1.0, 55, 0], [2.0, 1.0, 59, 0], [2.0, 1.0, 62, 0], [3.0, 1.0, 55, 0], [3.0, 1.0, 59, 0], [3.0, 1.0, 65, 0], [1.0, 0.75, 32, 1], [1.0, 0.75, 44, 1], [1.75, 0.125, 32, 1], [1.75, 0.125, 44, 1], [1.875, 0.125, 32, 1], [1.875, 0.125, 44, 1], [2.0, 1.0, 31, 1], [2.0, 1.0, 43, 1], [3.0, 1.0, 31, 1]], "67": [[0.0, 1.0, 63, 0], [0.0, 1.0, 67, 0], [0.0, 1.0, 75, 0], [1.0, 0.5, 63, 0], [1.0, 0.5, 67, 0], [1.0, 0.5, 74, 0], [1.5, 0.5, 63, 0], [1.5, 0.5, 67, 0], [1.5, 0.5, 75, 0], [2.0, 0.5, 63, 0], [2.0, 0.5, 67, 0], [2.0, 0.5, 74, 0], [2.5, 0.5, 63, 0], [2.5, 0.5, 67, 0], [2.5, 0.5, 75, 0], [3.0, 0.5, 63, 0], [3.0, 0.5, 67, 0], [3.0, 0.5, 75, 0], [3.5, 0.5, 58, 0], [3.5, 0.5, 63, 0], [3.5, 0.5, 70, 0], [0.0, 0.5, 36, 1], [0.5, 0.5, 43, 1], [1.0, 0.5, 51, 1], [1.5, 0.5, 43, 1], [2.0, 0.5, 34, 1], [2.5, 0.5, 43, 1], [3.0, 0.5, 51, 1], [3.5, 0.5, 43, 1]], "68": [[0.0, 1.0, 60, 0], [0.0, 1.0, 63, 0], [0.0, 1.0, 72, 0], [1.0, 1.0, 63, 0], [1.0, 1.0, 68, 0], [1.0, 1.0, 75, 0], [2.0, 0.75, 65, 0], [2.0, 0.75, 72, 0], [2.0, 0.75, 77, 0], [2.75, 0.125, 57, 0], [2.75, 0.125, 63, 0], [2.75, 0.125, 65, 0], [2.875, 0.125, 57, 0], [2.875, 0.125, 63, 0], [2.875, 0.125, 65, 0], [3.0, 0.5, 57, 0], [3.0, 0.5, 63, 0], [3.0, 0.5, 65, 0], [3.5, 0.5, 57, 0], [3.5, 0.5, 63, 0], [3.5, 0.5, 65, 0], [0.0, 0.5, 44, 1], [0.5, 0.5, 51, 1], [1.0, 0.5, 60, 1], [1.5, 0.5, 58, 1], [2.0, 0.75, 57, 1], [2.75, 0.125, 41, 1], [2.75, 0.125, 48, 1], [2.875, 0.125, 41, 1], [2.875, 0.125, 48, 1], [3.0, 0.5, 41, 1], [3.0, 0.5, 48, 1], [3.5, 0.5, 41, 1], [3.5, 0.5, 48, 1]], "69": [[0.0, 0.5, 56, 0], [0.0, 0.5, 60, 0], [0.0, 0.5, 65, 0], [0.5, 0.5, 60, 0], [0.5, 0.5, 65, 0], [0.5, 0.5, 68, 0], [1.0, 0.5, 65, 0], [1.0, 0.5, 68, 0], [1.0, 0.5, 72, 0], [1.5, 0.5, 68, 0], [1.5, 0.5, 72, 0], [1.5, 0.5, 75, 0], [2.0, 0.5, 68, 0], [2.0, 0.5, 72, 0], [2.0, 0.5, 77, 0], [2.5, 0.5, 56, 0], [2.5, 0.5, 60, 0], [2.5, 0.5, 65, 0], [3.0, 0.5, 65, 0], [3.0, 0.5, 68, 0], [3.0, 0.5, 72, 0], [3.5, 0.5, 68, 0], [3.5, 0.5, 72, 0], [3.5, 0.5, 77, 0], [0.0, 0.5, 34, 1], [0.0, 0.5, 46, 1], [0.5, 1.0, 34, 1], [0.5, 1.0, 46, 1], [1.5, 0.5, 34, 1], [1.5, 0.5, 46, 1], [2.0, 0.25, 46, 1], [2.25, 0.25, 34, 1]], "70": [[0.0, 0.5, 79, 0], [0.5, 0.5, 65, 0], [0.5, 0.5, 77, 0], [1.0, 0.5, 63, 0], [1.0, 0.5, 75, 0], [1.5, 0.5, 62, 0], [1.5, 0.5, 74, 0], [2.0, 0.5, 75, 0], [2.5, 0.5, 62, 0], [2.5, 0.5, 74, 0], [3.0, 0.5, 60, 0], [3.0, 0.5, 72, 0], [3.5, 0.5, 58, 0], [3.5, 0.5, 71, 0], [0.0, 2.0, 67, 0], [0.0, 2.0, 71, 0], [2.0, 2.0, 63, 0], [2.0, 2.0, 67, 0], [0.0, 0.5, 43, 1], [0.5, 0.5, 50, 1], [1.0, 0.5, 59, 1], [1.5, 0.5, 50, 1], [2.0, 0.5, 36, 1], [2.5, 0.5, 43, 1], [3.0, 0.5, 51, 1], [3.5, 0.5, 43, 1]], "71": [[0.0, 0.875, 55, 0], [0.0, 0.875, 60, 0], [0.0, 0.875, 63, 0], [0.0, 0.875, 67, 0], [0.875, 0.062, 55, 0], [0.875, 0.062, 60, 0], [0.875, 0.062, 63, 0], [0.875, 0.062, 67, 0], [0.938, 0.062, 55, 0], [0.938, 0.062, 60, 0], [0.938, 0.062, 63, 0], [0.938, 0.062, 67, 0], [1.0, 1.0, 55, 0], [1.0, 1.0, 60, 0], [1.0, 1.0, 63, 0], [1.0, 1.0, 67, 0], [2.0, 0.5, 56, 0], [2.0, 0.5, 59, 0], [2.0, 0.5, 63, 0], [2.0, 0.5, 68, 0], [2.5, 0.5, 59, 0], [2.5, 0.5, 72, 0], [3.0, 0.5, 63, 0], [3.0, 0.5, 75, 0], [3.5, 0.5, 65, 0], [3.5, 0.5, 77, 0], [0.0, 0.875, 33, 1], [0.0, 0.875, 45, 1], [0.875, 0.062, 33, 1], [0.875, 0.062, 45, 1], [0.938, 0.062, 33, 1], [0.938, 0.062, 45, 1], [1.0, 1.0, 33, 1], [1.0, 1.0, 45, 1], [2.0, 2.0, 32, 1], [2.0, 2.0, 44, 1]], "72": [[0.0, 0.875, 67, 0], [0.0, 0.875, 70, 0], [0.0, 0.875, 75, 0], [0.0, 0.875, 79, 0], [1.125, 0.062, 55, 0], [1.125, 0.062, 58, 0], [1.125, 0.062, 63, 0], [1.125, 0.062, 67, 0], [1.188, 0.062, 55, 0], [1.188, 0.062, 58, 0], [1.188, 0.062, 63, 0], [1.188, 0.062, 67, 0], [1.25, 1.0, 55, 0], [1.25, 1.0, 58, 0], [1.25, 1.0, 63, 0], [1.25, 1.0, 67, 0], [2.0, 0.5, 56, 0], [2.0, 0.5, 60, 0], [2.0, 0.5, 63, 0], [2.0, 0.5, 68, 0], [2.5, 0.5, 60, 0], [2.5, 0.5, 63, 0], [2.5, 0.5, 68, 0], [2.5, 0.5, 72, 0], [3.0, 0.5, 63, 0], [3.0, 0.5, 68, 0], [3.0, 0.5, 72, 0], [3.0, 0.5, 75, 0], [3.5, 0.5, 65, 0], [3.5, 0.5, 68, 0], [3.5, 0.5, 72, 0], [3.5, 0.5, 77, 0], [0.0, 1.5, 31, 1], [0.0, 1.5, 43, 1], [1.5, 0.5, 31, 1], [1.5, 0.5, 43, 1], [2.0, 1.5, 29, 1], [2.0, 1.5, 41, 1], [3.5, 0.5, 29, 1], [3.5, 0.5, 41, 1]], "73": [[0.0, 0.875, 67, 0], [0.0, 0.875, 70, 0], [0.0, 0.875, 75, 0], [0.0, 0.875, 79, 0], [0.875, 0.062, 55, 0], [0.875, 0.062, 58, 0], [0.875, 0.062, 63, 0], [0.875, 0.062, 67, 0], [0.938, 0.062, 55, 0], [0.938, 0.062, 58, 0], [0.938, 0.062, 63, 0], [0.938, 0.062, 67, 0], [1.0, 1.0, 55, 0], [1.0, 1.0, 58, 0], [1.0, 1.0, 63, 0], [1.0, 1.0, 67, 0], [2.0, 0.5, 56, 0], [2.0, 0.5, 60, 0], [2.0, 0.5, 63, 0], [2.0, 0.5, 68, 0], [2.5, 0.5, 60, 0], [2.5, 0.5, 63, 0], [2.5, 0.5, 68, 0], [2.5, 0.5, 72, 0], [3.0, 0.5, 63, 0], [3.0, 0.5, 68, 0], [3.0, 0.5, 72, 0], [3.0, 0.5, 75, 0], [3.5, 0.5, 65, 0], [3.5, 0.5, 68, 0], [3.5, 0.5, 72, 0], [3.5, 0.5, 77, 0], [0.0, 1.5, 31, 1], [0.0, 1.5, 43, 1], [1.5, 0.5, 31, 1], [1.5, 0.5, 43, 1], [2.0, 1.5, 32, 1], [2.0, 1.5, 44, 1], [3.5, 0.5, 32, 1], [3.5, 0.5, 44, 1]], "74": [[0.0, 0.875, 67, 0], [0.0, 0.875, 70, 0], [0.0, 0.875, 75, 0], [0.0, 0.875, 79, 0], [0.875, 0.062, 75, 0], [0.875, 0.062, 79, 0], [0.875, 0.062, 82, 0], [0.938, 0.062, 75, 0], [0.938, 0.062, 79, 0], [0.938, 0.062, 82, 0], [1.0, 1.0, 75, 0], [1.0, 1.0, 79, 0], [1.0, 1.0, 82, 0], [2.0, 0.875, 75, 0], [2.0, 0.875, 80, 0], [2.0, 0.875, 84, 0], [2.875, 0.062, 63, 0], [2.875, 0.062, 68, 0], [2.875, 0.062, 72, 0], [2.938, 0.062, 63, 0], [2.938, 0.062, 68, 0], [2.938, 0.062, 72, 0], [3.0, 1.0, 63, 0], [3.0, 1.0, 68, 0], [3.0, 1.0, 72, 0], [0.875, 0.062, 63, 0], [0.875, 0.062, 67, 0], [0.875, 0.062, 70, 0], [0.938, 0.062, 63, 0], [0.938, 0.062, 67, 0], [0.938, 0.062, 70, 0], [1.0, 1.0, 63, 0], [1.0, 1.0, 67, 0], [1.0, 1.0, 70, 0], [2.0, 1.0, 63, 0], [2.0, 1.0, 68, 0], [2.0, 1.0, 72, 0], [0.0, 0.875, 31, 1], [0.0, 0.875, 43, 1], [3.0, 0.5, 29, 1], [3.0, 0.5, 41, 1], [3.5, 0.25, 29, 1], [3.5, 0.25, 41, 1], [3.75, 0.25, 32, 1], [3.75, 0.25, 44, 1]], "75": [[0.0, 1.0, 65, 0], [0.0, 1.0, 68, 0], [0.0, 1.0, 72, 0], [0.0, 1.0, 75, 0], [1.0, 1.0, 53, 0], [1.0, 1.0, 56, 0], [1.0, 1.0, 60, 0], [1.0, 1.0, 63, 0], [2.0, 1.0, 56, 0], [2.0, 1.0, 60, 0], [2.0, 1.0, 63, 0], [2.25, 1.0, 56, 0], [2.25, 1.0, 60, 0], [2.25, 1.0, 63, 0], [0.0, 1.5, 34, 1], [0.0, 1.5, 46, 1], [1.5, 1.0, 34, 1], [1.5, 1.0, 46, 1], [2.0, 0.25, 46, 1], [2.25, 0.25, 34, 1]], "76": [[0.0, 1.5, 63, 0], [0.0, 1.5, 72, 0], [0.0, 1.5, 75, 0], [1.5, 1.0, 62, 0], [1.5, 1.0, 70, 0], [1.5, 1.0, 74, 0], [1.167, 1.0, 63, 0], [1.167, 1.0, 72, 0], [1.167, 1.0, 75, 0], [2.333, 1.0, 60, 0], [2.333, 1.0, 63, 0], [2.333, 1.0, 72, 0], [0.0, 0.5, 32, 1], [0.0, 0.5, 44, 1], [0.5, 0.333, 51, 1], [0.833, 0.333, 60, 1], [1.167, 0.5, 56, 1], [1.5, 0.5, 44, 1], [2.0, 0.333, 51, 1], [2.333, 0.5, 56, 1], [2.833, 0.5, 51, 1]], "77": [[0.5, 1.0, 58, 0], [0.5, 1.0, 62, 0], [0.5, 1.0, 70, 0], [1.5, 0.5, 67, 0], [2.0, 0.5, 68, 0], [2.5, 0.5, 70, 0], [3.0, 0.5, 74, 0], [3.0, 0.5, 75, 0], [3.0, 0.5, 85, 0], [3.5, 0.5, 72, 0], [3.5, 0.5, 75, 0], [3.5, 0.5, 84, 0], [1.5, 1.0, 58, 0], [1.5, 1.0, 62, 0], [2.5, 1.5, 60, 0], [2.5, 1.5, 64, 0], [0.5, 0.5, 43, 1], [1.0, 0.5, 50, 1], [1.5, 0.5, 55, 1], [2.0, 0.5, 50, 1], [2.5, 0.5, 36, 1], [3.0, 0.5, 43, 1], [3.5, 0.5, 52, 1]], "78": [[0.0, 1.5, 68, 0], [0.0, 1.5, 72, 0], [0.0, 1.5, 80, 0], [1.5, 0.5, 67, 0], [1.5, 0.5, 70, 0], [1.5, 0.5, 79, 0], [2.0, 0.5, 65, 0], [2.0, 0.5, 68, 0], [2.0, 0.5, 77, 0], [2.5, 0.5, 63, 0], [2.5, 0.5, 67, 0], [2.5, 0.5, 75, 0], [3.0, 0.5, 62, 0], [3.0, 0.5, 65, 0], [3.0, 0.5, 74, 0], [3.5, 0.5, 62, 0], [3.5, 0.5, 67, 0], [3.5, 0.5, 74, 0], [0.0, 0.5, 41, 1], [0.5, 0.5, 48, 1], [1.0, 0.5, 56, 1], [1.5, 0.5, 48, 1], [2.0, 0.5, 46, 1], [2.5, 0.5, 53, 1], [3.0, 0.5, 56, 1], [3.5, 0.5, 59, 1]], "79": [[0.0, 0.5, 63, 0], [0.0, 0.5, 67, 0], [0.0, 0.5, 72, 0], [0.0, 0.5, 75, 0], [0.5, 0.5, 67, 0], [1.0, 0.5, 63, 0], [1.0, 0.5, 67, 0], [1.0, 0.5, 72, 0], [1.5, 0.5, 68, 0], [1.5, 0.5, 72, 0], [1.5, 0.5, 75, 0], [2.0, 2.0, 69, 0], [2.0, 2.0, 72, 0], [2.0, 2.0, 79, 0], [0.0, 0.5, 60, 1], [0.5, 0.5, 58, 1], [1.0, 0.5, 56, 1], [1.5, 0.5, 55, 1], [2.0, 2.0, 53, 1], [2.0, 2.0, 63, 1]], "81": [[0.0, 2.0, 58, 0], [0.0, 2.0, 63, 0], [0.0, 2.0, 67, 0], [2.0, 1.0, 58, 0], [2.0, 1.0, 63, 0], [2.0, 1.0, 67, 0], [3.0, 1.0, 56, 0], [3.0, 1.0, 63, 0], [3.0, 1.0, 68, 0], [0.0, 2.0, 51, 1], [2.0, 1.0, 49, 1], [3.0, 1.0, 48, 1]], "82": [[0.0, 2.0, 55, 0], [0.0, 2.0, 62, 0], [0.0, 2.0, 67, 0], [2.0, 2.0, 55, 0], [2.0, 2.0, 60, 0], [2.0, 2.0, 63, 0], [2.0, 2.0, 67, 0], [0.0, 2.0, 47, 1], [2.0, 1.0, 48, 1], [3.0, 1.0, 46, 1]], "83": [[0.0, 4.0, 72, 0], [0.0, 4.0, 67, 0], [0.0, 4.0, 63, 0], [0.0, 4.0, 60, 0], [0.0, 4.0, 45, 1]], "84": [[0.0, 2.0, 55, 0], [0.0, 2.0, 58, 0], [0.0, 2.0, 63, 0], [2.0, 2.0, 56, 0], [2.0, 2.0, 65, 0], [2.0, 1.0, 60, 0], [3.0, 1.0, 62, 0], [0.0, 2.0, 46, 1], [2.0, 2.0, 46, 1]], "85": [[0.0, 0.5, 67, 0], [0.5, 0.5, 70, 0], [1.0, 2.0, 67, 0], [3.0, 1.0, 65, 0], [0.0, 0.5, 51, 1], [0.5, 0.5, 55, 1], [1.0, 0.5, 58, 1], [1.5, 0.5, 55, 1], [2.0, 0.5, 50, 1], [2.5, 0.5, 55, 1], [3.0, 0.5, 58, 1], [3.5, 0.5, 55, 1]], "86": [[0.0, 0.5, 65, 0], [0.5, 0.5, 67, 0], [1.0, 2.0, 63, 0], [3.0, 0.5, 62, 0], [3.5, 0.5, 63, 0], [0.0, 0.5, 48, 1], [0.5, 0.5, 55, 1], [1.0, 0.5, 58, 1], [1.5, 0.5, 55, 1], [2.0, 0.5, 46, 1], [2.5, 0.5, 55, 1], [3.0, 0.5, 58, 1], [3.5, 0.5, 55, 1]], "87": [[0.0, 0.5, 60, 0], [0.5, 0.5, 62, 0], [1.0, 0.5, 63, 0], [1.5, 0.5, 67, 0], [2.0, 1.0, 60, 0], [2.0, 1.0, 65, 0], [3.0, 0.5, 62, 0], [3.5, 0.5, 65, 0], [0.0, 0.5, 44, 1], [0.5, 0.5, 51, 1], [1.0, 0.5, 60, 1], [1.5, 0.5, 58, 1], [2.0, 2.0, 46, 1], [2.0, 2.0, 53, 1], [2.0, 2.0, 56, 1]], "88": [[2.0, 2.0, 53, 0], [2.0, 2.0, 56, 0], [2.0, 2.0, 61, 0], [2.0, 2.0, 49, 1]], "89": [[0.0, 2.0, 54, 0], [0.0, 2.0, 58, 0], [0.0, 2.0, 63, 0], [2.0, 2.0, 57, 0], [2.0, 2.0, 58, 0], [2.0, 2.0, 61, 0], [2.0, 2.0, 64, 0], [0.0, 2.0, 47, 1], [2.0, 2.0, 45, 1]], "90": [[0.0, 4.0, 63, 0], [0.0, 4.0, 60, 0], [0.0, 4.0, 58, 0], [0.0, 4.0, 56, 0], [0.0, 2.0, 44, 1], [2.0, 2.0, 32, 1]]};
+const RECMAP = {"step":0.1,"r":[1.15,1.24,1.33,1.42,1.5,1.59,1.68,1.77,1.86,1.95,2.04,2.13,2.23,2.33,2.43,2.53,2.63,2.73,2.83,2.93,3.03,3.13,3.23,3.33,3.43,3.53,3.63,3.74,3.84,3.94,4.04,4.14,4.24,4.34,4.44,4.54,4.64,4.74,4.84,4.94,5.04,5.14,5.24,5.34,5.44,5.54,5.64,5.74,5.84,5.94,6.04,6.14,6.25,6.35,6.45,6.55,6.65,6.75,6.85,6.95,7.05,7.15,7.25,7.35,7.45,7.55,7.65,7.75,7.85,7.95,8.05,8.15,8.25,8.35,8.45,8.55,8.65,8.76,8.86,8.96,9.06,9.16,9.26,9.36,9.46,9.56,9.66,9.76,9.86,9.96,10.06,10.16,10.26,10.36,10.46,10.56,10.66,10.76,10.86,10.96,11.06,11.17,11.27,11.37,11.47,11.57,11.67,11.77,11.87,11.97,12.07,12.17,12.27,12.37,12.47,12.57,12.67,12.77,12.87,12.97,13.07,13.17,13.27,13.37,13.47,13.57,13.68,13.78,13.88,13.98,14.08,14.18,14.28,14.38,14.48,14.58,14.68,14.78,14.88,14.98,15.08,15.18,15.28,15.38,15.48,15.58,15.68,15.78,15.88,15.98,16.08,16.19,16.29,16.39,16.49,16.59,16.69,16.79,16.89,16.99,17.09,17.19,17.29,17.39,17.49,17.59,17.69,17.79,17.89,17.99,18.09,18.19,18.29,18.39,18.49,18.59,18.7,18.8,18.9,19.0,19.1,19.2,19.3,19.4,19.5,19.6,19.7,19.8,19.9,20.0,20.1,20.2,20.3,20.4,20.5,20.6,20.7,20.8,20.9,21.0,21.11,21.21,21.31,21.41,21.51,21.61,21.71,21.81,21.91,22.01,22.11,22.21,22.31,22.41,22.51,22.61,22.71,22.81,22.91,23.01,23.11,23.21,23.31,23.41,23.51,23.62,23.72,23.82,23.92,24.02,24.12,24.22,24.32,24.42,24.52,24.62,24.72,24.82,24.92,25.02,25.12,25.22,25.32,25.42,25.52,25.62,25.72,25.82,25.92,26.02,26.13,26.23,26.33,26.43,26.53,26.63,26.73,26.83,26.93,27.03,27.13,27.23,27.33,27.43,27.53,27.63,27.73,27.83,27.93,28.03,28.13,28.23,28.33,28.43,28.53,28.64,28.74,28.84,28.94,29.04,29.14,29.24,29.34,29.44,29.54,29.64,29.74,29.84,29.94,30.04,30.14,30.24,30.34,30.44,30.54,30.64,30.74,30.84,30.94,31.05,31.15,31.25,31.35,31.45,31.55,31.65,31.75,31.85,31.95,32.05,32.15,32.25,32.35,32.45,32.55,32.65,32.75,32.85,32.95,33.05,33.15,33.25,33.35,33.45,33.56,33.66,33.76,33.86,33.96,34.06,34.16,34.26,34.36,34.46,34.56,34.66,34.76,34.86,34.96,35.06,35.16,35.26,35.36,35.46,35.56,35.66,35.76,35.86,35.96,36.07,36.17,36.27,36.37,36.47,36.57,36.67,36.77,36.87,36.97,37.07,37.17,37.27,37.37,37.47,37.57,37.67,37.77,37.87,37.97,38.07,38.17,38.27,38.37,38.46,38.56,38.66,38.76,38.86,38.96,39.06,39.16,39.26,39.36,39.46,39.56,39.65,39.75,39.85,39.95,40.05,40.15,40.25,40.35,40.45,40.55,40.65,40.75,40.84,40.94,41.04,41.14,41.24,41.34,41.44,41.54,41.64,41.74,41.84,41.93,42.01,42.1,42.19,42.28,42.37,42.46,42.55,42.64,42.72,42.81,42.9,42.99,43.08,43.17,43.26,43.35,43.43,43.52,43.61,43.7,43.79,43.88,43.97,44.06,44.14,44.23,44.32,44.41,44.5,44.59,44.68,44.77,44.85,44.94,45.03,45.12,45.21,45.3,45.39,45.48,45.56,45.72,45.78,45.85,45.91,46.0,46.11,46.22,46.35,46.47,46.56,46.62,46.68,46.75,46.82,46.9,46.98,47.06,47.12,47.19,47.24,47.3,47.35,47.4,47.46,47.51,47.59,47.67,47.77,47.87,47.96,48.03,48.11,48.17,48.24,48.31,48.37,48.44,48.51,48.58,48.66,48.77,48.9,49.06,49.26,49.44,49.61,49.78,49.94,50.08,50.22,50.33,50.42,50.52,50.6,50.68,50.75,50.81,50.87,50.94,51.03,51.11,51.2,51.31,51.39,51.48,51.58,51.65,51.72,51.8,51.86,51.94,52.02,52.08,52.15,52.2,52.25,52.3,52.34,52.42,52.5,52.6,52.72,52.85,52.98,53.1,53.22,53.33,53.41,53.48,53.55,53.63,53.75,53.88,54.02,54.14,54.22,54.28,54.32,54.37,54.41,54.47,54.55,54.64,54.75,54.84,54.94,55.03,55.1,55.17,55.25,55.32,55.39,55.48,55.57,55.65,55.77,55.87,55.99,56.12,56.25,56.41,56.58,56.75,56.9,57.03,57.12,57.17,57.22,57.27,57.32,57.38,57.44,57.52,57.6,57.69,57.76,57.86,57.96,58.04,58.12,58.21,58.28,58.36,58.44,58.51,58.57,58.64,58.72,58.81,58.92,59.02,59.11,59.2,59.25,59.32,59.39,59.47,59.57,59.66,59.74,59.81,59.89,59.97,60.07,60.17,60.27,60.35,60.42,60.49,60.58,60.65,60.75,60.88,61.01,61.15,61.28,61.37,61.44,61.5,61.55,61.6,61.65,61.7,61.79,61.89,61.99,62.09,62.2,62.29,62.37,62.46,62.55,62.62,62.68,62.74,62.79,62.84,62.89,62.94,62.99,63.04,63.1,63.17,63.23,63.3,63.37,63.44,63.5,63.57,63.64,63.7,63.79,63.9,64.05,64.22,64.41,64.57,64.69,64.8,64.88,64.98,65.09,65.21,65.32,65.43,65.55,65.66,65.76,65.86,65.95,66.03,66.11,66.18,66.23,66.28,66.33,66.38,66.43,66.48,66.54,66.63,66.75,66.9,67.04,67.16,67.25,67.3,67.35,67.42,67.48,67.55,67.63,67.7,67.78,67.87,67.97,68.07,68.18,68.29,68.41,68.51,68.61,68.74,68.85,68.96,69.06,69.13,69.18,69.23,69.27,69.32,69.37,69.42,69.47,69.55,69.63,69.73,69.82,69.9,69.97,70.02,70.07,70.15,70.26,70.37,70.5,70.64,70.77,70.93,71.12,71.32,71.52,71.71,71.87,71.99,72.08,72.14,72.19,72.24,72.29,72.36,72.42,72.5,72.58,72.69,72.78,72.88,73.0,73.11,73.21,73.3,73.37,73.42,73.47,73.53,73.59,73.66,73.72,73.8,73.86,73.96,74.08,74.21,74.32,74.42,74.49,74.56,74.64,74.72,74.8,74.87,74.95,75.03,75.09,75.17,75.25,75.31,75.39,75.47,75.56,75.64,75.72,75.81,75.91,76.03,76.15,76.25,76.34,76.4,76.44,76.49,76.54,76.61,76.72,76.85,76.97,77.09,77.18,77.25,77.32,77.38,77.44,77.5,77.57,77.65,77.73,77.81,77.88,77.93,77.99,78.04,78.1,78.15,78.21,78.26,78.31,78.37,78.42,78.48,78.53,78.58,78.64,78.69,78.76,78.83,78.92,79.02,79.13,79.25,79.39,79.54,79.72,79.9,80.05,80.18,80.3,80.41,80.53,80.64,80.73,80.84,80.93,81.03,81.15,81.26,81.36,81.46,81.57,81.66,81.74,81.82,81.91,82.0,82.1,82.19,82.26,82.33,82.4,82.49,82.59,82.68,82.77,82.85,82.92,82.98,83.05,83.12,83.18,83.26,83.35,83.43,83.53,83.62,83.7,83.76,83.82,83.87,83.92,83.98,84.06,84.14,84.26,84.39,84.52,84.65,84.75,84.83,84.91,84.97,85.05,85.14,85.23,85.32,85.4,85.48,85.55,85.62,85.69,85.77,85.86,85.96,86.05,86.13,86.21,86.3,86.43,86.55,86.68,86.81,86.91,87.0,87.12,87.23,87.32,87.42,87.49,87.54,87.61,87.68,87.75,87.82,87.87,87.94,88.01,88.09,88.17,88.25,88.33,88.39,88.47,88.55,88.61,88.67,88.75,88.83,88.91,89.02,89.16,89.28,89.43,89.56,89.66,89.72,89.78,89.84,89.89,89.95,90.01,90.1,90.18,90.26,90.35,90.43,90.53,90.63,90.74,90.83,90.91,90.98,91.03,91.08,91.16,91.25,91.33,91.42,91.53,91.63,91.73,91.83,91.9,91.96,92.02,92.08,92.13,92.22,92.31,92.42,92.55,92.67,92.76,92.86,92.93,93.0,93.07,93.14,93.21,93.27,93.34,93.41,93.49,93.57,93.65,93.72,93.8,93.89,94.0,94.14,94.27,94.38,94.47,94.55,94.64,94.73,94.85,94.97,95.07,95.16,95.24,95.32,95.39,95.48,95.56,95.64,95.72,95.8,95.86,95.93,96.03,96.12,96.2,96.28,96.34,96.41,96.47,96.54,96.6,96.67,96.76,96.86,96.96,97.05,97.13,97.19,97.26,97.33,97.42,97.53,97.64,97.76,97.9,98.03,98.14,98.25,98.34,98.39,98.44,98.49,98.54,98.59,98.64,98.69,98.75,98.81,98.91,99.02,99.14,99.26,99.38,99.46,99.54,99.63,99.71,99.8,99.89,99.97,100.04,100.11,100.16,100.21,100.28,100.37,100.46,100.56,100.64,100.75,100.85,100.96,101.07,101.17,101.29,101.42,101.56,101.7,101.82,101.92,101.99,102.05,102.12,102.18,102.24,102.31,102.37,102.44,102.51,102.57,102.64,102.71,102.8,102.89,102.99,103.08,103.17,103.25,103.33,103.42,103.53,103.63,103.72,103.82,103.89,103.99,104.1,104.2,104.3,104.39,104.47,104.54,104.6,104.66,104.73,104.79,104.87,104.95,105.04,105.13,105.23,105.32,105.42,105.5,105.57,105.65,105.74,105.83,105.93,106.01,106.09,106.15,106.21,106.27,106.35,106.44,106.52,106.62,106.7,106.79,106.89,106.98,107.07,107.13,107.18,107.23,107.27,107.32,107.36,107.41,107.47,107.53,107.59,107.65,107.71,107.76,107.8,107.85,107.89,107.94,107.99,108.04,108.12,108.21,108.32,108.45,108.56,108.67,108.8,108.94,109.1,109.25,109.39,109.52,109.66,109.79,109.91,110.01,110.09,110.16,110.23,110.31,110.37,110.45,110.56,110.67,110.78,110.91,111.0,111.06,111.13,111.18,111.23,111.29,111.34,111.42,111.51,111.61,111.71,111.79,111.88,111.96,112.05,112.13,112.22,112.31,112.43,112.55,112.67,112.8,112.9,113.0,113.08,113.14,113.19,113.24,113.29,113.35,113.4,113.48,113.57,113.65,113.73,113.81,113.88,113.95,114.02,114.1,114.17,114.23,114.31,114.38,114.45,114.51,114.57,114.63,114.7,114.79,114.89,115.0,115.09,115.17,115.25,115.34,115.47,115.6,115.75,115.89,115.99,116.08,116.16,116.25,116.33,116.42,116.5,116.58,116.67,116.74,116.81,116.88,116.93,116.98,117.03,117.08,117.14,117.24,117.34,117.45,117.58,117.69,117.79,117.9,118.0,118.12,118.21,118.3,118.39,118.47,118.55,118.63,118.71,118.78,118.84,118.93,119.02,119.11,119.19,119.27,119.34,119.4,119.45,119.52,119.61,119.7,119.79,119.88,119.96,120.03,120.1,120.19,120.27,120.38,120.49,120.6,120.7,120.79,120.87,120.94,121.0,121.06,121.13,121.19,121.27,121.35,121.44,121.53,121.62,121.7,121.77,121.84,121.92,122.02,122.12,122.23,122.34,122.45,122.58,122.73,122.89,123.03,123.17,123.27,123.34,123.41,123.47,123.52,123.58,123.65,123.73,123.82,123.91,123.99,124.06,124.13,124.19,124.26,124.32,124.39,124.44,124.51,124.58,124.67,124.77,124.85,124.94,125.05,125.16,125.27,125.38,125.46,125.52,125.57,125.65,125.73,125.81,125.89,125.97,126.03,126.1,126.17,126.25,126.33,126.43,126.52,126.61,126.69,126.77,126.88,127.02,127.17,127.29,127.39,127.45,127.5,127.55,127.6,127.66,127.74,127.82,127.9,127.98,128.06,128.12,128.19,128.25,128.3,128.35,128.41,128.47,128.53,128.61,128.69,128.75,128.82,128.9,128.99,129.09,129.22,129.36,129.49,129.62,129.74,129.85,129.94,130.04,130.15,130.28,130.41,130.54,130.64,130.74,130.85,130.95,131.06,131.16,131.27,131.37,131.46,131.54,131.59,131.64,131.69,131.74,131.79,131.85,131.93,132.01,132.09,132.17,132.23,132.3,132.37,132.46,132.53,132.62,132.69,132.78,132.88,132.96,133.04,133.12,133.19,133.28,133.37,133.47,133.55,133.63,133.71,133.79,133.87,133.93,133.99,134.04,134.1,134.17,134.25,134.35,134.45,134.54,134.62,134.7,134.78,134.86,134.94,135.03,135.11,135.19,135.27,135.36,135.45,135.56,135.65,135.74,135.82,135.87,135.94,136.01,136.1,136.18,136.25,136.32,136.37,136.43,136.5,136.56,136.63,136.69,136.74,136.8,136.85,136.9,136.95,137.02,137.13,137.27,137.44,137.64,137.81,137.97,138.11,138.23,138.33,138.41,138.49,138.56,138.63,138.69,138.77,138.85,138.94,139.04,139.13,139.19,139.26,139.32,139.37,139.44,139.53,139.63,139.74,139.85,139.95,140.04,140.13,140.21,140.3,140.4,140.51,140.61,140.69,140.76,140.83,140.91,140.99,141.07,141.13,141.19,141.24,141.29,141.34,141.4,141.48,141.58,141.69,141.81,141.92,142.0,142.08,142.13,142.17,142.22,142.27,142.33,142.39,142.47,142.57,142.66,142.75,142.83,142.93,143.01,143.09,143.17,143.26,143.34,143.42,143.49,143.55,143.61,143.69,143.8,143.92,144.04,144.14,144.25,144.37,144.49,144.63,144.76,144.85,144.93,144.99,145.04,145.11,145.21,145.3,145.4,145.49,145.54,145.59,145.66,145.72,145.79,145.85,145.91,145.96,146.03,146.12,146.22,146.33,146.44,146.51,146.58,146.66,146.75,146.86,146.97,147.08,147.19,147.28,147.36,147.46,147.56,147.66,147.75,147.84,147.9,147.95,148.02,148.1,148.18,148.26,148.34,148.41,148.5,148.62,148.75,148.87,148.98,149.07,149.14,149.2,149.27,149.32,149.38,149.46,149.54,149.62,149.73,149.84,149.94,150.04,150.13,150.19,150.25,150.33,150.42,150.52,150.62,150.7,150.76,150.81,150.86,150.91,150.97,151.03,151.1,151.18,151.26,151.34,151.46,151.6,151.76,151.93,152.08,152.19,152.26,152.32,152.39,152.47,152.56,152.65,152.74,152.81,152.88,152.93,152.98,153.04,153.1,153.17,153.25,153.34,153.42,153.54,153.64,153.73,153.82,153.88,153.93,154.0,154.08,154.17,154.28,154.38,154.46,154.54,154.62,154.71,154.81,154.91,155.03,155.13,155.21,155.3,155.38,155.45,155.51,155.58,155.65,155.71,155.78,155.86,155.93,156.01,156.11,156.22,156.33,156.47,156.58,156.69,156.79,156.87,156.94,157.0,157.05,157.1,157.15,157.2,157.25,157.3,157.36,157.43,157.51,157.6,157.68,157.74,157.79,157.85,157.9,157.95,158.0,158.05,158.12,158.19,158.25,158.32,158.4,158.48,158.56,158.64,158.7,158.77,158.87,159.0,159.17,159.35,159.52,159.69,159.84,159.96,160.09,160.21,160.29,160.4,160.51,160.59,160.67,160.74,160.83,160.93,161.03,161.12,161.19,161.24,161.3,161.39,161.49,161.59,161.69,161.79,161.87,161.95,162.03,162.09,162.16,162.23,162.31,162.39,162.48,162.56,162.63,162.7,162.76,162.81,162.88,162.96,163.05,163.15,163.27,163.37,163.47,163.56,163.65,163.72,163.78,163.84,163.92,164.0,164.08,164.17,164.25,164.31,164.39,164.47,164.53,164.6,164.68,164.75,164.81,164.88,164.94,164.99,165.04,165.11,165.18,165.26,165.34,165.41,165.48,165.54,165.59,165.64,165.69,165.77,165.87,165.98,166.12,166.27,166.41,166.56,166.7,166.86,167.0,167.12,167.24,167.32,167.39,167.45,167.51,167.58,167.65,167.73,167.8,167.87,167.94,168.0,168.05,168.1,168.15,168.21,168.27,168.34,168.42,168.5,168.58,168.67,168.74,168.81,168.88,168.95,169.02,169.08,169.17,169.24,169.3,169.37,169.44,169.54,169.63,169.73,169.82,169.89,169.95,170.02,170.1,170.19,170.27,170.35,170.42,170.47,170.52,170.57,170.62,170.67,170.71,170.76,170.81,170.86,170.91,170.96,171.01,171.05,171.1,171.15,171.2,171.25,171.3,171.34,171.39,171.44,171.49,171.54,171.58,171.65,171.74,171.87,172.03,172.19,172.36,172.52,172.69,172.88,173.08,173.25,173.41,173.55,173.66,173.76,173.84,173.9,173.97,174.05,174.13,174.19,174.26,174.31,174.36,174.41,174.47,174.54,174.6,174.68,174.75,174.82,174.92,175.05,175.18,175.3,175.4,175.47,175.52,175.56,175.61,175.67,175.74,175.81,175.91,176.02,176.11,176.21,176.28,176.33,176.4,176.48,176.56,176.64,176.71,176.79,176.87,176.95,177.04,177.12,177.19,177.25,177.31,177.35,177.4,177.47,177.53,177.61,177.71,177.82,177.91,178.01,178.08,178.14,178.2,178.25,178.31,178.39,178.47,178.56,178.66,178.74,178.82,178.89,178.95,179.02,179.1,179.18,179.27,179.37,179.48,179.62,179.78,179.94,180.06,180.15,180.21,180.26,180.34,180.45,180.57,180.69,180.8,180.89,180.96,181.03,181.08,181.13,181.19,181.26,181.34,181.43,181.51,181.59,181.67,181.74,181.82,181.91,181.99,182.08,182.17,182.27,182.36,182.44,182.52,182.59,182.68,182.76,182.83,182.89,182.95,183.02,183.11,183.21,183.34,183.45,183.55,183.63,183.7,183.78,183.88,184.0,184.13,184.24,184.35,184.46,184.57,184.65,184.74,184.83,184.92,185.02,185.14,185.24,185.37,185.53,185.7,185.89,186.09,186.29,186.49,186.69,186.89,187.08,187.27,187.46,187.64,187.83,188.03,188.23,188.43,188.63,188.83,189.03,189.22,189.42,189.62,189.82,190.0,190.15,190.27,190.35,190.42,190.49,190.56,190.63,190.69,190.75,190.82,190.91,191.03,191.16,191.29,191.41,191.51,191.59,191.67,191.75,191.83,191.93,192.04,192.15,192.26,192.35,192.42,192.49,192.56,192.65,192.75,192.88,192.99,193.09,193.18,193.23,193.3,193.37,193.43,193.5,193.56,193.62,193.7,193.81,193.94,194.07,194.2,194.33,194.45,194.57,194.69,194.8,194.9,194.98,195.04,195.09,195.14,195.19,195.25,195.3,195.35,195.4,195.45,195.52,195.63,195.78,195.95,196.14,196.31,196.44,196.55,196.63,196.72,196.8,196.86,196.93,196.98,197.06,197.14,197.23,197.32,197.42,197.5,197.58,197.66,197.74,197.8,197.87,197.97,198.05,198.13,198.21,198.29,198.39,198.5,198.62,198.74,198.83,198.92,199.02,199.12,199.22,199.31,199.38,199.44,199.49,199.54,199.59,199.64,199.71,199.77,199.84,199.92,200.0,200.08,200.17,200.27,200.39,200.51,200.63,200.74,200.84,200.92,201.01,201.07,201.13,201.2,201.27,201.35,201.46,201.56,201.66,201.78,201.89,201.99,202.1,202.19,202.26,202.32,202.38,202.44,202.51,202.58,202.67,202.77,202.87,202.98,203.09,203.18,203.26,203.33,203.38,203.43,203.5,203.56,203.63,203.69,203.76,203.83,203.91,204.02,204.14,204.25,204.35,204.43,204.49,204.54,204.59,204.65,204.72,204.78,204.86,204.94,205.02,205.1,205.19,205.27,205.33,205.42,205.51,205.6,205.71,205.83,205.93,206.02,206.1,206.15,206.2,206.27,206.33,206.4,206.47,206.54,206.63,206.72,206.82,206.92,207.02,207.12,207.21,207.31,207.37,207.42,207.47,207.52,207.57,207.64,207.75,207.88,208.01,208.13,208.23,208.31,208.39,208.47,208.54,208.61,208.7,208.81,208.92,209.03,209.14,209.21,209.28,209.34,209.41,209.46,209.53,209.6,209.66,209.73,209.78,209.83,209.88,209.93,209.99,210.05,210.12,210.19,210.29,210.41,210.53,210.66,210.78,210.87,210.96,211.04,211.12,211.2,211.29,211.37,211.46,211.55,211.65,211.74,211.83,211.92,211.99,212.06,212.14,212.22,212.29,212.37,212.43,212.49,212.57,212.65,212.73,212.81,212.91,213.01,213.09,213.18,213.25,213.32,213.39,213.45,213.51,213.58,213.65,213.73,213.82,213.91,214.01,214.1,214.17,214.24,214.3,214.38,214.48,214.58,214.68,214.78,214.9,215.01,215.13,215.25,215.33,215.4,215.49,215.57,215.65,215.73,215.8,215.85,215.9,215.95,216.02,216.1,216.18,216.27,216.38,216.49,216.62,216.75,216.87,216.96,217.03,217.11,217.19,217.28,217.37,217.45,217.52,217.59,217.66,217.73,217.82,217.92,218.02,218.12,218.23,218.32,218.43,218.55,218.65,218.74,218.83,218.89,218.96,219.03,219.09,219.17,219.25,219.33,219.42,219.5,219.56,219.62,219.69,219.77,219.87,219.98,220.11,220.23,220.35,220.48,220.59,220.69,220.77,220.84,220.89,220.95,221.03,221.11,221.19,221.29,221.36,221.43,221.49,221.56,221.65,221.76,221.87,221.98,222.06,222.13,222.21,222.31,222.43,222.54,222.64,222.7,222.75,222.8,222.85,222.9,222.95,223.0,223.05,223.1,223.18,223.28,223.39,223.52,223.65,223.75,223.84,223.91,223.96,224.03,224.12,224.21,224.31,224.4,224.46,224.52,224.57,224.62,224.7,224.78,224.89,225.01,225.14,225.25,225.35,225.44,225.53,225.61,225.69,225.77,225.85,225.93,226.04,226.15,226.25,226.33,226.4,226.47,226.53,226.6,226.67,226.75,226.86,226.98,227.09,227.18,227.26,227.34,227.44,227.55,227.66,227.76,227.85,227.93,228.01,228.1,228.18,228.26,228.32,228.38,228.45,228.54,228.64,228.73,228.83,228.91,228.99,229.09,229.19,229.3,229.42,229.52,229.62,229.69,229.75,229.83,229.89,229.97,230.05,230.14,230.2,230.28,230.38,230.49,230.6,230.71,230.79,230.86,230.92,230.99,231.05,231.12,231.19,231.26,231.36,231.46,231.57,231.69,231.78,231.87,231.97,232.05,232.14,232.24,232.32,232.4,232.47,232.53,232.61,232.69,232.77,232.85,232.93,233.02,233.13,233.23,233.32,233.43,233.5,233.57,233.67,233.78,233.91,234.06,234.22,234.34,234.46,234.55,234.6,234.65,234.7,234.76,234.84,234.92,235.02,235.13,235.23,235.31,235.38,235.45,235.53,235.64,235.75,235.86,235.94,236.01,236.07,236.15,236.23,236.31,236.4,236.47,236.55,236.64,236.72,236.79,236.85,236.92,236.98,237.05,237.14,237.25,237.36,237.47,237.57,237.65,237.74,237.85,237.96,238.07,238.17,238.22,238.27,238.32,238.37,238.42,238.47,238.53,238.61,238.72,238.84,238.97,239.09,239.19,239.27,239.35,239.44,239.52,239.6,239.68,239.76,239.84,239.94,240.03,240.11,240.18,240.26,240.35,240.44,240.54,240.64,240.73,240.84,240.95,241.06,241.15,241.22,241.27,241.32,241.37,241.42,241.48,241.56,241.66,241.79,241.95,242.08,242.21,242.32,242.4,242.47,242.54,242.63,242.73,242.83,242.92,243.03,243.11,243.22,243.33,243.43,243.51,243.59,243.65,243.72,243.79,243.88,243.98,244.08,244.18,244.29,244.39,244.5,244.61,244.7,244.81,244.93,245.04,245.15,245.26,245.35,245.41,245.48,245.57,245.64,245.71,245.78,245.85,245.92,246.0,246.08,246.18,246.27,246.35,246.45,246.54,246.61,246.68,246.74,246.79,246.84,246.89,246.96,247.06,247.16,247.25,247.35,247.43,247.49,247.57,247.65,247.73,247.81,247.89,247.95,248.02,248.1,248.2,248.3,248.41,248.52,248.63,248.75,248.85,248.94,249.05,249.17,249.3,249.45,249.58,249.67,249.74,249.8,249.85,249.9,249.96,250.01,250.06,250.14,250.25,250.39,250.56,250.71,250.84,250.95,251.06,251.19,251.34,251.48,251.61,251.71,251.8,251.91,252.05,252.22,252.41,252.61,252.8,252.97,253.1,253.19,253.26,253.31,253.36,253.41,253.46,253.53,253.64,253.77,253.91,254.08,254.25,254.42,254.61,254.81,255.01,255.21,255.41,255.61,255.81,256.01,256.21,256.41,256.61,256.81,257.01,257.21,257.41,257.61,257.8,257.95,258.06,258.16,258.26,258.38,258.5,258.61,258.7,258.78,258.88,259.02,259.19,259.39,259.59,259.78,259.95,260.12,260.29,260.46,260.65,260.85,261.05,261.25,261.45,261.65,261.85,262.05,262.25,262.45,262.65,262.85,263.05,263.24,263.43,263.62,263.81,264.0,264.2,264.4,264.59,264.78,264.97,265.16,265.36,265.56,265.76,265.96,266.16,266.36,266.56,266.76,266.96,267.16,267.36,267.55,267.72,267.86,267.97,268.06,268.14,268.21,268.29,268.36,268.43,268.52,268.59,268.67,268.77,268.86,268.97,269.07,269.16,269.24,269.3,269.35,269.4,269.48,269.59,269.73,269.87,270.01,270.12,270.2,270.27,270.36,270.46,270.56,270.66,270.75,270.82,270.87,270.92,270.97,271.02,271.07,271.12,271.18,271.25,271.33,271.41,271.49,271.57,271.64,271.71,271.79,271.86,271.94,272.02,272.09,272.16,272.23,272.3,272.38,272.46,272.54,272.6,272.69,272.8,272.93,273.06,273.18,273.28,273.35,273.41,273.47,273.54,273.62,273.7,273.79,273.86,273.91,273.96,274.01,274.06,274.11,274.16,274.22,274.31,274.43,274.58,274.72,274.86,275.0,275.14,275.3,275.46,275.62,275.76,275.87,275.99,276.1,276.21,276.33,276.47,276.61,276.76,276.92,277.06,277.19,277.32,277.44,277.53,277.61,277.68,277.74,277.83,277.95,278.08,278.2,278.32,278.41,278.47,278.54,278.59,278.67,278.78,278.89,279.0,279.1,279.17,279.22,279.27,279.32,279.37,279.42,279.49,279.6,279.74,279.92,280.12,280.32,280.52,280.72,280.92,281.12,281.32,281.52,281.69,281.86,282.01,282.11,282.2,282.27,282.32,282.38,282.44,282.51,282.59,282.67,282.74,282.82,282.9,282.98,283.06,283.13,283.2,283.25,283.3,283.36,283.45,283.55,283.65,283.74,283.81,283.86,283.91,283.96,284.02,284.07,284.12,284.17,284.24,284.35,284.49,284.67,284.87,285.07,285.27,285.47,285.64,285.79,285.93,286.07,286.22,286.4,286.57,286.71,286.82,286.91,287.0,287.1,287.19,287.3,287.41,287.5,287.59,287.68,287.74,287.81,287.86,287.91,287.96,288.01,288.07,288.14,288.21,288.29,288.37,288.45,288.53,288.6,288.67,288.73,288.78,288.84,288.91,289.01,289.11,289.2,289.28,289.34,289.39,289.46,289.56,289.66,289.75,289.84,289.9,289.97,290.03,290.11,290.19,290.28,290.36,290.46,290.54,290.61,290.67,290.73,290.78,290.83,290.88,290.95,291.02,291.12,291.22,291.31,291.39,291.46,291.53,291.6,291.68,291.76,291.82,291.89,291.94,291.99,292.04,292.09,292.14,292.19,292.24,292.29,292.37,292.48,292.63,292.8,292.96,293.09,293.19,293.26,293.31,293.36,293.41,293.46,293.51,293.56,293.61,293.66,293.72,293.78,293.85,293.92,294.0,294.07,294.15,294.27,294.4,294.53,294.65,294.75,294.81,294.87,294.93,295.0,295.07,295.15,295.24,295.34,295.44,295.52,295.58,295.63,295.68,295.74,295.84,295.97,296.12,296.28,296.4,296.49,296.56,296.63,296.69,296.75,296.81,296.86,296.91,296.96,297.01,297.05,297.1,297.15,297.2,297.25,297.3,297.36,297.43,297.51,297.59,297.65,297.73,297.8,297.9,298.0,298.13,298.26,298.38,298.51,298.63,298.72,298.83,298.96,299.07,299.19,299.3,299.39,299.45,299.51,299.56,299.61,299.67,299.73,299.79,299.86,299.92,299.97,300.04,300.1,300.17,300.23,300.28,300.33,300.41,300.49,300.57,300.64,300.72,300.78,300.85,300.93,301.02,301.1,301.18,301.24,301.31,301.37,301.42,301.48,301.55,301.63,301.72,301.82,301.93,302.03,302.12,302.2,302.31,302.41,302.51,302.62,302.69,302.76,302.84,302.94,303.04,303.15,303.22,303.29,303.35,303.41,303.46,303.53,303.62,303.71,303.79,303.86,303.92,303.96,304.01,304.07,304.13,304.21,304.29,304.38,304.46,304.53,304.6,304.68,304.77,304.89,305.02,305.15,305.27,305.35,305.41,305.47,305.52,305.58,305.65,305.71,305.77,305.83,305.88,305.94,306.01,306.07,306.13,306.21,306.31,306.41,306.53,306.63,306.7,306.77,306.81,306.86,306.9,306.97,307.06,307.15,307.24,307.33,307.4,307.46,307.53,307.61,307.7,307.8,307.89,307.97,308.04,308.12,308.2,308.29,308.39,308.46,308.52,308.58,308.64,308.7,308.76,308.85,308.93,309.02,309.12,309.2,309.26,309.34,309.42,309.52,309.66,309.79,309.9,309.99,310.05,310.1,310.14,310.19,310.24,310.31,310.41,310.52,310.62,310.72,310.8,310.86,310.92,310.98,311.05,311.1,311.15,311.21,311.27,311.36,311.44,311.52,311.61,311.67,311.74,311.81,311.88,311.95,312.02,312.09,312.16,312.23,312.3,312.35,312.4,312.48,312.56,312.67,312.78,312.9,312.99,313.08,313.15,313.23,313.32,313.39,313.46,313.54,313.64,313.74,313.83,313.93,313.99,314.04,314.09,314.14,314.2,314.27,314.35,314.43,314.52,314.59,314.64,314.7,314.75,314.8,314.85,314.9,314.97,315.03,315.1,315.17,315.23,315.28,315.33,315.38,315.44,315.49,315.54,315.59,315.64,315.69,315.75,315.8,315.85,315.9,315.95,316.0,316.06,316.13,316.23,316.32,316.42,316.53,316.64,316.77,316.94,317.14,317.34,317.51,317.65,317.75,317.83,317.92,318.02,318.14,318.27,318.38,318.46,318.53,318.59,318.64,318.69,318.74,318.79,318.84,318.91,318.98,319.07,319.15,319.25,319.34,319.41,319.49,319.57,319.63,319.7,319.77,319.85,319.95,320.06,320.17,320.27,320.35,320.42,320.48,320.54,320.6,320.69,320.8,320.91,321.02,321.1,321.16,321.22,321.28,321.35,321.41,321.48,321.54,321.61,321.67,321.73,321.77,321.82,321.87,321.92,321.97,322.01,322.06,322.11,322.16,322.22,322.29,322.39,322.51,322.64,322.78,322.92,323.03,323.12,323.2,323.28,323.36,323.44,323.52,323.59,323.65,323.72,323.78,323.85,323.91,323.96,324.01,324.06,324.11,324.17,324.24,324.31,324.37,324.45,324.54,324.67,324.79,324.92,325.02,325.08,325.14,325.21,325.27,325.34,325.4,325.45,325.5,325.55,325.62,325.72,325.85,325.98,326.1,326.19,326.25,326.32,326.4,326.48,326.57,326.66,326.73,326.8,326.88,326.96,327.05,327.12,327.21,327.29,327.35,327.42,327.47,327.52,327.6,327.7,327.82,327.96,328.09,328.2,328.29,328.35,328.42,328.49,328.55,328.62,328.68,328.73,328.78,328.84,328.91,329.02,329.13,329.24,329.33,329.41,329.46,329.51,329.56,329.62,329.68,329.74,329.8,329.89,329.97,330.06,330.15,330.22,330.28,330.32,330.37,330.41,330.46,330.5,330.55,330.61,330.67,330.73,330.79,330.83,330.88,330.95,331.04,331.17,331.32,331.48,331.62,331.73,331.8,331.85,331.9,331.95,332.0,332.05,332.1,332.15,332.22,332.29,332.37,332.47,332.57,332.66,332.74,332.8,332.89,332.98,333.07,333.16,333.27,333.37,333.48,333.58,333.67,333.75,333.81,333.87,333.94,334.01,334.11,334.22,334.31,334.38,334.45,334.49,334.53,334.57,334.61,334.67,334.74,334.81,334.88,334.95,335.01,335.07,335.13,335.18,335.23,335.28,335.34,335.4,335.47,335.55,335.66,335.78,335.9,336.02,336.1,336.17,336.25,336.34,336.42,336.52,336.59,336.66,336.72,336.79,336.84,336.9,336.99,337.09,337.18,337.28,337.35,337.42,337.49,337.57,337.65,337.73,337.84,337.98,338.13,338.27,338.4,338.49,338.56,338.63,338.69,338.74,338.79,338.85,338.91,338.98,339.04,339.11,339.2,339.28,339.37,339.45,339.52,339.59,339.64,339.7,339.75,339.8,339.86,339.93,339.99,340.06,340.13,340.21,340.27,340.34,340.4,340.47,340.51,340.56,340.63,340.73,340.87,341.01,341.16,341.28,341.37,341.45,341.52,341.58,341.64,341.7,341.74,341.79,341.84,341.88,341.94,342.0,342.06,342.12,342.18,342.24,342.3,342.36,342.43,342.5,342.58,342.65,342.72,342.79,342.85,342.91,342.98,343.05,343.12,343.2,343.27,343.33,343.39,343.47,343.58,343.7,343.85,344.03,344.2,344.36,344.5,344.62,344.71,344.79,344.87,344.95,345.01,345.07,345.12,345.18,345.23,345.29,345.34,345.39,345.45,345.5,345.55,345.61,345.66,345.71,345.77,345.82,345.87,345.93,345.98,346.05,346.11,346.18,346.25,346.32,346.37,346.42,346.48,346.54,346.62,346.72,346.83,346.97,347.13,347.3,347.49,347.68,347.84,347.98,348.09,348.16,348.22,348.27,348.32,348.36,348.42,348.49,348.56,348.63,348.73,348.82,348.93,349.03,349.13,349.23,349.3,349.38,349.44,349.51,349.6,349.68,349.76,349.84,349.91,349.96,350.02,350.07,350.11,350.14,350.18,350.23,350.32,350.42,350.52,350.62,350.69,350.73,350.8,350.87,350.94,351.01,351.1,351.17,351.26,351.37,351.5,351.65,351.83,351.98,352.1,352.18,352.24,352.28,352.33,352.38,352.43,352.48,352.53,352.58,352.63,352.68,352.73,352.78,352.83,352.88,352.93,352.98,353.03,353.08,353.13,353.18,353.23,353.3,353.36,353.45,353.53,353.59,353.66,353.73,353.8,353.88,353.98,354.07,354.15,354.22,354.3,354.38,354.48,354.59,354.73,354.87,355.04,355.18,355.32,355.43,355.51,355.58,355.65,355.71,355.78,355.84,355.93,355.99,356.07,356.15,356.22,356.3,356.4,356.52,356.68,356.85,357.02,357.19,357.35,357.48,357.62,357.76,357.9,358.06,358.25,358.45,358.65,358.85,359.05,359.25,359.45,359.65,359.83,360.0,360.17,360.33,360.51,360.71,360.91,361.11,361.32,361.52,361.72,361.92,362.13,362.33,362.53,362.73,362.94,363.14,363.34,363.54,363.74,363.95,364.15,364.35,364.55,364.75,364.95,365.15,365.35,365.55,365.75,365.95,366.15,366.35,366.55,366.75,366.95,367.15,367.35,367.55,367.75,367.95,368.14,368.34,368.54,368.74,368.94,369.13,369.33,369.53,369.73,369.93,370.1,370.24,370.38,370.5,370.6,370.72,370.86,370.97,371.1,371.23,371.33,371.43,371.51,371.59,371.68,371.76,371.87,371.98,372.08,372.18,372.29,372.4,372.53,372.66,372.79,372.9,373.01,373.09,373.17,373.27,373.37,373.46,373.55,373.63,373.71,373.78,373.87,373.96,374.05,374.14,374.27,374.41,374.56,374.7,374.8,374.88,374.94,375.0,375.05,375.12,375.21,375.31,375.42,375.54,375.63,375.73,375.81,375.89,375.98,376.07,376.15,376.23,376.3,376.35,376.4,376.45,376.5,376.55,376.6,376.65,376.7,376.75,376.8,376.85,376.91,376.96,377.01,377.06,377.11,377.16,377.21,377.26,377.31,377.36,377.42,377.49,377.56,377.63,377.71,377.78,377.88,378.01,378.17,378.33,378.46,378.57,378.66,378.75,378.87,379.03,379.2,379.4,379.6,379.8,380.0,380.2,380.4,380.6,380.8,381.0,381.2,381.4,381.61,381.81,382.0,382.17,382.31,382.43,382.54,382.65,382.8,382.95,383.07,383.19,383.3,383.4,383.49,383.58,383.67,383.72,383.78,383.85,383.93,384.01,384.11,384.2,384.3,384.4,384.49,384.56,384.64,384.73,384.83,384.96,385.1,385.25,385.38,385.5,385.6,385.71,385.8,385.9,386.0,386.08,386.17,386.27,386.38,386.49,386.6,386.71,386.81,386.9,386.98,387.05,387.11,387.18,387.24,387.29,387.34,387.39,387.45,387.53,387.61,387.69,387.76,387.83,387.88,387.93,387.99,388.07,388.15,388.25,388.36,388.47,388.58,388.69,388.78,388.88,389.0,389.16,389.32,389.49,389.66,389.82,389.96,390.09,390.19,390.25,390.3,390.35,390.4,390.45,390.5,390.56,390.62,390.7,390.78,390.87,390.95,391.03,391.11,391.21,391.3,391.4,391.49,391.57,391.64,391.72,391.81,391.92,392.06,392.17,392.28,392.38,392.46,392.53,392.59,392.65,392.71,392.81,392.93,393.09,393.26,393.43,393.59,393.72,393.82,393.92,394.0,394.06,394.13,394.19,394.25,394.32,394.38,394.45,394.51,394.56,394.61,394.67,394.74,394.8,394.87,394.93,394.98,395.03,395.08,395.13,395.18,395.25,395.33,395.44,395.55,395.67,395.76,395.84,395.9,395.95,396.02,396.12,396.26,396.44,396.64,396.84,397.04,397.24,397.44,397.64,397.84,398.04,398.24,398.44,398.64,398.84,399.04,399.24,399.44,399.63,399.82,400.01,400.2,400.4,400.65,400.84,401.01,401.16,401.3,401.41,401.54,401.68,401.84,401.99,402.13,402.23,402.31,402.38,402.44,402.51,402.57,402.64,402.69,402.74,402.79,402.84,402.9,402.98,403.06,403.16,403.25,403.32,403.4,403.5,403.63,403.79,403.96,404.12,404.25,404.35,404.42,404.48,404.53,404.58,404.63,404.68,404.73,404.78,404.83,404.88,404.93,404.98,405.03,405.09,405.16,405.26,405.37,405.49,405.61,405.75,405.86,405.97,406.08,406.19,406.29,406.38,406.47,406.54,406.59,406.65,406.71,406.78,406.84,406.91,406.97,407.03,407.1,407.19,407.31,407.45,407.63,407.83,408.03,408.23,408.4,408.57,408.71,408.82,408.92,409.02,409.1,409.18,409.26,409.37,409.5,409.64,409.8,409.97,410.14,410.32,410.51,410.71,410.91,411.11,411.31,411.51,411.71,411.91,412.11,412.31,412.51,412.71,412.9,413.09,413.28,413.47,413.67,413.87,414.07,414.27,414.47,414.67,414.87,415.07,415.27,415.47,415.67,415.87,416.07,416.27,416.47,416.67,416.87,417.07,417.27,417.47,417.67,417.87,418.07,418.27,418.47,418.67,418.87,419.07,419.27,419.47,419.67,419.87,420.07,420.26,420.43,420.58,420.68],"t0":[0,1.0714,5.3571,9.6429,13.9286,18.2143,22.5,26.7857,31.0714,36.4286,40.7143,45.0,49.2857,53.5714,57.8571,62.1429,66.4286,70.7143,75,79.2857,83.5714,87.8571,92.1429,96.4286,100.7143,105.0,109.2857,113.5714,117.8571,122.1429,126.4286,130.7143,135.0,139.2857,143.5714,147.8571,152.1429,156.4286,160.7143,165,169.2857,173.5714,177.8571,182.1429,186.4286,190.7143,195.0,199.2857,203.5714,207.8571,212.8992,216.8992,220.8992,224.8992,228.8992,232.8992,236.8992,240.8992,244.8992,248.8992,252.8992,256.8992,260.8992,264.8992,268.8992,272.8992,276.8992,281.605,285.605,289.605,294.3109,298.3109,302.3109,306.3109,311.0168,315.0168,319.0168,323.0168,327.0168,331.0168,335.0168,339.0168,343.0168,347.0168,351.0168,355.0168,359.0168,363.0168,367.0168,371.0168,375.0168,379.0168,383.7227,387.7227,391.7227,395.7227,403.2227,408.2227,412.2227,416.2227,420.2227,424.2227,428.2227,432.2227,438.105,442.5495,447.2554],"t1":[1.0714,5.3571,9.6429,13.9286,18.2143,22.5,26.7857,31.0714,36.4286,40.7143,45.0,49.2857,53.5714,57.8571,62.1429,66.4286,70.7143,75,79.2857,83.5714,87.8571,92.1429,96.4286,100.7143,105.0,109.2857,113.5714,117.8571,122.1429,126.4286,130.7143,135.0,139.2857,143.5714,147.8571,152.1429,156.4286,160.7143,165,169.2857,173.5714,177.8571,182.1429,186.4286,190.7143,195.0,199.2857,203.5714,207.8571,212.8992,216.8992,220.8992,224.8992,228.8992,232.8992,236.8992,240.8992,244.8992,248.8992,252.8992,256.8992,260.8992,264.8992,268.8992,272.8992,276.8992,281.605,285.605,289.605,294.3109,298.3109,302.3109,306.3109,311.0168,315.0168,319.0168,323.0168,327.0168,331.0168,335.0168,339.0168,343.0168,347.0168,351.0168,355.0168,359.0168,363.0168,367.0168,371.0168,375.0168,379.0168,383.7227,387.7227,391.7227,395.7227,403.2227,408.2227,412.2227,416.2227,420.2227,424.2227,428.2227,432.2227,438.105,442.5495,447.2554,452.2554]}; // dense score-time -> recording-time map (0.1s grid), from pitch-template DTW + note-onset refinement
+function fullToRec(F){const i=F/RECMAP.step,k=Math.floor(i),r=RECMAP.r;if(k<0)return r[0];if(k>=r.length-1)return r[r.length-1];return r[k]+(r[k+1]-r[k])*(i-k);}
+function recToFull(x){const r=RECMAP.r;let lo=0,hi=r.length-1;if(x<=r[0])return 0;if(x>=r[hi])return hi*RECMAP.step;while(hi-lo>1){const m=(lo+hi)>>1;if(r[m]<=x)lo=m;else hi=m;}const d=r[hi]-r[lo];return (lo+(d>0?(x-r[lo])/d:0))*RECMAP.step;}
+const PAGES = ["pages/p-1.png","pages/p-2.png","pages/p-3.png","pages/p-4.png","pages/p-5.png","pages/p-6.png","pages/p-7.png","pages/p-8.png"];
+
+// ---------- musical data ----------
+const INTRO={0:"C4 .5|C4 .5",1:"A4 .5|G4 2.5|C4 .5|C4 .5",2:"A4 .5|G4 2|F4 .5|C4 .5|D4 .5",3:"E4 3.5|D4 .25|E4 .25",
+ 4:"G4 1.5|D4 .25|E4 .25|G4 .5|F4 1|C5 .5",5:"C6 .25|Bb5 .25|A5 .25|Ab5 .25|G5 .25|Eb5 .25|C5 .25|Ab4 .25|C5 2",
+ 6:"C5 1|G4 .5|F4 1.5|Eb4 .5|F4 .5",7:"G4 .5|Bb4 .5|Bb4 2|G4 .333|Eb4 .333|F4 .334",8:"Bb4 .5|G4 1|F4 1.5|Eb4 1"};
+const ML=m=>m===0?1:4;
+const CH={0:"",1:"C6|C7",2:"Dm7/C|Fm/C",3:"C",4:"F|Fm6|F|Fm",5:"Fmaj7",6:"F|F7",7:"Cm9",8:"Eb|Ab/Bb",9:"Cadd9",
+10:"C|Dm7",11:"C/E",12:"C|Em",13:"Dm7",14:"C/E|Dm7",15:"C|C/G",16:"Am|F/C",17:"C",
+18:"C|C|Am|Dm7",19:"C/G|C",20:"Am/E|E7",21:"F|G7",22:"C|Dm7",23:"E7|E7|Am|Am",24:"Dm7|G7",25:"C",
+26:"Am|Am|G|F",27:"C/E|C",28:"C|D7",29:"E",30:"Am|Am|B7|B7",31:"C|A7",32:"Dm|G7",33:"Am|G|D7|D7",
+34:"C/G|G7",35:"C",36:"Bø|E7",37:"Am|Am/G",38:"F|D7/F#",39:"Gsus|G7",40:"E7|Am",41:"D7/F#|D7/F#|C/G|E7/G#",42:"Am|F|Dm7|G7",43:"C|G/B",
+44:"Am|Em/G",45:"F|D7/F#",46:"G7",47:"C|G/B",48:"Am|G",49:"F|G7",50:"C",51:"Am|C/G",52:"F|Em",53:"Dm7|G7",
+54:"Abmaj7|Ab",55:"Fm7|Bb7",56:"Eb/G|Ab",57:"Bb7",58:"Eb|Eb|Bb7/D|Cm",59:"Eb/G|Eb",60:"F7",61:"Gsus|G7",
+62:"Ab|Ab|Bb7/Ab|Fm6/Ab",63:"Eb/G|C7",64:"Fm|Bb7",65:"Eb",66:"Fm6/Ab|G7",67:"Cm|Cm/Bb",68:"Ab|F7",69:"Bb7sus|Bb7",70:"G7|Cm",71:"F7|Abm",
+72:"Eb/Bb|Fm7/Ab",73:"Eb/Bb|Ab",74:"Eb|Fm7",75:"Bb7sus",76:"Ab",77:"Gm|C",78:"Fm|F7",79:"Cm|F9",80:"Bb7",
+81:"Cm7|Ab",82:"G7/B|Cm",83:"Aø",84:"Eb/Bb|Bb7",85:"Eb|Gm",86:"Cm|Eb/Bb",87:"Ab|Bb7",88:"Eb|Db",89:"B|A7b5",90:"Abmaj7"};
+function style(m){if(m<=8)return'intro';if(m<=17)return'qch';if(m<=33)return'block';if(m<=50)return'arp';if(m<=53)return'soft';if(m<=87)return'arp';return'hold';}
+const DYN={0:'mf',2:'mp',9:'p',26:'p',35:'mf',41:'f',44:'mp',51:'mp',52:'pp',54:'mf',66:'f',72:'f',76:'ff',79:'mp',81:'p',83:'mp',86:'p',88:'mp'};
+const DYNG={pp:.55,p:.7,mp:.85,mf:1,f:1.15,ff:1.28};
+function dynAt(m){let d='mf';for(const k in DYN)if(+k<=m)d=DYN[k];return d;}
+const BREATH=[[12,0],[16,0],[20,0],[24,0],[28,0],[32,0],[37,3],[41,3],[60,0],[64,0],[65,3],[67,3]];
+const TIPS={
+ 10:"허밍: 입은 가볍게 다물고 ‘음~’. 소리를 코·앞니 쪽으로 모아 작게.",
+ 15:"낮은 솔(G2)·라(A2): 힘주지 말고 숨에 실어서 가볍게.",
+ 26:"남성 유니즌 시작. 높은 도(C4)는 베이스에겐 높은 편 — 소리 지르지 말고 둥글게.",
+ 28:"‘영생함을’ 앞에서 숨(∨). 도-도-도-시-레-도 리듬 정확히.",
+ 34:"피아노 G화음 다음 박에 ‘귀하’로 들어가요. 테너와 갈라지는 첫 부분!",
+ 36:"낮은 시(B2)에서 미(E3)로. 시를 충분히 내리고 미로 깔끔하게.",
+ 38:"‘들려주시’에서 파 → 파♯ 반음 올라가요.",
+ 41:"파♯ 네 번 → 솔 → 솔♯, 반음씩 계단처럼 올라가요. f로 크게.",
+ 48:"피아노만 들리다가 혼자 ‘나’(시, B2)로 들어가요. 박자 세기!",
+ 58:"E♭장조로 바뀜. 남성 유니즌 높은 미♭(E♭4) — 무리면 작게라도 정확히.",
+ 60:"‘싸움’의 라는 라♮(내추럴). ‘선한’ 앞에서 숨.",
+ 61:"도 → 시♮로 내려가며 끝. 시도 내추럴이에요.",
+ 63:"마지막 ‘에’는 높은 도 하프음(테너는 미♮).",
+ 66:"f! ‘고’ 라♭ 두 박 → 솔. 크게 하되 소리 퍼지지 않게.",
+ 71:"라♮ 네 번 → 라♭으로 돌아와요. 반음 차이 주의.",
+ 74:"‘하나님의’ 시♭-미♭-미♭-시♭. 여기서 미♭(E♭4) 높아요.",
+ 77:"아멘: 솔 → 높은 도. 끝 음 길게.",
+ 79:"늘임표 ‘아’ (파, F3). 지휘자 손 보고 끊기.",
+ 83:"‘내가’ 미♭-도로 들어가요. 앞 마디 피아노 듣기.",
+ 87:"‘억’(도)에 늘임표. 지휘 보고 이어가기.",
+ 88:"마지막 미♭ 세 마디 길게. 숨이 모자라면 옆 사람과 엇갈려 쉬기."
+};
+const PART={B:{name:'베이스',who:'나',lo:40,hi:66,other:'T',col:'#2f5d8a'},T:{name:'테너',who:'아빠',lo:43,hi:69,other:'B',col:'#4f7a3a'},S:{name:'소프라노',who:'누나',lo:55,hi:81,other:'A',col:'#b0603c'},A:{name:'알토',who:'엄마',lo:53,hi:77,other:'S',col:'#7a55a3'}};
+const OTHERNAME={B:'베이스',T:'테너',A:'알토',S:'소프'};
+let ME='B';
+const TIPS_T={
+ 10:"2·3절 허밍. 베이스와 같은 음(유니즌)이에요. 입 다물고 ‘음~’ 작게.",
+ 26:"남성 유니즌. 테너에게 편한 음역이니 베이스와 소리를 맞춰 둥글게.",
+ 28:"‘영생함을’ 앞에서 숨(∨). 도-도-도-시-레-도.",
+ 34:"피아노 다음 박 ‘귀하’: 솔 → 높은 도. 여기서 베이스와 갈라져요!",
+ 36:"라 두 박 → 시. 베이스는 낮은 시로 내려가니 내 음 지키기.",
+ 38:"도 네 번 → 레 네 번. 베이스가 파→파♯로 움직여도 흔들리지 않기.",
+ 39:"도 → 시 → 레레(‘재미’).",
+ 41:"도를 계속 유지, 마지막 ‘ㅡ’만 시로.",
+ 42:"‘합니’ 레 → 시. 같은 도가 많으니 음 처지지 않게.",
+ 58:"E♭장조. 남성 유니즌 미♭-미♭-레-도.",
+ 62:"미♭-미♭-파-레. 파(F4)가 이 곡 테너 최고음.",
+ 63:"레 네 번 → 미♮(E4). 반음 올라가는 것 주의.",
+ 66:"f! 레를 세 박 길게.",
+ 68:"미♭ 여덟 번 같은 음. 음이 처지지 않게 위에서 누르듯.",
+ 70:"레 네 번 → 미♭.",
+ 75:"‘아’ 파(F4)로 올라가서 ‘멘’ 미♭.",
+ 77:"아멘: 레 → 미♮(E4).",
+ 79:"늘임표 ‘아’ 미♭. 지휘 보고 끊기.",
+ 83:"‘내가’ 베이스와 같은 음(유니즌)으로 들어가요.",
+ 87:"‘억’(도)에 늘임표.",
+ 88:"마지막 미♭ 세 마디 길게."
+};
+const TIPS_S={
+ 10:"1·2절은 허밍, 3절은 ‘어머니의 넓은 사랑’ 가사. 멜로디 담당이에요.",
+ 12:"‘귀하고도’ 높은 도(C5) 도약.",
+ 18:"4절 유니즌. ‘아 침ㅡ’ 16분음표 빠르게.",
+ 26:"남성 차례 — 쉬면서 30마디 준비.",
+ 30:"미-미-레♯-레♯ 반음 주의(외워주신).",
+ 35:"‘귀하’ 솔 → 도로 들어가요. 4부 시작!",
+ 36:"높은 레(D5) 세 박 길게.",
+ 39:"‘재ㅡ미ㅡ’ 16분음표 도레도레 가볍게.",
+ 40:"‘던ㅡ’ 16분음표 미레.",
+ 42:"미 → 솔 → 도 → 높은 미(E5) 도약.",
+ 44:"‘우리 어머님의 성경책’ 낮은 솔로 라인(라~미). 작게, 말하듯이.",
+ 58:"E♭장조. 높은 미♭(E♭5) 시작.",
+ 66:"f! 높은 파(F5) 세 박 길게.",
+ 68:"높은 솔(G5)! 목 조이지 말고 숨으로 받치기.",
+ 70:"솔(G5) 네 번 — 곡에서 가장 높은 구간.",
+ 71:"‘에’는 파(F5). 끝 ‘귀한’은 도♭(C♭5) 16분음표 — 반음 낮게, 다음 마디로 바로 이어져요.",
+ 77:"‘아ㅡ멘’ 16분음표 미♭-파 → 미♮.",
+ 79:"늘임표 높은 솔(G5), mp로 부드럽게.",
+ 81:"subito p! 갑자기 작게 ‘어머니의 넓은 사랑’.",
+ 87:"‘억’에 늘임표.",
+ 88:"마지막 미♭ 세 마디 길게."
+};
+const TIPS_A={
+ 10:"1·2절 허밍, 3절 가사. 여기선 소프라노와 같은 멜로디(유니즌)예요.",
+ 18:"4절도 소프라노와 같은 멜로디. ‘아 침ㅡ’ 16분음표 빠르게.",
+ 30:"미-미-레♯-레♯ 반음 주의. 소프라노와 같은 음.",
+ 35:"‘귀하’ 솔-솔. 소프라노는 도로 올라가지만 알토는 솔에 머물러요. 4부 시작!",
+ 36:"알토가 두 음으로 나뉘어요(디비지): 위 라→솔♯, 아래 파→미. 이 페이지는 아래 음 기준 — 누가 위를 맡을지 파트장과 정하세요.",
+ 38:"파-솔-라 올라간 뒤 라를 여섯 번 유지.",
+ 39:"‘재ㅡ미ㅡ’ 16분음표 라시라시.",
+ 40:"솔♯ 네 번(반음 올림!) → 미.",
+ 41:"미를 계속 유지, 마지막 ‘ㅡ’만 레.",
+ 42:"도-미-라-라 → 파 네 번.",
+ 44:"‘우리 어머님의 성경책’ 낮은 라인(라~미). 알토 음역이라 편해요 — 말하듯이.",
+ 58:"E♭장조. 여성 유니즌 높은 미♭(E♭5) — 무리면 작게.",
+ 62:"도-도-시♭-파.",
+ 63:"파 네 번 → 솔.",
+ 64:"라♭ → 파 → 레 네 번 (낮게 내려가요).",
+ 66:"f! 도 두 박 → 시♮ (반음 내려가요).",
+ 68:"라♭-라♭-도-도 → 라♮ 네 번 (반음 올림!).",
+ 70:"시♮ 네 번 → 솔.",
+ 71:"솔-도-라♭-도 → ‘니’는 도♭(C♭5), 반음 낮게. 소프라노 ‘귀한’ 때 쉬어요.",
+ 72:"솔-시♭-시♭-솔-라♭-라♭. 소프라노 ‘귀한’ 때 쉼.",
+ 77:"아멘: 시♭ → 솔.",
+ 79:"늘임표 ‘아’. 알토 나뉨: 위 도(C5), 아래 라♮(A4). 이 페이지는 위 음 기준.",
+ 81:"subito p! 소프라노와 같은 멜로디.",
+ 88:"마지막 미♭ 세 마디 길게."
+};
+const HARD_A=[[35,"솔에 머물기 (소프와 갈라짐)"],[36,"파 → 미"],[40,"솔♯ 네 번"],[44,"낮은 솔로 라인"],[64,"레까지 내려감"],[66,"도 → 시♮"],[68,"라♮ 네 번"],[70,"시♮ 네 번"],[71,"도♭"],[77,"아멘 시♭ → 솔"],[88,"마지막 긴 음"]];
+const HARD_T=[[34,"솔 → 높은 도, 갈라짐 시작"],[36,"라 → 시"],[38,"도 → 레"],[62,"최고음 파(F4)"],[63,"미♮ 반음"],[68,"미♭ 여덟 번 유지"],[77,"아멘 레 → 미♮"],[79,"늘임표"],[88,"마지막 긴 음"]];
+const HARD_S=[[18,"4절 16분음표"],[30,"레♯ 반음"],[39,"재ㅡ미ㅡ 16분음표"],[42,"높은 미 도약"],[44,"낮은 솔로 라인"],[66,"높은 파 f"],[68,"높은 솔"],[70,"솔 네 번"],[71,"도♭ ‘귀한’"],[77,"아멘 16분음표"],[79,"늘임표 높은 솔"],[81,"subito p"],[88,"마지막 긴 음"]];
+const HARD=[[15,"낮은 솔·라 (G2, A2)"],[26,"남성 유니즌 · 높은 도"],[36,"낮은 시 → 미"],[38,"파 → 파♯"],[41,"파♯ → 솔 → 솔♯"],[48,"혼자 들어가기 ‘나’"],[58,"E♭장조 · 높은 미♭"],[60,"라♮"],[66,"f · 라♭ → 솔"],[71,"라♮ → 라♭"],[77,"아멘 높은 도"],[87,"늘임표"],[88,"마지막 긴 음"]];
+
+// ---------- pitch helpers ----------
+const LET={C:0,D:2,E:4,F:5,G:7,A:9,B:11};
+function midi(p){const m=p.match(/^([A-G])([#bn]?)(-?\d)$/);return 12*(+m[3]+1)+LET[m[1]]+(m[2]==='#'?1:m[2]==='b'?-1:0);}
+const KO={C:'도',D:'레',E:'미',F:'파',G:'솔',A:'라',B:'시'};
+function koName(p){const m=p.match(/^([A-G])([#bn]?)/);return KO[m[1]]+(m[2]==='#'?'♯':m[2]==='b'?'♭':'');}
+function enName(p){return p.replace('b','♭').replace('#','♯').replace('n','');}
+const Q={'':[0,4,7],m:[0,3,7],'7':[0,4,7,10],m7:[0,3,7,10],maj7:[0,4,7,11],m6:[0,3,7,9],'ø':[0,3,6,10],'9':[0,4,7,10,14],add9:[0,4,7,14],sus:[0,5,7],'7sus':[0,5,7,10],'6':[0,4,7,9],'7b5':[0,4,6,10],m9:[0,3,7,10,14]};
+function pc(s){return (LET[s[0]]+(s[1]==='#'?1:s[1]==='b'?-1:0)+12)%12;}
+function chord(name){
+  const [main,slash]=name.split('/');
+  const r=main.match(/^([A-G][#b]?)(.*)$/);
+  const root=pc(r[1]);const ints=Q[r[2]]||Q[''];
+  return {root,pcs:ints.map(i=>(root+i)%12),ints,bass:slash?pc(slash):root,name};
+}
+function parseSeq(s){return s.split('|').map(t=>{const p=t.split(' ');return [p[0],+p[1],'',0];});}
+
+// ---------- full sequence ----------
+const FULL=[];const REST=[['r',4,'',0]];
+function vox(m,pass){
+  if(m<=8){const r=[['r',ML(m),'',0]];return {S:r,A:r,T:r,B:r};}
+  if(m>=10&&m<=17){
+    const r=SCORE.rep[m];
+    const w=pass===3?r.wl:r.w.map(n=>[n[0],n[1],n[0]==='r'?'':'음',n[3]]);
+    const hum=r.hum.map(n=>[n[0],n[1],n[0]==='r'?'':'음',n[3]]);
+    return {S:w,A:pass===3?r.wl:w,T:pass>=2?hum:REST,B:pass>=2?hum:REST};
+  }
+  const d=SCORE.m[m]||{};
+  return {S:d.S||REST,A:d.A||REST,T:d.T||REST,B:d.B||REST};
+}
+for(let m=0;m<=9;m++)FULL.push({m,pass:0,v:vox(m,0)});
+for(let p=1;p<=3;p++)for(let m=10;m<=17;m++)FULL.push({m,pass:p,v:vox(m,p)});
+for(let m=18;m<=90;m++)FULL.push({m,pass:0,v:vox(m,0)});
+FULL.forEach((x,i)=>{x.idx=i;x.rest={};for(const k of ['S','A','T','B'])x.rest[k]=x.v[k].every(n=>n[0]==='r');});
+function label(x){return x.m===0?'전주':x.m+(x.pass?` (${x.pass}절)`:'');}
+
+const RIT={8:.8,33:.85,50:.85,53:.85,57:.85,75:.85,79:.8,87:.85,88:.9,89:.85,90:.8};
+const FERM={79:[2,4,2],80:[3,4,2],87:[2.5,3,3]};
+function bpm(m){return m<34?56:60;}
+
+// ---------- state ----------
+let speed=1,loopOn=true,clickOn=false,countOn=true,octOn=false,skipOn=true,echoOn=false,echoLen=2;
+let rangeA=0,rangeB=FULL.length-1;
+let MEL=[],SEQ=[],EV=[],CLK=[],CHS=[],BRS=[],total=0,BEV=[],TEV=[];// BEV=my part, TEV=reference part
+
+let recMode=false,lyrView=true;
+function buildSeq(){
+  const seg=FULL.slice(rangeA,rangeB+1);
+  if(recMode){SEQ=seg.map(x=>({...x}));return;}
+  let base=[];
+  if(!skipOn)base=seg.slice();
+  else{
+    for(let i=0;i<seg.length;i++){
+      const x=seg[i];
+      if(x.rest[ME]){
+        let j=i;while(j+1<seg.length&&seg[j+1].rest[ME])j++;
+        if(j-i+1>=3){ // keep last 2 rest measures as lead-in (or first 1 if trailing)
+          if(j<seg.length-1){base.push(seg[j-1],seg[j]);} else base.push(seg[i]);
+          i=j;continue;
+        }
+      }
+      base.push(x);
+    }
+  }
+  if(!echoOn){SEQ=base.map(x=>({...x}));return;}
+  SEQ=[];
+  for(let i=0;i<base.length;i+=echoLen){
+    const chunk=base.slice(i,i+echoLen);
+    chunk.forEach(x=>SEQ.push({...x,echo:0}));
+    if(chunk.some(x=>!x.rest[ME])) chunk.forEach((x,k)=>SEQ.push({...x,echo:k===0?2:1}));
+  }
+}
+function warp(m,b){const f=FERM[m];if(!f)return b;const [a,c,k]=f;if(b<=a)return b;if(b<=c)return a+(b-a)*k;return a+(c-a)*k+(b-c);}
+
+function pianoNotes(x,push){
+  const m=x.m,st=style(m),names=(CH[m]||'').split('|').filter(Boolean);
+  if(PIANO[m]){
+    const pn=PIANO[m];const top={};
+    if(m<=8)for(const [o,d,mid,h] of pn)if(h===0)top[o]=Math.max(top[o]||0,mid);
+    for(const [o,d,mid,h] of pn){const mel=m<=8&&h===0&&top[o]===mid;push(o,d,mid,mel?.85:(h?.6:.45),mel);}
+    return;
+  }
+  const segLen=names.length?ML(m)/names.length:ML(m);
+  // intro melody
+  if(m<=8&&INTRO[m]){let b=0;for(const [p,d] of parseSeq(INTRO[m])){if(p!=='r')push(b,d,midi(p),.9,true);b+=d;}}
+  names.forEach((nm,i)=>{
+    const c=chord(nm),b0=i*segLen;
+    let bass=36+c.bass; while(bass<38)bass+=12; while(bass>50)bass-=12;
+    const rh=[];for(let n=55;n<=69;n++)if(c.pcs.includes(n%12))rh.push(n);
+    const rhv=rh.slice(-4);
+    const fifth=bass+7, third=bass+12+((c.ints[1]||4));
+    if(st==='intro'){push(b0,segLen,bass,.8);rhv.slice(0,3).forEach(n=>push(b0,segLen,n-12>=52?n-12:n,.35));}
+    else if(st==='qch'){for(let b=b0;b<b0+segLen;b++)rhv.slice(-3).forEach(n=>push(b,1,n+12,.28));}
+    else if(st==='block'){push(b0,segLen,bass,.75);push(b0,segLen,bass+12,.35);for(let b=b0;b<b0+segLen;b+=2)rhv.forEach(n=>push(b,Math.min(2,segLen),n,.42));}
+    else if(st==='soft'){[bass,fifth,third,fifth+12].forEach((n,k)=>push(b0+k*segLen/4,segLen-k*segLen/4,n,.45));}
+    else if(st==='arp'){
+      const pat=[bass,fifth,third,fifth];
+      for(let k=0;k<segLen*2;k++)push(b0+k*.5,.5,pat[k%4]+(k%4===0?0:0),k%4===0?.7:.45);
+      push(b0,segLen,bass,.25);
+      rhv.slice(-3).forEach(n=>push(b0,Math.min(1.5,segLen),n,.38));
+      if(segLen>=2)rhv.slice(-3).forEach(n=>push(b0+segLen/2,Math.min(1,segLen/2),n,.3));
+    }
+    else if(st==='hold'){push(b0,segLen,bass,.6);push(b0,segLen,bass+12,.3);rhv.forEach(n=>push(b0,segLen,n,.35));}
+  });
+}
+
+function buildTimeline(){
+  buildSeq();
+  EV=[];CLK=[];CHS=[];BRS=[];let t=0;
+  const SP=recMode?1:speed;
+  if(countOn&&!recMode){const x=SEQ[0];const spb=60/(bpm(x.m)*SP);for(let b=0;b<4;b++)CLK.push({t:t+b*spb,acc:b===0,count:true});t+=4*spb;}
+  const lastEnd={};
+  SEQ.forEach((x,si)=>{
+    const spb=60/(bpm(x.m)*(RIT[x.m]||1)*SP);
+    x.t0=t;x.spb=spb;x.dyn=dynAt(x.m);const dg=DYNG[x.dyn];
+    for(const vn of ['S','A','T','B']){
+      let b=0;
+      for(const n of x.v[vn]){
+        const [p,d,l,tie]=n;
+        const st=t+warp(x.m,b)*spb,en=t+warp(x.m,b+d)*spb;
+        if(p!=='r'){
+          if(tie&&lastEnd[vn]){lastEnd[vn].end=en;b+=d;continue;}
+          const e={v:vn,t:st,end:en,p,l,mid:midi(p),si,m:x.m,beat:b,g:dg,mute:vn===ME&&x.echo>0};
+          EV.push(e);lastEnd[vn]=e;
+        } else lastEnd[vn]=null;
+        b+=d;
+      }
+    }
+    pianoNotes(x,(b,d,mid,vel,mel)=>{const L=ML(x.m);EV.push({v:'P',t:t+warp(x.m,b)*spb,end:t+warp(x.m,Math.min(L,b+d))*spb+Math.max(0,b+d-L)*spb,mid,vel:vel*dg,si,m:x.m,mel});});
+    const names=(CH[x.m]||'').split('|').filter(Boolean);
+    names.forEach((nm,i)=>CHS.push({t:t+warp(x.m,i*ML(x.m)/names.length)*spb,name:nm}));
+    for(const [bm,bb] of BREATH)if(bm===x.m)BRS.push(t+warp(x.m,bb)*spb);
+    for(let b=0;b<ML(x.m);b++)CLK.push({t:t+warp(x.m,b)*spb,acc:b===0});
+    t+=warp(x.m,ML(x.m))*spb;x.t1=t;
+  });
+  total=t;
+  // breath: shorten bass note ending at breath
+  for(const bt of BRS){for(const e of EV)if(e.v!=='P'&&Math.abs(e.end-bt)<1e-3){const s=SEQ[e.si].spb;e.audEnd=e.end-Math.min(.35*s,(e.end-e.t)*.4);}}
+  EV.sort((a,b)=>a.t-b.t);
+  BEV=EV.filter(e=>e.v===ME);TEV=EV.filter(e=>e.v===PART[ME].other);MEL=EV.filter(e=>e.mel);
+}
+
+// ---------- audio engine (works for live and offline contexts) ----------
+let ctx=null,G=null,vol={S:.3,A:.25,T:.4,B:1,P:.55};
+function makeGraph(ac){
+  const g={ac,bus:{}};
+  const comp=ac.createDynamicsCompressor();comp.threshold.value=-10;comp.ratio.value=6;comp.knee.value=6;comp.connect(ac.destination);
+  g.master=ac.createGain();g.master.gain.value=1.6;g.master.connect(comp);
+  // reverb
+  const len=Math.floor(ac.sampleRate*1.8),ir=ac.createBuffer(2,len,ac.sampleRate);
+  for(let c=0;c<2;c++){const d=ir.getChannelData(c);for(let i=0;i<len;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/len,3);}
+  const conv=ac.createConvolver();conv.buffer=ir;const wet=ac.createGain();wet.gain.value=.22;conv.connect(wet);wet.connect(g.master);
+  for(const v of ['S','A','T','B','P','C']){const b=ac.createGain();b.gain.value=v==='C'?.5:vol[v];b.connect(g.master);if(v!=='C')b.connect(conv);g.bus[v]=b;}
+  const n=12,re=new Float32Array(n),im=new Float32Array(n);const amps=[0,1,.55,.28,.18,.1,.07,.05,.03,.02,.015,.01];for(let i=1;i<n;i++)im[i]=amps[i];
+  g.pwave=ac.createPeriodicWave(re,im);
+  return g;
+}
+const FORM={B:[[650,1,90],[1080,.55,110],[2650,.22,160]],T:[[700,1,90],[1150,.5,110],[2700,.2,160]],A:[[800,1,100],[1150,.5,120],[2800,.18,180]],S:[[850,1,100],[1200,.45,120],[2900,.16,180]]};
+const fq=m=>440*Math.pow(2,(m-69)/12);
+function sing(g,e,when,dur){
+  const ac=g.ac,isB=e.v==='B'||e.v==='T';const fr=fq(e.mid+(e.v==='B'&&octOn?12:0));
+  const s1=ac.createOscillator();s1.type='sawtooth';s1.frequency.value=fr;
+  const s2=ac.createOscillator();s2.type='sawtooth';s2.frequency.value=fr*1.004;
+  const mx=ac.createGain();mx.gain.value=.5;s1.connect(mx);s2.connect(mx);
+  const out=ac.createGain();out.gain.value=0;
+  for(const [F,amp,bw] of FORM[e.v]){const bp=ac.createBiquadFilter();bp.type='bandpass';bp.frequency.value=F;bp.Q.value=F/bw;const ga=ac.createGain();ga.gain.value=amp*(isB?5:4);mx.connect(bp);bp.connect(ga);ga.connect(out);}
+  const body=ac.createBiquadFilter();body.type='lowpass';body.frequency.value=fr*3;const bg=ac.createGain();bg.gain.value=isB?.35:.15;mx.connect(body);body.connect(bg);bg.connect(out);
+  out.connect(g.bus[e.v]);
+  const lfo=ac.createOscillator();lfo.frequency.value=5.3;const lg=ac.createGain();lg.gain.setValueAtTime(0,when);lg.gain.linearRampToValueAtTime(fr*.012,when+Math.min(.5,dur*.7));lfo.connect(lg);lg.connect(s1.frequency);lg.connect(s2.frequency);
+  const peak=(isB?.5:.36)*(e.g||1),a=.06,r=Math.min(.1,dur*.3);
+  out.gain.setValueAtTime(0,when);out.gain.linearRampToValueAtTime(peak,when+a);out.gain.setValueAtTime(peak,Math.max(when+a,when+dur-r));out.gain.linearRampToValueAtTime(0,when+dur);
+  for(const o of [s1,s2,lfo]){o.start(when);o.stop(when+dur+.05);}
+}
+function piano(g,e,when,dur){
+  const ac=g.ac;const o=ac.createOscillator();o.setPeriodicWave(g.pwave);o.frequency.value=fq(e.mid);
+  const lp=ac.createBiquadFilter();lp.type='lowpass';lp.frequency.setValueAtTime(Math.min(6000,fq(e.mid)*8),when);lp.frequency.exponentialRampToValueAtTime(Math.max(300,fq(e.mid)*2),when+1.5);
+  const a=ac.createGain();const pk=.33*e.vel;const decay=e.mid<48?2.2:e.mid<60?1.6:1.1;
+  a.gain.setValueAtTime(0,when);a.gain.linearRampToValueAtTime(pk,when+.006);a.gain.setTargetAtTime(pk*.05,when+.01,decay*.45);
+  const off=when+Math.max(.08,dur);a.gain.setTargetAtTime(0,off,.08);
+  o.connect(lp);lp.connect(a);a.connect(g.bus.P);o.start(when);o.stop(off+.5);
+}
+function clickN(g,when,acc){const ac=g.ac;const o=ac.createOscillator(),k=ac.createGain();o.frequency.value=acc?1500:1000;o.type='square';k.gain.setValueAtTime(.0001,when);k.gain.exponentialRampToValueAtTime(acc?.5:.3,when+.002);k.gain.exponentialRampToValueAtTime(.0001,when+.05);o.connect(k);k.connect(g.bus.C);o.start(when);o.stop(when+.06);}
+// ---- recorded samples (FluidR3 GM, MIT) ----
+const TUNE={"piano24": 0.133, "piano27": 0.005, "piano30": 0.005, "piano33": 0.054, "piano36": 0.125, "piano39": 0.123, "piano42": 0.131, "piano45": 0.124, "piano48": 0.13, "piano51": 0.084, "piano54": 0.083, "piano57": 0.127, "piano60": 0.154, "piano63": 0.256, "piano66": 0.225, "piano69": 0.046, "piano72": 0.197, "piano75": 0.196, "piano78": 0.201, "piano81": 0.127, "piano84": 0.103, "piano87": 0.048, "piano90": 0.05, "piano93": 0.095, "piano96": 0.147, "piano99": 0.18, "choir36": -0.375, "choir39": -0.355, "choir42": -0.19, "choir45": -0.195, "choir48": -0.21, "choir51": -0.395, "choir54": -0.235, "choir57": -0.33, "choir60": -0.155, "choir63": -0.26, "choir66": -0.13, "choir69": 0.12, "choir72": 0.005, "choir75": -0.265, "choir78": -0.045, "choir81": -0.075, "choir84": -0.085}; // measured sample pitch deviation (semitones), corrected at playback
+const SAMP={piano:{},choir:{}};let sampState='none',useSamples=true;
+const SLIST={piano:[...Array(26)].map((_,i)=>24+i*3),choir:[...Array(17)].map((_,i)=>36+i*3)};
+let sampPromise=null;
+function loadSamples(){
+  if(sampState!=='none')return sampPromise;sampState='loading';
+  $('aState').textContent='🎹 녹음 소리 불러오는 중…';
+  const jobs=[];
+  for(const k of ['piano','choir'])for(const m of SLIST[k])jobs.push(fetch(`samples/${k}/${m}.mp3`).then(r=>{if(!r.ok)throw new Error(r.status);return r.arrayBuffer();}).then(b=>new Promise((res,rej)=>ctx.decodeAudioData(b,res,rej))).then(buf=>{SAMP[k][m]=buf;}));
+  sampPromise=Promise.all(jobs).then(()=>{sampState='ready';showState();},err=>{sampState='failed';useSamples=false;$('aState').textContent='녹음 소리를 못 불러와서 전자음으로 재생해요';});
+  return sampPromise;
+}
+function nearest(k,m){let best=null,bd=99;for(const x of SLIST[k]){const d=Math.abs(x-m);if(d<bd&&SAMP[k][x]){bd=d;best=x;}}return best;}
+function sampleNote(g,kind,midiN,when,dur,gainV,bus){
+  const k=nearest(kind,midiN);if(k==null)return false;
+  const ac=g.ac,src=ac.createBufferSource();src.buffer=SAMP[kind][k];src.playbackRate.value=Math.pow(2,(midiN-k-(TUNE[kind+k]||0))/12);
+  const a=ac.createGain();
+  if(kind==='choir'){src.loop=true;src.loopStart=.7;src.loopEnd=2.7;
+    a.gain.setValueAtTime(0,when);a.gain.linearRampToValueAtTime(gainV,when+.06);a.gain.setValueAtTime(gainV,Math.max(when+.06,when+dur-.1));a.gain.linearRampToValueAtTime(0,when+dur);src.start(when,.35);src.stop(when+dur+.05);} // skip the sample's pitch scoop at onset
+  else{a.gain.setValueAtTime(gainV,when);const off=when+Math.max(.1,dur);a.gain.setValueAtTime(gainV,off);a.gain.setTargetAtTime(0,off,.09);src.start(when);src.stop(Math.min(off+.6,when+3.1/src.playbackRate.value));}
+  src.connect(a);a.connect(bus);return true;
+}
+function playEvent(g,e,when){
+  if(useSamples&&sampState==='ready'){
+    if(e.v==='P'){if(sampleNote(g,'piano',e.mid,when,e.end-e.t,4.2*e.vel,g.bus.P))return;}
+    else if(!e.mute){const m=e.mid+(e.v==='B'&&octOn?12:0);const lowBoost=m<50?1.35:1;if(sampleNote(g,'choir',m,when,(e.audEnd||e.end)-e.t,3.6*(e.g||1)*lowBoost,g.bus[e.v]))return;}
+    else return;
+  }
+  if(e.v==='P')piano(g,e,when,e.end-e.t);
+  else if(!e.mute)sing(g,e,when,(e.audEnd||e.end)-e.t);
+}
+
+// iOS unlock
+let unlockEl=null;
+function silentWav(){const sr=8000,n=sr/2,b=new ArrayBuffer(44+n*2),d=new DataView(b);const w=(o,t)=>{for(let i=0;i<t.length;i++)d.setUint8(o+i,t.charCodeAt(i));};
+  w(0,'RIFF');d.setUint32(4,36+n*2,true);w(8,'WAVE');w(12,'fmt ');d.setUint32(16,16,true);d.setUint16(20,1,true);d.setUint16(22,1,true);d.setUint32(24,sr,true);d.setUint32(28,sr*2,true);d.setUint16(32,2,true);d.setUint16(34,16,true);w(36,'data');d.setUint32(40,n*2,true);
+  return URL.createObjectURL(new Blob([b],{type:'audio/wav'}));}
+function showState(){if(!ctx)return;$('aState').textContent=ctx.state==='running'?'🔊 소리 켜짐':'⚠️ 소리가 막혀 있어요 — 화면을 한 번 더 누르거나 무음 모드를 꺼 주세요';}
+function unlock(){
+  try{if(navigator.audioSession)navigator.audioSession.type='playback';}catch(e){}
+  try{if(!unlockEl){unlockEl=new Audio(silentWav());unlockEl.loop=true;unlockEl.setAttribute('playsinline','');}const p=unlockEl.play();if(p&&p.catch)p.catch(()=>{});}catch(e){}
+  try{const b=ctx.createBuffer(1,1,22050),s=ctx.createBufferSource();s.buffer=b;s.connect(ctx.destination);s.start(0);}catch(e){}
+  const r=ctx.resume();if(r&&r.then)r.then(showState,showState);showState();
+}
+function initAudio(){
+  if(ctx){unlock();return;}
+  ctx=new (window.AudioContext||window.webkitAudioContext)();G=makeGraph(ctx);ctx.onstatechange=showState;unlock();
+}
+function resetBuses(){ // hard-stop live sound
+  for(const v of Object.keys(G.bus)){G.bus[v].disconnect();}
+  const old=G;G=makeGraph(ctx);
+}
+
+let playing=false,ctxStart=0,posStart=0,evPtr=0,clkPtr=0,timer=null;
+const recA=document.getElementById('recA');
+function rec2syn(r){
+  if(!SEQ.length)return 0;
+  const F=recToFull(r);
+  for(const x of SEQ){const a=RECMAP.t0[x.idx],b=RECMAP.t1[x.idx];if(F<b)return F<=a?x.t0:x.t0+(F-a);}
+  return total;
+}
+function syn2rec(t){
+  for(const x of SEQ){if(t<x.t1){return fullToRec(RECMAP.t0[x.idx]+Math.max(0,t-x.t0));}}
+  const L=SEQ[SEQ.length-1];return fullToRec(RECMAP.t1[L.idx]);
+}
+function recStart(){return fullToRec(RECMAP.t0[SEQ[0].idx]);}
+function recEnd(){return fullToRec(RECMAP.t1[SEQ[SEQ.length-1].idx]);}
+let recOffset=0;try{recOffset=+(localStorage.getItem('recOffset')||0);}catch(e){}
+function curPos(){if(recMode)return rec2syn(recA.currentTime-recOffset);return playing?(ctx.currentTime-ctxStart)+posStart:posStart;}
+function seekPtrs(pos){evPtr=EV.findIndex(e=>e.t>=pos-1e-6);if(evPtr<0)evPtr=EV.length;clkPtr=CLK.findIndex(c=>c.t>=pos-1e-6);if(clkPtr<0)clkPtr=CLK.length;}
+async function play(){
+  if(recMode){
+    if(recA.currentTime<recStart()-.3||recA.currentTime>=recEnd()-.05)recA.currentTime=Math.max(0,recStart()-.15);
+    recA.playbackRate=speed;try{recA.preservesPitch=true;recA.webkitPreservesPitch=true;}catch(e){}
+    try{await recA.play();}catch(err){$('aState').textContent='⚠️ 재생이 막혔어요 — ▶를 한 번 더 눌러 주세요';return;}
+    playing=true;timer=setInterval(sched,40);playBtn.textContent='⏸ 정지';$('aState').textContent='🎙 실제 녹음 재생 중';return;
+  }
+  initAudio();
+  if(useSamples&&sampState!=='ready'){loadSamples();playBtn.textContent='⏳ 준비중';await Promise.race([sampPromise,new Promise(r=>setTimeout(r,9000))]);if(sampState!=='ready'){useSamples=false;setToggle('tSamp',false);}}
+  if(playing)return;
+  if(posStart>=total-.01)posStart=0;
+  ctxStart=ctx.currentTime+.08;seekPtrs(posStart);playing=true;
+  timer=setInterval(sched,25);sched();playBtn.textContent='⏸ 정지';
+}
+function pause(){
+  if(!playing)return;
+  if(recMode){recA.pause();playing=false;clearInterval(timer);playBtn.textContent='▶ 재생';return;}posStart=curPos();playing=false;clearInterval(timer);resetBuses();playBtn.textContent='▶ 재생';
+}
+function sched(){
+  if(recMode){if(recA.currentTime>=recEnd()||recA.ended){if(loopOn){recA.currentTime=Math.max(0,recStart()-.15);if(recA.paused)recA.play();}else pause();}return;}
+  const pos=curPos(),ahead=pos+.25;
+  while(evPtr<EV.length&&EV[evPtr].t<ahead){const e=EV[evPtr++];const when=ctxStart+(e.t-posStart);if(when>=ctx.currentTime-.02)playEvent(G,e,Math.max(when,ctx.currentTime));}
+  while(clkPtr<CLK.length&&CLK[clkPtr].t<ahead){const c=CLK[clkPtr++];const when=ctxStart+(c.t-posStart);if((clickOn||c.count)&&when>=ctx.currentTime-.02)clickN(G,Math.max(when,ctx.currentTime),c.acc);}
+  if(pos>=total+.6){if(loopOn)restartAt(0);else{pause();posStart=0;}}
+}
+function restartAt(pos){if(recMode){recA.currentTime=Math.max(0,syn2rec(pos)-(pos<=SEQ[0].t0?.15:0));return;}const was=playing;if(was)pause();posStart=pos;if(was)play();}
+
+// ---------- offline render ----------
+async function renderAudio(){
+  const btn=$('render');btn.disabled=true;$('rState').textContent='만드는 중… 잠시만요';
+  if(useSamples&&sampState!=='ready'){loadSamples();await sampPromise;}
+  try{
+    const sr=24000,len=Math.ceil((total+2.5)*sr);
+    const OAC=window.OfflineAudioContext||window.webkitOfflineAudioContext;
+    const oc=new OAC(1,len,sr);const g=makeGraph(oc);
+    for(const e of EV)playEvent(g,e,e.t+.2);
+    for(const c of CLK)if(clickOn||c.count)clickN(g,c.t+.2,c.acc);
+    const buf=await new Promise((res,rej)=>{oc.oncomplete=ev=>res(ev.renderedBuffer);const p=oc.startRendering();if(p&&p.then)p.then(res,rej);});
+    const blob=toWav(buf);const url=URL.createObjectURL(blob);
+    const pl=$('player');pl.src=url;pl.style.display='block';
+    $('rState').textContent=`완성 (${fmt(total)}) — 아래 플레이어로 재생하세요`;
+  }catch(err){$('rState').textContent='이 기기에선 음원 만들기가 안 돼요: '+err.message;}
+  btn.disabled=false;
+}
+function toWav(buf){
+  const d=buf.getChannelData(0),n=d.length,b=new ArrayBuffer(44+n*2),v=new DataView(b);let peak=0;for(let i=0;i<n;i++)peak=Math.max(peak,Math.abs(d[i]));const k=peak>0?.95/peak:1;
+  const w=(o,s)=>{for(let i=0;i<s.length;i++)v.setUint8(o+i,s.charCodeAt(i));};
+  w(0,'RIFF');v.setUint32(4,36+n*2,true);w(8,'WAVE');w(12,'fmt ');v.setUint32(16,16,true);v.setUint16(20,1,true);v.setUint16(22,1,true);v.setUint32(24,buf.sampleRate,true);v.setUint32(28,buf.sampleRate*2,true);v.setUint16(32,2,true);v.setUint16(34,16,true);w(36,'data');v.setUint32(40,n*2,true);
+  for(let i=0;i<n;i++){const s=Math.max(-1,Math.min(1,d[i]*k));v.setInt16(44+i*2,s*32767,true);}
+  return new Blob([b],{type:'audio/wav'});
+}
+
+// ---------- UI ----------
+const $=id=>document.getElementById(id);
+const playBtn=$('play');
+playBtn.onclick=()=>{playing?pause():play();};
+$('back').onclick=()=>restartAt(0);
+$('loopBtn').onclick=e=>{loopOn=!loopOn;e.currentTarget.classList.toggle('on',loopOn);};
+$('test').onclick=async()=>{initAudio();if(useSamples){loadSamples();await Promise.race([sampPromise,new Promise(r=>setTimeout(r,6000))]);}const t=ctx.currentTime+.1;[48,52,55].forEach((m,i)=>playEvent(G,{v:ME,mid:m+(ME==='S'||ME==='A'?12:0),g:1,t:0,end:.5},t+i*.45));playEvent(G,{v:'P',mid:60,vel:1,t:0,end:1},t+1.5);};
+document.addEventListener('touchend',()=>{if(ctx&&ctx.state!=='running')unlock();},{passive:true});
+$('render').onclick=()=>{initAudio();renderAudio();};
+
+function setToggle(id,val){$(id).classList.toggle('on',val);}
+$('tClick').onclick=()=>{clickOn=!clickOn;setToggle('tClick',clickOn);rebuild(true);};
+$('tCount').onclick=()=>{countOn=!countOn;setToggle('tCount',countOn);rebuild(true);};
+$('tOct').onclick=()=>{octOn=!octOn;setToggle('tOct',octOn);};
+$('tSkip').onclick=()=>{skipOn=!skipOn;setToggle('tSkip',skipOn);rebuild(true);};
+$('tEcho').onclick=()=>{echoOn=!echoOn;setToggle('tEcho',echoOn);markStep(0);rebuild(true);};
+$('tSamp').onclick=()=>{useSamples=!useSamples;setToggle('tSamp',useSamples);if(useSamples){initAudio();loadSamples();}};
+$('echoLen').onchange=e=>{echoLen=+e.target.value;rebuild(true);};
+
+function rebuild(keep){
+  let k=null;if(keep&&SEQ.length){const s=seqAt(curPos());if(s)k=s.idx;}
+  const was=playing;if(was)pause();
+  buildTimeline();posStart=0;buildLines();
+  if(recMode){let s=k!=null?SEQ.find(x=>x.idx===k):null;const i=s?SEQ.indexOf(s):0;const prev=SEQ[Math.max(0,i-1)];recA.currentTime=Math.max(0,fullToRec(RECMAP.t0[(s&&i>0?prev:SEQ[0]).idx])-.15);if(was)play();return;}
+  if(k!=null){const s=SEQ.find(x=>x.idx===k);if(s)posStart=Math.max(0,s.t0-(countOn&&s!==SEQ[0]?4*s.spb:0));if(s===SEQ[0])posStart=0;}
+  $('player').style.display='none';$('rState').textContent='';
+  if(was)play();
+}
+let LINES=[],lineIdx=-1;
+const LYRTXT="어머니의 넓은 사랑 귀하고도 귀하다 그 사랑이 언제든지 나를 감싸줍니다 아침저녁 읽으시던 어머니의 성경책 손때 남은 구절마다 모습 본 듯합니다 믿는 자는 누구든지 영생함을 얻으리 외워주신 귀한 말씀 이제 힘이 됩니다 귀하고 귀하다 우리 어머님이 들려주시던 재미있게 듣던 말 이 책 중에 있으니 이 성경 심히 사랑합니다 우리 어머님의 성경책 나 잊지 않고 기억합니다 풍파 많은 세상에서 선한 싸움 싸우다 생명시내 흐르는 곳에 길이 함께 살리라 귀한 어머니의 사랑 아버지의 사랑 하나님의 사랑 아멘 내가";
+const WORDS=new Set(LYRTXT.split(' '));
+function wordGroups(tok){ // greedy longest match of syllable tokens into words
+  const out=[];let i=0;
+  while(i<tok.length){let best=i;for(let j=Math.min(tok.length-1,i+7);j>i;j--){if(WORDS.has(tok.slice(i,j+1).map(t=>t.txt).join(''))){best=j;break;}}out.push([i,best]);i=best+1;}
+  return out;
+}
+function buildLines(){
+  LINES=[];let cur=null,prevEnd=-1,prevSi=-1;
+  for(const e of BEV){
+    const s=SEQ[e.si];const gap=e.t-prevEnd;
+    const jump=prevSi>=0&&(SEQ[prevSi].echo!==s.echo||s.m<SEQ[prevSi].m);prevSi=e.si;
+    const br=BRS.some(b=>Math.abs(b-e.t)<1e-3);
+    if(!cur||gap>=.9*s.spb||br||jump){cur={notes:[]};LINES.push(cur);}
+    cur.notes.push(e);prevEnd=e.end;
+  }
+  const raw=LINES;LINES=[];
+  for(const L of raw){
+    // display tokens: skip continuation marks, collapse hum
+    const tok=[];let last=null;
+    for(const e of L.notes){const l=e.l||'';
+      if(l==='ㅡ'||l===''||(l==='음'&&last&&last.txt==='음~')){if(last)last.notes.push(e);continue;}
+      last={txt:l==='음'?'음~':l,notes:[e]};tok.push(last);}
+    if(!tok.length)continue;
+    // split long phrases at word boundaries into balanced chunks (≤ ~12 syllables)
+    const words=wordGroups(tok),n=tok.length,parts=Math.ceil(n/12),target=n/parts;
+    let chunk=[],cnt=0;const chunks=[];
+    for(const [a,b] of words){const len=b-a+1;if(cnt>0&&cnt+len>target+2&&chunks.length<parts-1){chunks.push(chunk);chunk=[];cnt=0;}chunk.push(...tok.slice(a,b+1));cnt+=len;}
+    if(chunk.length)chunks.push(chunk);
+    for(const c of chunks){LINES.push({tok:c,t0:c[0].notes[0].t,t1:c[c.length-1].notes[c[c.length-1].notes.length-1].end,notes:[].concat(...c.map(t=>t.notes))});}
+  }
+  lineIdx=-1;
+}
+const DYNKO={pp:'아주 여리게',p:'여리게',mp:'조금 여리게',mf:'보통 세기',f:'세게',ff:'아주 세게'};
+function easy(t){return t.replace(/subito p!?/g,'갑자기 작게!').replace(/\(디비지\)/g,'').replace(/\bmp로/g,'조금 작게').replace(/^f! /,'크게! ').replace(/ f!/g,' 크게!').replace(/\(([A-G][♭♯b#]?\d)(, ?[A-G][♭♯b#]?\d)*\)/g,'').replace(/늘임표/g,'늘임표(길게)').replace(/  +/g,' ');}
+const pc2=document.getElementById('lyPitch'),px2=pc2.getContext('2d');const PH=230;
+function fitPitch(){const dpr=window.devicePixelRatio||1;pc2.width=pc2.clientWidth*dpr;pc2.height=PH*dpr;pc2.style.height=PH+'px';px2.setTransform(dpr,0,0,dpr,0,0);}
+window.addEventListener('resize',fitPitch);
+function rrp(x,y,w,h,r){px2.beginPath();px2.moveTo(x+r,y);px2.arcTo(x+w,y,x+w,y+h,r);px2.arcTo(x+w,y+h,x,y+h,r);px2.arcTo(x,y+h,x,y,r);px2.arcTo(x,y,x+w,y,r);px2.closePath();}
+function drawPitch(L,pos){
+  if(!pc2.clientWidth)return; if(pc2.width!==Math.round(pc2.clientWidth*(window.devicePixelRatio||1)))fitPitch();
+  const W=pc2.clientWidth,H=PH;px2.clearRect(0,0,W,H);
+  if(!L){return;}
+  const notes=L.notes;if(!notes.length)return;
+  // syllable label per note: first note of each token gets the text, continuation notes get '~'
+  const lab=new Map();for(const t of L.tok){t.notes.forEach((e,k)=>lab.set(e,k===0?t.txt:'~'));}
+  let lo=Math.min(...notes.map(e=>e.mid)),hi=Math.max(...notes.map(e=>e.mid));
+  const span=Math.max(7,hi-lo);const mid=(lo+hi)/2;lo=mid-span/2;hi=mid+span/2;
+  const top=26,bot=H-14,bh=34;
+  const Y=m=>top+(hi-m)/(hi-lo)*(bot-top-bh);
+  // widths proportional to duration with a minimum
+  const pad=8,avail=W-pad*2,gap=4;const minW=Math.min(40,avail/notes.length-gap);
+  let ws=notes.map(e=>Math.max(minW,0));const tot=notes.reduce((a,e)=>a+(e.end-e.t),0);
+  const free=avail-notes.length*(minW+gap);
+  ws=notes.map(e=>minW+Math.max(0,free)*(e.end-e.t)/tot);
+  // faint reference lines for each 도 and 솔 in range
+  px2.font='12px "Noto Sans KR",sans-serif';
+  for(let m=Math.ceil(lo);m<=Math.floor(hi)+1;m++){const p=((m%12)+12)%12;if(p===0||p===7){const y=Y(m)+bh/2;px2.strokeStyle='#ece5db';px2.lineWidth=1;px2.beginPath();px2.moveTo(0,y);px2.lineTo(W,y);px2.stroke();}}
+  let x=pad;const cs=[];
+  notes.forEach((e,i)=>{cs.push([x+ws[i]/2,Y(e.mid)+bh/2]);x+=ws[i]+gap;});
+  // connecting contour line
+  px2.strokeStyle='#cdbfae';px2.lineWidth=3;px2.lineJoin='round';px2.beginPath();cs.forEach(([cx,cy],i)=>i?px2.lineTo(cx,cy):px2.moveTo(cx,cy));px2.stroke();
+  x=pad;
+  notes.forEach((e,i)=>{
+    const w=ws[i],y=Y(e.mid),done=pos>=e.end,cur=pos>=e.t&&pos<e.end;
+    px2.fillStyle=cur?PART[ME].col:done?'#e4dcd2':'#6f665c';
+    rrp(x,y,w,bh,8);px2.fill();
+    if(cur){px2.strokeStyle='#e8a33d';px2.lineWidth=3;rrp(x-2,y-2,w+4,bh+4,10);px2.stroke();}
+    const t=lab.get(e)||'';
+    px2.fillStyle=done?'#9a8f84':'#fff';px2.font='bold '+(w<30?15:20)+'px "Noto Sans KR",sans-serif';px2.textAlign='center';px2.textBaseline='middle';
+    if(t)px2.fillText(t==='음~'?'음':t,x+w/2,y+bh/2+1);
+    const nm=koName(e.p);px2.font=(cur?'bold ':'')+'13px "Noto Sans KR",sans-serif';px2.fillStyle=cur?PART[ME].col:'#8a8076';
+    px2.fillText(nm,x+w/2,y-10);
+    x+=w+gap;
+  });
+  px2.textAlign='left';px2.textBaseline='alphabetic';
+  // interval arrows between notes with big leaps (>=4 semitones)
+  px2.font='bold 14px sans-serif';px2.fillStyle='#b5532f';
+  for(let i=1;i<notes.length;i++){const d=notes[i].mid-notes[i-1].mid;if(Math.abs(d)>=4){const [x0,y0]=cs[i-1],[x1,y1]=cs[i];px2.fillText(d>0?'▲':'▼',(x0+x1)/2-6,(y0+y1)/2+5);}}
+}
+function drawLyrics(pos,s){
+  let li=LINES.findIndex(L=>pos<L.t1+.05);if(li<0)li=LINES.length;
+  const L=LINES[li],N=LINES[li+1];
+  if(li!==lineIdx){lineIdx=li;
+    $('ly1').innerHTML=L?wordGroups(L.tok).map(([a,b])=>`<span class="w">${L.tok.slice(a,b+1).map((t,k)=>`<span data-i="${a+k}">${t.txt}</span>`).join('')}</span>`).join(' '):'<span class="rest">끝</span>';
+    $('ly2').textContent=N?wordGroups(N.tok).map(([a,b])=>N.tok.slice(a,b+1).map(t=>t.txt).join('')).join(' '):'';}
+  drawPitch(L,pos);
+  if(L){const spans=$('ly1').querySelectorAll('span[data-i]');L.tok.forEach((t,i)=>{const a=t.notes[0].t,b=t.notes[t.notes.length-1].end;const sp=spans[i];if(!sp)return;const c=pos>=b?'done':pos>=a?'cur':'';if(sp.className!==c)sp.className=c;});}
+  let meta=s?`<b>${s.m===0?'전주':s.m+'마디'}</b>${s.pass?` · ${s.pass}절`:''}`:'';
+  $('lyMeta').innerHTML=meta;$('lyDyn').textContent=s?(DYNKO[s.dyn]||''):'';
+  let cd='';
+  if(L&&pos<L.t0){const beats=(L.t0-pos)/(SEQ[L.notes[0].si].spb);if(beats>.3)cd=beats<=4.2?`${Math.ceil(beats)}박 뒤 시작 — 준비!`:`쉬는 중 · ${label(SEQ[L.notes[0].si])}마디부터`;}
+  const nb=BRS.find(b=>b>pos-.05);if(nb&&nb>pos&&nb-pos<(s?s.spb:1)*1.2)cd='∨ 숨 쉬기!';
+  $('lyCd').textContent=cd;
+  const eb=$('lyEcho');
+  if(echoOn&&s&&!recMode){eb.style.display='block';if(s.echo){eb.textContent='🎤 이제 내가 부를 차례';eb.style.background='#f6dccf';eb.style.color='#8a3a1c';}else{eb.textContent='👂 먼저 들어 보세요';eb.style.background='#dbe7f3';eb.style.color='#2f5d8a';}}else eb.style.display='none';
+  const TP=tipsOf();let tk=null;if(s)for(const k in TP)if(+k<=s.m&&s.m-k<4&&!(k==10&&(ME==='B'||ME==='T')&&s.pass<2))tk=k;
+  const tip=$('lyTip');if(tk){tip.style.display='block';tip.textContent='💡 '+easy(TP[tk]);}else tip.style.display='none';
+}
+function seqAt(pos){for(let i=SEQ.length-1;i>=0;i--)if(pos>=SEQ[i].t0)return SEQ[i];return SEQ[0];}
+
+// steps
+const STEPS={
+ 1:{d:()=>`네 파트와 반주를 다 같이 들어요. 가사를 눈으로 따라가 보세요.`,speed:100,echo:false,skip:false},
+ 2:{d:()=>`${PART[ME].name} 소리를 크게, 조금 느리게 틀어 드려요. 같이 따라 불러 보세요.`,speed:85,echo:false,skip:true},
+ 3:{d:()=>`먼저 두 마디를 들려 드리고, 같은 부분을 ${PART[ME].name} 소리 없이 다시 틀어 드려요. ‘이제 내가 부를 차례’가 뜨면 불러 보세요.`,speed:85,echo:true,skip:true},
+ 4:{d:()=>`${PART[ME].name} 소리만 빼고 틀어 드려요. 가사를 보면서 혼자 불러 보세요.`,speed:100,echo:false,skip:true},
+ 5:{d:()=>`네 파트 소리를 다 끄고 반주만 나와요. 파트 연습이나 합창 연습 때 틀어 놓고 다 같이 불러 보세요. 화면은 ${PART[ME].name} 기준.`,speed:100,echo:false,skip:false}
+};
+let curStep=1;
+function stepMix(n){
+  const me=ME,o={S:.3,A:.25,T:.35,B:.4,P:.6};
+  if(n==1){Object.assign(o,{S:.45,A:.35,T:.45,B:.5,P:.6});o[me]=1;}
+  if(n==2){Object.assign(o,{S:.13,A:.12,T:.15,B:.18,P:.5});o[me]=1;}
+  if(n==3){Object.assign(o,{S:.13,A:.12,T:.15,B:.18,P:.55});o[me]=1;}
+  if(n==4){Object.assign(o,{S:.45,A:.4,T:.5,B:.5,P:.6});o[me]=0;}
+  if(n==5){Object.assign(o,{S:0,A:0,T:0,B:0,P:.75});}
+  return o;
+}
+function markStep(n){curStep=n;[...$('steps').children].forEach(b=>b.classList.toggle('on',+b.dataset.s===n));$('stepdesc').textContent=n?STEPS[n].d():'';}
+function applyMix(o){for(const v in o){const r=$('v'+v);r.value=Math.round(o[v]*100);r.oninput();}}
+function applyStep(n,doRebuild){
+  const s=STEPS[n];applyMix(stepMix(n));
+  $('speed').value=s.speed;$('spdLbl').textContent=s.speed+'%';speed=s.speed/100;
+  echoOn=s.echo;setToggle('tEcho',echoOn);skipOn=s.skip;setToggle('tSkip',skipOn);
+  markStep(n);if(typeof syncSpd==='function')syncSpd();if(doRebuild!==false)rebuild(true);
+}
+[...$('steps').children].forEach(b=>b.onclick=()=>applyStep(+b.dataset.s));
+
+// sections
+const SECS=[['전체','전주 포함 1–90',0,0,90,0],['반복 (1–3절)','10–17 · 허밍·3절',10,2,17,3],['믿는 자는','26–33 · 유니즌',25,0,33,0],['귀하고 귀하다','34–43 · 4부',34,0,43,0],
+ ['잊지 않고','47–50',47,0,50,0],['풍파 많은','58–61 · E♭',56,0,61,0],['생명시내~아멘','62–77 · 4부',61,0,77,0],['마지막','78–90',78,0,90,0]];
+function fidx(m,pass){return FULL.findIndex(x=>x.m===m&&(!pass||x.pass===pass));}
+const secBox=$('secs');
+function setRange(a,b){rangeA=a;rangeB=b;syncSel();rebuild(false);}
+SECS.forEach((s,i)=>{
+  const b=document.createElement('button');b.innerHTML=`<b>${s[0]}</b><span>${s[1]}</span>`;
+  b.onclick=()=>{[...secBox.children].forEach(c=>c.classList.remove('on'));b.classList.add('on');setRange(fidx(s[2],((ME==='S'||ME==='A')&&s[3])?1:s[3]),s[4]===17?fidx(17,s[5]):fidx(s[4],0));};
+  if(i===0)b.classList.add('on');secBox.appendChild(b);
+});
+const fromSel=$('from'),toSel=$('to');
+FULL.forEach((x,i)=>{fromSel.add(new Option(label(x)+'마디',i));toSel.add(new Option(label(x)+'마디',i));});
+function syncSel(){fromSel.value=rangeA;toSel.value=rangeB;}
+function clearSec(){[...secBox.children].forEach(c=>c.classList.remove('on'));}
+fromSel.onchange=()=>{let a=+fromSel.value,b=Math.max(rangeB,a);clearSec();setRange(a,b);};
+toSel.onchange=()=>{let b=+toSel.value,a=Math.min(rangeA,b);clearSec();setRange(a,b);};
+$('speed').oninput=e=>{$('spdLbl').textContent=e.target.value+'%';};
+$('speed').onchange=e=>{speed=e.target.value/100;if(recMode){recA.playbackRate=speed;return;}rebuild(true);};
+
+// hard spots
+function renderHard(){$('hard').innerHTML='';const H=ME==='B'?HARD:ME==='T'?HARD_T:ME==='A'?HARD_A:HARD_S,TP=tipsOf();
+H.forEach(([m,t])=>{const d=document.createElement('div');d.innerHTML=`<b>${m}마디</b><span>${easy(t)}<br><span style="color:#5f564d">${easy(TP[m]||'')}</span></span>`;
+  d.onclick=()=>{clearSec();const a=Math.max(0,fidx(Math.max(1,m-1),m-1>=10&&m-1<=17?3:0)),b=fidx(Math.min(90,m+2),m+2>=10&&m+2<=17?3:0);setRange(a,b);if(!playing)play();window.scrollTo({top:0,behavior:'smooth'});};
+  $('hard').appendChild(d);});}
+function tipsOf(){return ME==='B'?TIPS:ME==='T'?TIPS_T:ME==='A'?TIPS_A:TIPS_S;}
+
+// mixer
+const NAMES={B:'베이스',T:'테너',A:'알토',S:'소프',P:'반주'};const WHO={};
+for(const v of ['B','P','T','A','S']){
+  const lab=document.createElement('div');lab.className='lab';lab.id='lab'+v;lab.innerHTML=NAMES[v]+(WHO[v]?`<br><small style="font-weight:400;color:var(--mute)">${WHO[v].trim()}</small>`:'');
+  const r=document.createElement('input');r.type='range';r.min=0;r.max=100;r.value=Math.round(vol[v]*100);r.id='v'+v;
+  const val=document.createElement('div');val.className='val';val.textContent=r.value;
+  r.oninput=()=>{vol[v]=r.value/100;val.textContent=r.value;if(G)G.bus[v].gain.setTargetAtTime(vol[v],ctx.currentTime,.03);};
+  $('mix').append(lab,r,val);
+}
+
+// ---------- drawing ----------
+const cv=$('roll'),cx=cv.getContext('2d');const CH_H=240;
+function fitCanvas(){const dpr=window.devicePixelRatio||1;cv.width=cv.clientWidth*dpr;cv.height=CH_H*dpr;cv.style.height=CH_H+'px';cx.setTransform(dpr,0,0,dpr,0,0);}
+window.addEventListener('resize',()=>{fitCanvas();});
+let LO=40,HI=66;
+function yy(m){return 26+(HI-m)/(HI-LO)*(CH_H-26-24);}
+function fmt(s){s=Math.max(0,s);return Math.floor(s/60)+':'+String(Math.floor(s%60)).padStart(2,'0');}
+function rr(x,y,w,h,r){cx.beginPath();cx.moveTo(x+r,y);cx.arcTo(x+w,y,x+w,y+h,r);cx.arcTo(x+w,y+h,x,y+h,r);cx.arcTo(x,y+h,x,y,r);cx.arcTo(x,y,x+w,y,r);cx.fill();}
+let curPage=1,lastBox='';
+function draw(){
+  if(lyrView&&!document.getElementById('roll').offsetParent){drawLite();return;}
+  const pos=curPos(),W=cv.clientWidth,H=CH_H,s0=seqAt(pos),pxs=Math.max(38,Math.min(120,(W*.74)/(5*((s0&&s0.spb)||1)))),px0=W*.22,X=t=>px0+(t-pos)*pxs;
+  cx.clearRect(0,0,W,H);
+  // echo shading
+  for(const s of SEQ){if(!s.echo)continue;const a=X(s.t0),b=X(s.t1);if(b<0||a>W)continue;cx.fillStyle='rgba(181,83,47,.07)';cx.fillRect(a,0,b-a,H-20);}
+  cx.font='10px "Noto Sans KR",sans-serif';
+  for(let m=LO;m<=HI;m++){const p=m%12,y=yy(m);if([1,3,6,8,10].includes(p)){cx.fillStyle='rgba(0,0,0,.025)';cx.fillRect(0,y-3.5,W,7);}
+    if(p===0||p===7){cx.fillStyle='#b8ada0';cx.fillText((p===0?'도':'솔')+(Math.floor(m/12)-1),3,y+3);}}
+  for(const s of SEQ){const x=X(s.t0);if(x<-60||x>W+10)continue;
+    cx.strokeStyle='#d8cfc3';cx.beginPath();cx.moveTo(x,0);cx.lineTo(x,H-20);cx.stroke();
+    cx.fillStyle='#9a8f84';cx.fillText(label(s)+(s.echo===2?' · 내 차례':''),x+3,H-6);
+    for(let b=1;b<ML(s.m);b++){const bx=X(s.t0+warp(s.m,b)*s.spb);cx.strokeStyle='#efe9e1';cx.beginPath();cx.moveTo(bx,18);cx.lineTo(bx,H-20);cx.stroke();}}
+  // chords
+  cx.font='bold 11px "Noto Sans KR",sans-serif';cx.fillStyle='#a0907d';
+  for(const c of CHS){const x=X(c.t);if(x<-30||x>W)continue;cx.fillText(c.name.replace('b','♭').replace('#','♯'),x+3,13);}
+  for(const e of TEV){const a=X(e.t),b=X(e.end);if(b<0||a>W)continue;cx.fillStyle='rgba(124,154,91,.28)';rr(a+1,yy(e.mid)-4,b-a-2,8,3);}
+  for(const e of MEL){const a=X(e.t),b=X(e.end);if(b<0||a>W)continue;let m=e.mid;while(m>HI)m-=12;while(m<LO)m+=12;cx.fillStyle='rgba(120,110,100,.22)';rr(a+1,yy(m)-4,Math.max(3,b-a-2),8,3);}
+  let cur=null;
+  for(const e of BEV){const a=X(e.t),b=X(e.end);if(b<0||a>W)continue;const on=pos>=e.t&&pos<e.end;if(on)cur=e;
+    cx.fillStyle=on?'#e8a33d':(e.mute?(e.end<pos?'#e7c3b3':'#c46a48'):(e.end<pos?PART[ME].col+'66':PART[ME].col));
+    rr(a+1,yy(e.mid)-7,Math.max(4,b-a-2),14,4);
+    cx.font='bold 13px "Noto Sans KR",sans-serif';if(b-a>16&&e.l&&e.l!=='ㅡ'){cx.fillStyle='#fff';cx.fillText(e.l,a+5,yy(e.mid)+5);}
+    cx.font='10px "Noto Sans KR",sans-serif';cx.fillStyle=on?'#b56f12':'#7a7066';cx.fillText(koName(e.p),a+2,yy(e.mid)-10);}
+  cx.font='bold 16px sans-serif';cx.fillStyle='#b5532f';
+  for(const bt of BRS){const x=X(bt);if(x<-10||x>W)continue;cx.fillText('∨',x-6,32);}
+  cx.strokeStyle='#e8a33d';cx.lineWidth=2;cx.beginPath();cx.moveTo(px0,0);cx.lineTo(px0,H-20);cx.stroke();cx.lineWidth=1;
+
+  const s=seqAt(pos);
+  if(lyrView)drawLyrics(pos,s);
+  if(s){$('mNo').textContent=s.m===0?'전주':s.m<=8?s.m+' (전주)':s.m;$('passLbl').textContent=s.pass?`(${s.pass}절)`:'';}
+  $('tLbl').textContent=recMode?fmt(recA.currentTime)+' / '+fmt(recA.duration||420):fmt(pos)+' / '+fmt(total);
+  const syl=$('syl'),nx=BEV.filter(e=>e.end>pos).slice(0,8);
+  const dynTxt=s?`<span class="dyn">${s.dyn}</span>`:'';
+  if(cur){syl.textContent=cur.l||'·';syl.className='syl'+(cur.mute?' echo':'');$('nn').innerHTML=`${koName(cur.p)} <small>${enName(cur.p)}</small>${dynTxt}`;}
+  else{syl.textContent='쉼';syl.className='syl rest';$('nn').innerHTML=(nx[0]?`다음: ${koName(nx[0].p)} <small>${enName(nx[0].p)}</small>`:'–')+dynTxt;}
+  const nb=BRS.find(b=>b>pos-.05);
+  let prevL='';$('next').innerHTML=nx.filter(e=>{const keep=!(e.l==='음'&&prevL==='음');prevL=e.l;return keep;}).map(e=>{const br=nb&&Math.abs(e.t-nb)<1e-3?'<span class="br">∨</span>':'';return br+`<span class="${e===cur?'cur':''}">${e.l||'·'}</span>`;}).join('');
+  let cd='';
+  if(!cur&&nx[0]){const ss=SEQ[nx[0].si];const beats=(nx[0].t-pos)/ss.spb;if(beats>.3)cd=`다음 등장까지 ${beats.toFixed(1)}박`+(beats<=4?` — 준비!`:` (${label(ss)}마디)`);}
+  if(nb&&nb-pos<(s?s.spb:1)*1.2&&nb>pos)cd='∨ 숨 쉬기!';
+  $('cd').textContent=cd;
+  const eb=$('echoBanner');
+  if(echoOn&&s){eb.style.display='block';if(s.echo){eb.textContent='🎤 이제 내가 부를 차례 (베이스 소리 꺼짐)';eb.style.background='#f6dccf';eb.style.color='#8a3a1c';}else{eb.textContent='👂 먼저 듣기';eb.style.background='#dbe7f3';eb.style.color='#2f5d8a';}}else eb.style.display='none';
+  const tip=$('tip');const TP=tipsOf();let tk=null;if(s)for(const k in TP)if(+k<=s.m&&s.m-k<4&&!(k==10&&(ME==='B'||ME==='T')&&s.pass<2))tk=k;
+  if(tk){tip.style.display='block';tip.textContent='💡 '+TP[tk];}else tip.style.display='none';
+  scoreBox(s);
+}
+function scoreBox(s){
+  if(s){const bx=BOXES[s.m];
+    if(bx){if($('follow').checked&&curPage!==bx[0])setPage(bx[0]);
+      const box=$('box'),inner=$('inner'),sc=$('score');
+      if(curPage===bx[0]){box.style.display='block';const key=bx.join();if(key!==lastBox){lastBox=key;box.style.left=bx[1]*100+'%';box.style.top=bx[2]*100+'%';box.style.width=(bx[3]-bx[1])*100+'%';box.style.height=(bx[4]-bx[2])*100+'%';}
+        if($('zoom').checked){const ih=inner.offsetHeight;sc.style.height=(bx[4]-bx[2])*ih+'px';inner.style.transform=`translateY(${-bx[2]*ih}px)`;}else{sc.style.height='';inner.style.transform='';}}
+      else{box.style.display='none';sc.style.height='';inner.style.transform='';}}}
+}
+function drawLite(){
+  const pos=curPos(),s=seqAt(pos);drawLyrics(pos,s);
+  if(s){$('mNo').textContent=s.m===0?'전주':s.m<=8?s.m+' (전주)':s.m;$('passLbl').textContent=s.pass?`(${s.pass}절)`:'';}
+  $('tLbl').textContent=recMode?fmt(recA.currentTime)+' / '+fmt(recA.duration||420):fmt(pos)+' / '+fmt(total);
+  scoreBox(s);
+}
+function setPage(p){curPage=Math.max(1,Math.min(8,p));$('pimg').src=PAGES[curPage-1];$('pLbl').textContent=curPage+' / 8 쪽';lastBox='';}
+$('zoom').onchange=()=>{lastBox='';};
+$('pPrev').onclick=()=>{$('follow').checked=false;$('zoom').checked=false;setPage(curPage-1);};
+$('pNext').onclick=()=>{$('follow').checked=false;$('zoom').checked=false;setPage(curPage+1);};
+$('score').onclick=ev=>{
+  const r=$('inner').getBoundingClientRect();const fx=(ev.clientX-r.left)/r.width,fy=(ev.clientY-r.top)/r.height;
+  let hit=null;for(const m in BOXES){const b=BOXES[m];if(b[0]===curPage&&fx>=b[1]&&fx<=b[3]&&fy>=b[2]&&fy<=b[4]){hit=+m;break;}}
+  if(hit==null)return;
+  let s=SEQ.find(x=>x.m===hit&&!x.echo);
+  if(!s){rangeA=0;rangeB=FULL.length-1;syncSel();clearSec();secBox.children[0].classList.add('on');buildTimeline();s=SEQ.find(x=>x.m===hit&&!x.echo)||SEQ.find(x=>x.m>hit);}
+  if(!s)return;$('follow').checked=true;
+  if(recMode){const i=SEQ.indexOf(s);recA.currentTime=Math.max(0,fullToRec(RECMAP.t0[SEQ[Math.max(0,i-1)].idx])-.1);if(!playing)play();return;}
+  const was=playing;if(was)pause();posStart=s===SEQ[0]?0:Math.max(0,s.t0-(countOn?4*s.spb:0));play();
+};
+function loop(){draw();requestAnimationFrame(loop);}
+function setPart(p,user){
+  ME=p;const P=PART[p];document.documentElement.style.setProperty('--me',P.col);LO=P.lo;HI=P.hi;
+  [...$('parts').children].forEach(b=>b.classList.toggle('on',b.dataset.p===p));
+  $('lgMe').textContent=`${P.name}(내 파트)`;$('lgOt').textContent=OTHERNAME[P.other];
+  $('tOct').style.display=p==='B'?'':'none';if(p!=='B'&&octOn){octOn=false;setToggle('tOct',false);}
+  document.title=`어머니의 성경책 · ${P.name} 연습`;
+  ['B','T','S','A'].forEach(v=>{const l=$('lab'+v);if(l)l.style.color=v===p?P.col:'';});
+  try{localStorage.setItem('part',p);}catch(e){}
+  if(user&&location.hash!=='#'+{B:'bass',T:'tenor',S:'soprano',A:'alto'}[p])location.hash={B:'bass',T:'tenor',S:'soprano',A:'alto'}[p];
+  renderHard();applyStep(curStep||1,false);rebuild(true);
+  $('trkPart').textContent=P.name;
+  for(const [id,k] of [['trkG','guide'],['trkM','minus']]){const el=$(id),src=`audio/${p}-${k}.mp3`;if(el.getAttribute('src')!==src){el.pause();el.setAttribute('src',src);}}
+}
+[...$('parts').children].forEach(b=>b.onclick=()=>setPart(b.dataset.p,true));
+function setSrc(v){
+  const r=v==='rec';if(r===recMode&&document.body.classList.contains('init'))return;
+  const was=playing;if(was)pause();
+  recMode=r;document.body.classList.toggle('recmode',r);
+  [...$('srcSeg').children].forEach(b=>b.classList.toggle('on',b.dataset.v===v));
+  if(!r){applyStep(curStep||2,false);}
+  rebuild(true);document.body.classList.add('init');
+  $('aState').textContent=r?'🎙 실제 녹음 모드 — ▶를 누르면 녹음이 재생돼요':'🎹 파트 연습 음원 모드';
+}
+function setView(v){lyrView=v==='lyr';document.body.classList.toggle('lyrview',lyrView);[...$('viewSeg').children].forEach(b=>b.classList.toggle('on',b.dataset.v===v));lineIdx=-1;if(!lyrView)setTimeout(fitCanvas,0);}
+[...$('srcSeg').children].forEach(b=>b.onclick=()=>setSrc(b.dataset.v));
+function syncSpd(){[...$('spd').children].forEach(b=>b.classList.toggle('on',+b.dataset.v===Math.round(speed*100)));}
+[...$('spd').children].forEach(b=>b.onclick=()=>{speed=+b.dataset.v/100;$('speed').value=b.dataset.v;$('spdLbl').textContent=b.dataset.v+'%';syncSpd();rebuild(true);});
+$('tGraph').onclick=()=>{setView(lyrView?'full':'lyr');$('tGraph').classList.toggle('on',!lyrView);$('tGraph').textContent=lyrView?'음표 그래프 화면 보기':'가사 화면으로 돌아가기';};
+function setOff(v){recOffset=Math.round(Math.max(-1,Math.min(1,v))*10)/10;$('offV').textContent=(recOffset>0?'+':'')+recOffset.toFixed(1)+'초';try{localStorage.setItem('recOffset',recOffset);}catch(e){}lineIdx=-1;}
+$('offM').onclick=()=>setOff(recOffset-.1);$('offP').onclick=()=>setOff(recOffset+.1);setOff(recOffset);
+[...$('viewSeg').children].forEach(b=>b.onclick=()=>setView(b.dataset.v));
+function partFromHash(){const h=location.hash.slice(1);return {bass:'B',tenor:'T',soprano:'S',alto:'A'}[h];}
+window.addEventListener('hashchange',()=>{const p=partFromHash();if(p&&p!==ME)setPart(p,false);});
+let initP=partFromHash();if(!initP){try{initP=localStorage.getItem('part');}catch(e){}}if(!PART[initP])initP='S';
+document.body.classList.add('lyrview');fitCanvas();syncSel();setPage(1);setPart(initP,false);document.body.classList.add('init');
+requestAnimationFrame(loop);
+</script>
+</body>
+</html>
